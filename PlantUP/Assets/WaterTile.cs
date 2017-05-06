@@ -11,7 +11,14 @@ public class WaterTile : MonoBehaviour, isTile
     int windstrength;
     bool windUpdate = true;
 
+    static public Sprite waterSprite = (Sprite)Resources.Load("WaterHexagon", typeof(Sprite));
 
+    /// <summary>
+    /// Um wieviel % ein Wasserfeld den Wind wiederauffrischt.
+    /// Erhöht den Windwert um % der originalen Windstärke.
+    /// </summary>
+    static public float waterWindRefreshFactor = 0.10f;
+    
 
 
     /// <summary>
@@ -46,8 +53,10 @@ public class WaterTile : MonoBehaviour, isTile
     
     public int getWindSpread()
     {
-        //WasserFelder verändern die Windgeschwindigkeit nicht.
-        return getWindStrength();
+        int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * waterWindRefreshFactor);
+        if (windSpread > getPlayingField().getWindStrength())
+            windSpread = getPlayingField().getWindStrength();
+        return windSpread;
     }
 
     public int getWindStrength()
@@ -84,9 +93,11 @@ public class WaterTile : MonoBehaviour, isTile
     }
 
     // Use this for initialization
-    void Start () {
-		
-	}
+    void Start ()
+    {
+
+        gameObject.AddComponent<SpriteRenderer>().sprite = waterSprite;
+    }
 	
 	// Update is called once per frame
 	void Update () {

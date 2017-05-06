@@ -8,7 +8,6 @@ using UnityEngine;
 /// </summary>
 public interface isTile
 {
-    
     string getTileType();
     isTile[] getNeighbours();
     void setNeighbours(isTile[] neighbours);
@@ -26,6 +25,8 @@ public interface isTile
 }
 
 public class PlayingFieldLogic : MonoBehaviour {
+
+
 
 
 
@@ -78,6 +79,8 @@ public class PlayingFieldLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+
+
 
         GenerateRectangleMap();
 
@@ -140,10 +143,15 @@ public class PlayingFieldLogic : MonoBehaviour {
 
                     for (int j = 0; j < 6; j++)
                     {
-                        if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 2)
-                            countMountain++;
-                        else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 1)
-                            countWater++;
+                        if (x + neighbourCoords[j, 0] >= 0 && x + neighbourCoords[j, 0] < xSize
+                            && y + neighbourCoords[j, 1] >= 0 && y + neighbourCoords[j, 1] < ySize)
+                        { 
+
+                            if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 2)
+                                countMountain++;
+                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 1)
+                                countWater++;
+                        }
                     }
 
                     //Ein GroundFeld das neben 3 oder mehr Wasserfeldern ist, kann sich selbst in ein Wassfeld verwandeln.
@@ -184,12 +192,15 @@ public class PlayingFieldLogic : MonoBehaviour {
 
         //Die ausgewürfelten Feldertypen werden jetzt in richtige Felder verwandelt.
         felder = new isTile[xSize * ySize];
-
+        
         for (int y = 0; y < ySize; y++)
         {
             for (int x = 0; x < xSize; x++)
             {
                 GameObject newTile = new GameObject();
+
+                Vector2 size = new Vector2(0.5f, 0.75f);
+                newTile.transform.position.Set(this.transform.position.x - (xSize * 0.5f * 0.5f) + 0.5f * x, this.transform.position.y - (ySize * 0.75f * 0.5f) + 0.75f * y, 1);
 
 
                 switch (tempField[x, y])
@@ -246,6 +257,9 @@ public class PlayingFieldLogic : MonoBehaviour {
                     neighbours[j] = null;
             }
         }
+
+
+
 
         //Die Erstellung von allen Feldern ist jetzt abgeschlossen.
         //Nun folgt das setzen der weiteren Weltbedingten Resourcen wie Licht.

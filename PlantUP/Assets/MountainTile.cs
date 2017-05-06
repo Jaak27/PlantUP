@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class MountainTile : MonoBehaviour, isTile
 {
-
+    
     /// <summary>
     /// Auf wieviel reduziert der Berg die Windstärke.
     /// Für die Balance.
     /// </summary>
-    static public double mountainWindFactor = 0.75;
+    static public double mountainWindFactor = 0.5;
 
+
+    static public Sprite mountainSprite = (Sprite) Resources.Load("MountainHexagon", typeof(Sprite));
 
     PlayingFieldLogic playingField;
     isTile[] neighbours;
@@ -18,10 +20,6 @@ public class MountainTile : MonoBehaviour, isTile
     int windstrength;
     bool windUpdate = true;
     
-    public MountainTile( PlayingFieldLogic playingField)
-    {
-        this.playingField = playingField;
-    }
 
     public void forceWindUpdate()
     {
@@ -89,7 +87,10 @@ public class MountainTile : MonoBehaviour, isTile
 
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        gameObject.AddComponent<SpriteRenderer>().sprite = mountainSprite;
+
 		
 	}
 	
