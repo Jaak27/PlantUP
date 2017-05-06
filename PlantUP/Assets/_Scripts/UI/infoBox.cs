@@ -16,6 +16,8 @@ public class infoBox : MonoBehaviour {
         // Positon für das Infofenster für die Erklärungen zu den Fähigkeiten auf die Maus setzen
 
         Vector3 mousePositon = Input.mousePosition;
+        float testX = Mathf.Lerp(gameObject.GetComponent<RectTransform>().position.x, Input.mousePosition.x, Time.deltaTime * 20);
+        float testY = Mathf.Lerp(gameObject.GetComponent<RectTransform>().position.y, Input.mousePosition.y, Time.deltaTime * 20);
         gameObject.GetComponent<RectTransform>().position = mousePositon;
 		
 	}

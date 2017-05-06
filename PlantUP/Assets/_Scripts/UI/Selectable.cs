@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System;
 
-public class Selectable : MonoBehaviour {
+public class Selectable : MonoBehaviour, IPointerClickHandler {
 
-    public Text text; // Text welcher die Feldinfos darstellt
+    public Text text_Feld; // Text welcher die Feldinfos darstellt
+    public Text text_Pflanze;
+    public Image fenster_FeldInfo;
+    public Image fenster_PflanzenInfo;
 
     bool selected = false;
 
@@ -22,44 +27,67 @@ public class Selectable : MonoBehaviour {
             // Welche Infos angezeigt werden sollen abhängig von den Tiles
             if(this.gameObject.GetComponent<GroundTile>() != null)
             {
-                text.text = "Felddaten " +
+
+                text_Feld.text = "Felddaten " +
                             "\n" + gameObject.name +
-                            "\nBodenwert: " + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
+                            "\n" + "Bodenwert: " + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
                             //"/n Windwert: " + this.gameObject.GetComponent<GroundTile>().getWindStrength() +
-                            "\nSonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+                            "\n" + "Sonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+
+                text_Pflanze.text = "Pflanzendaten: (Falls vorhanden)" +
+                                    "\n" + "Produktion: 100" +
+                                     "\n" + "Verbrauch: 100" +
+                                     "\n" + "Alter: 100" +
+                                     "\n" + "Size: 111" +
+                                     "\n" + "Health: 100";
+          
+                            
             }
 
             if (this.gameObject.GetComponent<WaterTile>() != null)
             {
-                text.text = "Felddaten" +
+
+                text_Feld.text = "Felddaten" +
                             "\n" + gameObject.name +
                             "\nWasserwert: " + this.gameObject.GetComponent<WaterTile>().getWaterStrength() +
                             //"/n Windwert: " + this.gameObject.GetComponent<WaterTile>().getWindStrength() +
                             "\nSonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+                            
             }
 
             if (this.gameObject.GetComponent<MountainTile>() != null)
             {
-                text.text = "Felddaten" +
+
+                text_Feld.text = "Felddaten" +
                             "\n" + gameObject.name +
                             //"\nWindwert: " + this.gameObject.GetComponent<MountainTile>().getWindStrength() +
                             "\nSonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+                            
             }
 
+
+            
         }
-
+            if(Input.GetMouseButton(1)) // feld wird deselektiert
+            {
+                selected = false;
+            }
     }
 
 
-    // Methoden um die jeweiligen Felder zu selektieren
+    // Methode um die jeweiligen Felder zu selektieren(deselektieren)
     
-    public void setSelected()
+    public void setSelected(bool b)
     {
-        selected = true;
+        selected = b;
     }
 
-    public void setUnselected()
+
+    public void OnPointerClick(PointerEventData eventData)
     {
-        selected = false;
+        if(this.gameObject.GetComponent<GroundTile>() != null)
+        {
+
+        }
     }
 }
