@@ -10,8 +10,7 @@ public class GroundTile : MonoBehaviour, isTile
     /// </summary>
     PlayingFieldLogic playingField;
 
-
-    static public Sprite groundSprite = (Sprite)Resources.Load("GroundHexagon", typeof(Sprite));
+   
 
     /// <summary>
     /// Enthält die 6 nächsten Nachbarn.
@@ -56,7 +55,8 @@ public class GroundTile : MonoBehaviour, isTile
     // Use this for initialization
     void Start()
     {
-        gameObject.AddComponent<SpriteRenderer>().sprite = groundSprite;
+
+
     }
 
     // Update is called once per frame

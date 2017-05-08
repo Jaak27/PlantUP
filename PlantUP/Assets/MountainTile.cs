@@ -11,8 +11,7 @@ public class MountainTile : MonoBehaviour, isTile
     /// </summary>
     static public double mountainWindFactor = 0.5;
 
-
-    static public Sprite mountainSprite = (Sprite) Resources.Load("MountainHexagon", typeof(Sprite));
+   
 
     PlayingFieldLogic playingField;
     isTile[] neighbours;
@@ -89,7 +88,6 @@ public class MountainTile : MonoBehaviour, isTile
     // Use this for initialization
     void Start ()
     {
-        gameObject.AddComponent<SpriteRenderer>().sprite = mountainSprite;
 
 		
 	}

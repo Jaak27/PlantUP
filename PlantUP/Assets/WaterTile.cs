@@ -10,8 +10,7 @@ public class WaterTile : MonoBehaviour, isTile
 
     int windstrength;
     bool windUpdate = true;
-
-    static public Sprite waterSprite = (Sprite)Resources.Load("WaterHexagon", typeof(Sprite));
+    
 
     /// <summary>
     /// Um wieviel % ein Wasserfeld den Wind wiederauffrischt.
@@ -95,8 +94,7 @@ public class WaterTile : MonoBehaviour, isTile
     // Use this for initialization
     void Start ()
     {
-
-        gameObject.AddComponent<SpriteRenderer>().sprite = waterSprite;
+        
     }
 	
 	// Update is called once per frame
