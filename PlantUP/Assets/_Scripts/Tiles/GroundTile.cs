@@ -10,6 +10,7 @@ public class GroundTile : MonoBehaviour, isTile
     /// </summary>
     PlayingFieldLogic playingField;
 
+   
 
     /// <summary>
     /// Enthält die 6 nächsten Nachbarn.
@@ -31,6 +32,12 @@ public class GroundTile : MonoBehaviour, isTile
     int windstrength;
 
     /// <summary>
+    /// Um wieviel % ein Bodenfeld den Wind wiederauffrischt.
+    /// Erhöht den Windwert um % der originalen Windstärke.
+    /// </summary>
+    static public float groundWindRefreshFactor = 0.5f;
+
+    /// <summary>
     /// Ist windUpdate = true, muss die Windstärke neu berechnet werden.
     /// </summary>
     bool windUpdate = true;
@@ -41,9 +48,14 @@ public class GroundTile : MonoBehaviour, isTile
     /// Muss noch implementiert werden.
     /// </summary>
     int plant;
+
+
+
+
     // Use this for initialization
     void Start()
     {
+
 
     }
 
@@ -94,12 +106,16 @@ public class GroundTile : MonoBehaviour, isTile
     /// <returns>Weitergegebene Windstärke</returns>
     public int getWindSpread()
     {
-        if (windUpdate)
-            updateWindStrength();
-        //Muss reduziert werden von großen Pflanzen
+
+        //Der Wind frischt ein bischen auf, bis auf den Maximalwert.
+        int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * groundWindRefreshFactor);
+        if (windSpread > getPlayingField().getWindStrength())
+            windSpread = getPlayingField().getWindStrength();
 
 
-        return windstrength;
+
+        return windSpread;
+        
     }
 
     public void setWindStrength(int newValue)
