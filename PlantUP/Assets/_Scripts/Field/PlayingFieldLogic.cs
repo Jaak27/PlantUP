@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public interface isTile
 {
+    
     string getTileType();
     isTile[] getNeighbours();
     void setNeighbours(isTile[] neighbours);
@@ -26,9 +27,6 @@ public interface isTile
 
 public class PlayingFieldLogic : MonoBehaviour {
 
-    public GroundTile groundTilePrefab;
-    public WaterTile waterTilePrefab;
-    public MountainTile mountainTilePrefab;
 
 
 
@@ -81,8 +79,6 @@ public class PlayingFieldLogic : MonoBehaviour {
 	void Start ()
     {
 
-
-
         GenerateRectangleMap();
 
 	}
@@ -104,17 +100,17 @@ public class PlayingFieldLogic : MonoBehaviour {
                 //Generiere eine zufällige Zahl zwischen 0 und 10.
                 float randomChance = Random.Range(0f, 10f);
 
-                //80% Chance das es ein Groundfeld wird.
-                if (randomChance < 8f)
+                //70% Chance das es ein Groundfeld wird.
+                if (randomChance < 7f)
                 {
                     tempField[x, y] = 0;
                 }
-                //10% Chance für ein Wasserfeld
-                else if (randomChance < 9f)
+                //15% Chance für ein Wasserfeld
+                else if (randomChance < 8.5f)
                 {
                     tempField[x, y] = 1;
                 }
-                //10% chance für ein Gebirgsfeld
+                //15% chance für ein Gebirgsfeld
                 else
                 {
                     tempField[x, y] = 2;
@@ -144,15 +140,10 @@ public class PlayingFieldLogic : MonoBehaviour {
 
                     for (int j = 0; j < 6; j++)
                     {
-                        if (x + neighbourCoords[j, 0] >= 0 && x + neighbourCoords[j, 0] < xSize
-                            && y + neighbourCoords[j, 1] >= 0 && y + neighbourCoords[j, 1] < ySize)
-                        { 
-
-                            if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 2)
-                                countMountain++;
-                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 1)
-                                countWater++;
-                        }
+                        if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 2)
+                            countMountain++;
+                        else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 1)
+                            countWater++;
                     }
 
                     //Ein GroundFeld das neben 3 oder mehr Wasserfeldern ist, kann sich selbst in ein Wassfeld verwandeln.
@@ -160,7 +151,7 @@ public class PlayingFieldLogic : MonoBehaviour {
                     if (tempField[x, y] == 0)
                     {
                         //Chance sich in ein Wasserfeld zu verwandeln.
-                        if (countWater >= 2)
+                        if (countWater >= 3)
                         {
                             float chance = Random.Range(0f, 1f);
                             if (chance <= 0.1 + 0.05 * countWater)
@@ -193,45 +184,35 @@ public class PlayingFieldLogic : MonoBehaviour {
 
         //Die ausgewürfelten Feldertypen werden jetzt in richtige Felder verwandelt.
         felder = new isTile[xSize * ySize];
-        
+
         for (int y = 0; y < ySize; y++)
         {
             for (int x = 0; x < xSize; x++)
             {
-                
+                GameObject newTile = new GameObject();
 
-                Vector2 size = new Vector2(0.866f, 0.747f);
-                Vector2 position2d;
-                position2d = new Vector2(x - xSize / 2, y - ySize / 2);
-                if (y % 2 == 1)
-                    position2d.x += 0.5f;
-
-                Vector3 position = new Vector3(this.transform.position.x + position2d.x * size.x, this.transform.position.y + position2d.y * size.y, 1);
 
                 switch (tempField[x, y])
                 {
                     case 1:
-                        WaterTile tempWater = Instantiate(waterTilePrefab, position, Quaternion.identity);
-                        
+                        WaterTile tempWater = newTile.AddComponent<WaterTile>();
                         felder[y * xSize + x] = tempWater;
                         tempWater.setWaterStrength((int)Random.Range(WaterTile.minimumWaterStrength, WaterTile.maximumWaterStrength));
                         tempWater.setPlayingField(this);
                         break;
                     case 2:
-                        MountainTile tempMountain = Instantiate(mountainTilePrefab, position, Quaternion.identity);
+                        MountainTile tempMountain = newTile.AddComponent<MountainTile>();
                         tempMountain.setPlayingField(this);
                         felder[y * xSize + x] = tempMountain;
                         break;
                     case 0:
                     default:
-                        GroundTile tempGround = Instantiate(groundTilePrefab, position, Quaternion.identity);
+                        GroundTile tempGround = newTile.AddComponent<GroundTile>();
                         tempGround.setPlayingField(this);
                         tempGround.setNutrientValue((int)Random.Range(GroundTile.minimumNutrientValue, GroundTile.maximumNutrientValue));
                         felder[y * xSize + x] = tempGround;
                         break;
                 }
-
-                
             }
         }
 
@@ -265,9 +246,6 @@ public class PlayingFieldLogic : MonoBehaviour {
                     neighbours[j] = null;
             }
         }
-
-
-
 
         //Die Erstellung von allen Feldern ist jetzt abgeschlossen.
         //Nun folgt das setzen der weiteren Weltbedingten Resourcen wie Licht.

@@ -10,14 +10,8 @@ public class WaterTile : MonoBehaviour, isTile
 
     int windstrength;
     bool windUpdate = true;
-    
 
-    /// <summary>
-    /// Um wieviel % ein Wasserfeld den Wind wiederauffrischt.
-    /// Erhöht den Windwert um % der originalen Windstärke.
-    /// </summary>
-    static public float waterWindRefreshFactor = 0.10f;
-    
+
 
 
     /// <summary>
@@ -52,10 +46,8 @@ public class WaterTile : MonoBehaviour, isTile
     
     public int getWindSpread()
     {
-        int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * waterWindRefreshFactor);
-        if (windSpread > getPlayingField().getWindStrength())
-            windSpread = getPlayingField().getWindStrength();
-        return windSpread;
+        //WasserFelder verändern die Windgeschwindigkeit nicht.
+        return getWindStrength();
     }
 
     public int getWindStrength()
@@ -92,10 +84,9 @@ public class WaterTile : MonoBehaviour, isTile
     }
 
     // Use this for initialization
-    void Start ()
-    {
-        
-    }
+    void Start () {
+		
+	}
 	
 	// Update is called once per frame
 	void Update () {
