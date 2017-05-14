@@ -14,6 +14,10 @@
 -r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll"
 -r:"C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll"
 -r:"C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll"
+-r:"C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll"
+-r:"C:/Program Files/Unity/Editor/Data/PlaybackEngines/AppleTVSupport/UnityEditor.iOS.Extensions.Xcode.dll"
+-r:"C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll"
+-r:"C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll"
 -define:UNITY_5_3_OR_NEWER
 -define:UNITY_5_4_OR_NEWER
 -define:UNITY_5_5_OR_NEWER
@@ -88,7 +92,11 @@
 -define:UNITY_TEAM_LICENSE
 -define:ENABLE_VSTU
 Assets/_Scripts/Field/PlayingFieldLogic.cs
+Assets/_Scripts/Plant/BaseStat.cs
+Assets/_Scripts/Plant/BaseUpgrade.cs
+Assets/_Scripts/Plant/BluePrintManager.cs
 Assets/_Scripts/Plant/Blueprint.cs
+Assets/_Scripts/Plant/ContainerStat.cs
 Assets/_Scripts/Plant/Plant.cs
 Assets/_Scripts/Tiles/GroundTile.cs
 Assets/_Scripts/Tiles/MountainTile.cs

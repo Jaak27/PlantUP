@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Blueprint : MonoBehaviour {
 
+    
     /// <summary>
     /// Upgrade zum Erhöhen der FoV und des Alters.
     /// </summary>
@@ -67,9 +68,26 @@ public class Blueprint : MonoBehaviour {
     /// Sequenz in welcher die Upgrades abgearbeitet werden sollen
     /// </summary>
     List<int> blueprintSequence;
-    List<BaseUpgrade> upgradeList;
-    int numOfUpgrades = 10;
 
+    /// <summary>
+    /// Liste aller Upgrades
+    /// </summary>
+    List<BaseUpgrade> upgradeList;
+
+    /// <summary>
+    /// Konstruktor mit Sequenz für den Blueprint 
+    /// </summary>
+    /// <param name="seq">Sequenz</param>
+    public Blueprint(List<int> seq) {
+
+        setUpUpgradeList();
+        addWholeSequence(seq);
+
+    }
+
+    /// <summary>
+    /// Konstruktor für Leeren Blueprint
+    /// </summary>
     public Blueprint() {
         setUpUpgradeList();
     }
@@ -84,14 +102,7 @@ public class Blueprint : MonoBehaviour {
     public int getThickStalk() { return thickStalk.getCurrentValue(); }
     public int getEfficiency() { return efficiency.getCurrentValue(); }
     public int getInsects() { return insects.getCurrentValue(); }
-
-    public int[] getAllUpgrades()
-    {
-        int[] upgrades = { getHeight(),getRegeneration(),getDeepRoots(),getBigLeaves(),getLargePetals(),
-                         getPorousRoots(),getSpreadRoots(),getThickStalk(),getEfficiency(),getInsects()};
-        return upgrades;
-    }
-
+    
     /// <summary>
     /// Setze Upgrade auf bestimmtes Level.
     /// </summary>
@@ -103,31 +114,36 @@ public class Blueprint : MonoBehaviour {
     }
 
     /// <summary>
+    /// Setup für neuen Blueprint
+    /// </summary>
+    private void setUpUpgradeList()
+    {
+        upgradeList = new List<BaseUpgrade> { height, regeneration, deepRoots, bigLeaves, largePetals,
+                                            porousRoots, spreadRoots, thickStalk, efficiency, insects};
+        blueprintSequence = new List<int>();
+    }
+
+    /// <summary>
     /// Inkrementiere bestimmtes Upgrade.
     /// </summary>
     /// <param name="u">UpgradeID des Upgrades das inkrementiert werden soll</param>
     public void incrementUpgrade(int i) {
         upgradeList[i].incrementLevel();
     }
-
-    private void setUpUpgradeList() {
-        upgradeList = new List<BaseUpgrade> { height, regeneration, deepRoots, bigLeaves, largePetals,
-                                            porousRoots, spreadRoots, thickStalk, efficiency, insects};
+    
+    public int getNumOfUpgrades() {
+        return upgradeList.Count;
     }
     public List<BaseUpgrade> getUpgradeList()
     {
         return upgradeList;
-    }
-    public int getNumOfUpgrades()
-    {
-        return numOfUpgrades;
     }
     /// <summary>
     /// Füge abzuarbeitendes Upgrade der Sequenz hinzu
     /// </summary>
     /// <param name="upgradeNum">Einzelnes Upgrade als integer</param>
     public void addToSequence(int upgradeNum) {
-        if (upgradeNum >= 0 && upgradeNum <= numOfUpgrades)
+        if (upgradeNum >= 0 && upgradeNum < upgradeList.Count)
         {
             blueprintSequence.Add(upgradeNum);
         }
@@ -141,11 +157,11 @@ public class Blueprint : MonoBehaviour {
     /// Füge komplette Sequenz hinzu 
     /// </summary>
     /// <param name="seq">Integer array mit Upgradesequenz</param>
-    public void addWholeSequence(int[] seq)
+    public void addWholeSequence(List<int> seq)
     {
         foreach (int i in seq)
         {
-            if (i >= 0 && i <= numOfUpgrades)
+            if (i >= 0 && i < upgradeList.Count)
             {
                 blueprintSequence.Add(i);
             }
@@ -162,5 +178,9 @@ public class Blueprint : MonoBehaviour {
     public void resetSequence()
     {
         blueprintSequence.Clear();
+    }
+
+    public List<int> getSequence() {
+        return blueprintSequence;
     }
 }

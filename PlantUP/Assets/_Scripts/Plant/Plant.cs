@@ -4,20 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public class Plant : MonoBehaviour {
-
-
-
-
-    //TODO: AGE HEALTH BANKCAPACITY ==> ContainerStat!
-
-
-
-
-
-
-
-
-
+    
     /// <summary>
     /// Eine Referenz auf die GroundTile.
     /// </summary>
@@ -27,16 +14,14 @@ public class Plant : MonoBehaviour {
     /// Eine Referenz auf den Blueprint.
     /// </summary>
     Blueprint myBlueprint;
-    int [] upgrade;
-    List<int> blueprintSequence = new List<int> { 1, 1, 3, 0 };
     int currentStage = 0;
 
     /// <summary>
     /// Das Alter der Pflanze.
     /// </summary>
     static readonly float baseAge = 0;
-    float maxAge;
-    BaseStat age = new BaseStat(baseAge, baseAge);
+    static readonly float maxAge = 5;
+    ContainerStat age = new ContainerStat(baseAge, baseAge, maxAge);
 
     /// <summary>
     /// Die Sichtweite der Pflanze in Tiles.
@@ -48,8 +33,8 @@ public class Plant : MonoBehaviour {
     /// Die Lebenskraft der Pflanze.
     /// </summary>
     static readonly float baseHealth = 100;
-    float maxHealth = baseHealth;
-    BaseStat health = new BaseStat(baseHealth, baseHealth);
+    static readonly float maxHealth = baseHealth;
+    ContainerStat health = new ContainerStat(baseHealth, baseHealth, maxHealth);
 
     /// <summary>
     /// Health Per Second. Wieviel Leben regeneriert die Pflanze.
@@ -84,14 +69,9 @@ public class Plant : MonoBehaviour {
     /// <summary>
     /// Die Grösse des Energiespeichers der Pflanze.
     /// </summary>
-    static readonly float baseBankCapacity = 1000;
-    BaseStat bankCapacity = new BaseStat(baseBankCapacity, baseBankCapacity);
-
-    /// <summary>
-    /// Der Inhalt des Energiespeichers der Pflanze.
-    /// </summary>
-    static readonly float baseBankLevel = 0;
-    BaseStat bankLevel = new BaseStat(baseBankLevel, baseBankLevel);
+    static readonly float baseBankCapacity = 0;
+    static readonly float maxBankCapacity = 1000;
+    ContainerStat bankCapacity = new ContainerStat(baseBankCapacity, baseBankCapacity, maxBankCapacity);
 
     /// <summary>
     /// Wieviel Schaden die Pflanze nimmt in Prozent.
@@ -113,8 +93,6 @@ public class Plant : MonoBehaviour {
         else {
             myBlueprint = new Blueprint();
         }
-        //TODO: Nur zum testen hier, !!!!!!!!!!!!LÖSCHEN!!!!!!!!!!!!!!!!
-        blueprintSequence = new List<int> { 1, 1, 3, 0 };
     }
     // Use this for initialization
     void Start () {
@@ -137,7 +115,6 @@ public class Plant : MonoBehaviour {
     public float getWindAbsorb() { return windAbsorb.getCurrentValue(); }
     public float getWaterAbsorb() { return waterAbsorb.getCurrentValue(); }
     public float getBankCapacity() { return bankCapacity.getCurrentValue(); }
-    public float getBankLevel() { return bankLevel.getCurrentValue(); }
     public float getDamageTaken() { return damageTaken.getCurrentValue();  }
     public float getEnergyPerSecond() { return energyPerSecond.getCurrentValue(); }
 
@@ -162,13 +139,19 @@ public class Plant : MonoBehaviour {
         return myBlueprint;
     }
 
-    private void getCurrentUpgrades()
-    {
-        upgrade = myBlueprint.getAllUpgrades();
+    /// <summary>
+    /// Gibt den momentanen Wert für ein bestimmtes Upgrade an.
+    /// </summary>
+    /// <param name="i">UpgradeID</param>
+    /// <returns>Momentaner Wert des Upgrades</returns>
+    private float getCurrentValueForUpgrade(int i) {
+        return myBlueprint.getUpgradeList()[i].getCurrentValue();
     }
 
+    /// <summary>
+    /// Passt die Stats neu an.
+    /// </summary>
     public void pushChanges() {
-        getCurrentUpgrades();
         pushMaxHealth();
         pushFoV();
         pushMaxAge();
@@ -182,29 +165,29 @@ public class Plant : MonoBehaviour {
     /// MaxHealth abhängig von height.
     /// </summary>
     private void pushMaxHealth() {
-        int height = upgrade[0];
-        maxHealth = (int)System.Math.Pow(2, height) * baseHealth;
+        float height = getCurrentValueForUpgrade(0);
+        health.setMaxValue( (int)System.Math.Pow(2, height) * baseHealth);
     }
     /// <summary>
     /// Field of View abhängig von height.
     /// </summary>
     private void pushFoV() {
-        int height = upgrade[0];
+        float height = getCurrentValueForUpgrade(0);
         fieldOfView.setCurrentValue(fieldOfView.getBaseValue() + height);
     }
     //TODO: Define params
     private void pushMaxAge() {
         // example
-        foreach (int n in upgrade) {
-            maxAge += n;
+        for(int n = 0; n > myBlueprint.getUpgradeList().Count(); n++) {
+            age.setMaxValue(age.getMaxValue() + getCurrentValueForUpgrade(n));
         }
     }
     /// <summary>
     /// DamageTaken abhängig von efficiency und thickStalk, range 50% - 150%.
     /// </summary>
     private void pushDamageTaken() {
-        int efficiency = upgrade[8];
-        int thickStalk = upgrade[7];
+        float efficiency = getCurrentValueForUpgrade(8);
+        float thickStalk = getCurrentValueForUpgrade(7);
 
         damageTaken.setCurrentValue(damageTaken.getBaseValue() + (thickStalk * 0.1f) - (efficiency * 0.1f));
     }
@@ -213,8 +196,8 @@ public class Plant : MonoBehaviour {
     /// bei negativ spielt damageTaken eine Rolle.
     /// </summary>
     private void pushHps() {
-        int regen = upgrade[1];
-        int insects = upgrade[9];
+        float regen = getCurrentValueForUpgrade(1);
+        float insects = getCurrentValueForUpgrade(9);
 
         healthPerSecond.setCurrentValue((maxHealth * regen * 0.02f) - (maxHealth * insects * 0.01f * damageTaken.getCurrentValue()));
     }
@@ -222,8 +205,8 @@ public class Plant : MonoBehaviour {
     /// Basic Nutrient Absorb Value abhängig von thickStalk und largePetals, range 50% - 150%.
     /// </summary>
     private void pushNutrientAbsorb() {
-        int thickStalk = upgrade[7];
-        int porousRoots = upgrade[5];
+        float thickStalk = getCurrentValueForUpgrade(7);
+        float porousRoots = getCurrentValueForUpgrade(5);
 
         nutrientAbsorb.setCurrentValue(nutrientAbsorb.getBaseValue() + (porousRoots * 0.1f) - (thickStalk * 0.1f));
     }
@@ -231,21 +214,21 @@ public class Plant : MonoBehaviour {
     /// Maximale Bank Kapazität abhängig von height und thickStalk.
     /// </summary>
     private void pushBankCapacity() {
-        int thickStalk = upgrade[7];
-        int height = upgrade[0];
+        float thickStalk = getCurrentValueForUpgrade(7);
+        float height = getCurrentValueForUpgrade(0);
 
-        bankCapacity.setCurrentValue(bankCapacity.getBaseValue() + (height * 100) + (thickStalk * 25));
+        bankCapacity.setMaxValue(bankCapacity.getBaseValue() + (height * 100) + (thickStalk * 25));
     }
     /// <summary>
     /// Energieausgabe abhängig von height, regen, deepRoots, bigLeaves, largePetals und efficiency.
     /// </summary>
     private void pushEps() {
-        int height = upgrade[0];
-        int regen = upgrade[1];
-        int efficiency = upgrade[8];
-        int deepRoots = upgrade[2];
-        int bigLeaves = upgrade[3];
-        int largePetals = upgrade[4];
+        float height = getCurrentValueForUpgrade(0);
+        float regen = getCurrentValueForUpgrade(1);
+        float efficiency = getCurrentValueForUpgrade(8);
+        float deepRoots = getCurrentValueForUpgrade(2);
+        float bigLeaves = getCurrentValueForUpgrade(3);
+        float largePetals = getCurrentValueForUpgrade(4);
 
         energyPerSecond.setCurrentValue(bankCapacity.getCurrentValue() * (height + regen + deepRoots + bigLeaves + largePetals - 2 * efficiency) * 0.01f);
     }
@@ -253,7 +236,7 @@ public class Plant : MonoBehaviour {
     /// Pflanze gewinnt Sonnenenergie abhängig vom allgemeinen NutrientAbsorb und dem largePetals Upgrade.
     /// </summary>
     private void pushSunAbsorb() {
-        int largePetals = upgrade[4];
+        float largePetals = getCurrentValueForUpgrade(4);
 
         sunAbsorb.setCurrentValue(nutrientAbsorb.getCurrentValue() + largePetals * 0.1f);
     }
@@ -262,7 +245,7 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void pushWindAbsorb()
     {
-        int bigLeaves = upgrade[3];
+        float bigLeaves = getCurrentValueForUpgrade(3);
 
         sunAbsorb.setCurrentValue(nutrientAbsorb.getCurrentValue() + bigLeaves * 0.1f);
     }
@@ -271,17 +254,29 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void pushWaterAbsorb()
     {
-        int deepRoots = upgrade[2];
+        float deepRoots = getCurrentValueForUpgrade(2);
 
         sunAbsorb.setCurrentValue(nutrientAbsorb.getCurrentValue() + deepRoots * 0.1f);
     }
-    private void getNextUpgrade() {
-        int upgradeID = blueprintSequence.ElementAt(currentStage);
 
-        //Upgrade validation step #1, making sure Sequence
-        if (upgradeID <= myBlueprint.getNumOfUpgrades() && upgradeID >= 0) {
-            myBlueprint.incrementUpgrade(upgradeID);
-            pushChanges();
+    /// <summary>
+    /// Arbeitet Upgrade an abzuarbeitender Stelle ab und passt dann Stats an
+    /// </summary>
+    private void workOnSequence() {
+
+        //Sicherstellen ob noch ein Upgrade vorhanden ist
+        if (currentStage < myBlueprint.getUpgradeList().Count())
+        {
+            int upgradeID = myBlueprint.getSequence()[currentStage];
+
+            //Upgrade validation, sicherstellen dass es sich um ein vorhandenes Upgrade handelt, es gibt nur 0 bis numOfUpgrades Upgrades.
+            if (upgradeID <= myBlueprint.getNumOfUpgrades() && upgradeID >= 0)
+            {
+                myBlueprint.incrementUpgrade(upgradeID);
+                pushChanges();
+                currentStage++;
+            }
         }
+
     }
 }

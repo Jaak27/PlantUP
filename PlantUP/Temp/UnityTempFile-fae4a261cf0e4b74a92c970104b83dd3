@@ -92,7 +92,10 @@
 -define:UNITY_TEAM_LICENSE
 -define:ENABLE_VSTU
 Assets/_Scripts/Field/PlayingFieldLogic.cs
+Assets/_Scripts/Plant/BaseStat.cs
+Assets/_Scripts/Plant/BaseUpgrade.cs
 Assets/_Scripts/Plant/Blueprint.cs
+Assets/_Scripts/Plant/ContainerStat.cs
 Assets/_Scripts/Plant/Plant.cs
 Assets/_Scripts/Tiles/GroundTile.cs
 Assets/_Scripts/Tiles/MountainTile.cs
