@@ -33,9 +33,15 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 	// Update is called once per frame
 	void Update () {
 
+
+
         if (selected == true)
         {
-
+            
+            print(this.gameObject.transform.position.x);
+            print(GameObject.Find("feldSelect").transform.position.x);
+            GameObject.Find("feldSelect").transform.position = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y,1);
+            GameObject.Find("feldSelect").GetComponent<SpriteRenderer>().enabled = true;
             fenster_FeldInfo.setUp(true);
             fenster_PflanzenInfo.setUp(true);
             fenster_UpgradeInfo.setUp(true);
@@ -90,10 +96,17 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
             
         }
+        else
+        {
+            
+           
+               
+        }
 
         if(Input.GetMouseButton(1)) // feld wird deselektiert
         {
             selected = false;
+            GameObject.Find("feldSelect").GetComponent<SpriteRenderer>().enabled = false;
         }
 
         if (mouseOverObject)
@@ -101,6 +114,7 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             if(Input.GetMouseButtonDown(0))
             {
                 selected = true;
+                
             }
         }
 
