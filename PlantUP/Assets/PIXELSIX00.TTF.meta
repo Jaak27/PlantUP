@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 15caacb0073e674448ea26b33231e04f
+timeCreated: 1494760302
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: PixelSix00
+  fontNames:
+  - PixelSix00
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 2
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
