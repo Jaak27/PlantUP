@@ -7,141 +7,160 @@ public class Blueprint : MonoBehaviour {
     /// <summary>
     /// Upgrade zum Erhöhen der FoV und des Alters.
     /// </summary>
-    int height = 0;
-    int maxHeight = 6;
+    static readonly int maxHeight = 6;
+    BaseUpgrade height = new BaseUpgrade(maxHeight, "height");
     /// <summary>
     /// Upgrade zum Erhöhen der hps, erhöht aber auch eps.
     /// </summary>
-    int regeneration = 0;
-    int maxRegeneration = 6;
+    static readonly int maxRegeneration = 6;
+    BaseUpgrade regeneration = new BaseUpgrade(maxHeight, "regeneration");
+
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über benachbarte WaterTiles.
     /// </summary>
-    int deepRoots = 0;
-    int maxDeepRoots = 10;
+    static readonly int maxDeepRoots = 10;
+    BaseUpgrade deepRoots = new BaseUpgrade(maxHeight, "deepRoots");
+
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über Windstärke.
     /// </summary>
-    int bigLeaves = 0;
-    int maxBigLeaves = 10;
+    static readonly int maxBigLeaves = 10;
+    BaseUpgrade bigLeaves = new BaseUpgrade(maxHeight, "bigLeaves");
+
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über Sonne.
     /// </summary>
-    int largePetals = 0;
-    int maxLargePetals = 5;
+    static readonly int maxLargePetals = 5;
+    BaseUpgrade largePetals = new BaseUpgrade(maxHeight, "largePetals");
+
     /// <summary>
     /// Upgrade zur Aufnahme von Energie in der GroundTile.
     /// </summary>
-    int porousRoots = 0;
-    int maxPorousRoots = 10;
+    static readonly int maxPorousRoots = 10;
+    BaseUpgrade porousRoots = new BaseUpgrade(maxHeight, "porousRoots");
+
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über benachbarte GroundTiles.
     /// </summary>
-    int spreadRoots = 0;
-    int maxSpreadRoots = 5;
+    static readonly int maxSpreadRoots = 5;
+    BaseUpgrade spreadRoots = new BaseUpgrade(maxHeight, "spreadRoots");
+
     /// <summary>
     /// Upgrade zum Schutz vor Angriffen, hemmt Energieaufnahme.
     /// </summary>
-    int thickStalk = 0;
-    int maxThickStalk = 5;
+    static readonly int maxThickStalk = 5;
+    BaseUpgrade thickStalk = new BaseUpgrade(maxHeight, "thickStalk");
+
     /// <summary>
     /// Upgrade zur effizienteren Energieausgabe.
     /// </summary>
-    int efficiency = 0;
-    int maxEfficieny = 5;
+    static readonly int maxEfficieny = 5;
+    BaseUpgrade efficiency = new BaseUpgrade(maxHeight, "efficiency");
+
     /// <summary>
     /// Upgrade zur Chance auf periodische Samenverteilung.
     /// </summary>
-    int insects = 0;
-    int maxInsects = 3;
+    static readonly int maxInsects = 3;
+    BaseUpgrade insects = new BaseUpgrade(maxHeight, "insects");
 
-    // Use this for initialization
-    void Start() {
+    /// <summary>
+    /// Sequenz in welcher die Upgrades abgearbeitet werden sollen
+    /// </summary>
+    List<int> blueprintSequence;
+    List<BaseUpgrade> upgradeList;
+    int numOfUpgrades = 10;
 
+    public Blueprint() {
+        setUpUpgradeList();
     }
 
-    // Update is called once per frame
-    void Update() {
+    public int getHeight() { return height.getCurrentValue(); }
+    public int getRegeneration() { return regeneration.getCurrentValue(); }
+    public int getDeepRoots() { return deepRoots.getCurrentValue(); }
+    public int getBigLeaves() { return bigLeaves.getCurrentValue(); }
+    public int getLargePetals() { return largePetals.getCurrentValue(); }
+    public int getPorousRoots() { return porousRoots.getCurrentValue(); }
+    public int getSpreadRoots() { return spreadRoots.getCurrentValue(); }
+    public int getThickStalk() { return thickStalk.getCurrentValue(); }
+    public int getEfficiency() { return efficiency.getCurrentValue(); }
+    public int getInsects() { return insects.getCurrentValue(); }
 
+    public int[] getAllUpgrades()
+    {
+        int[] upgrades = { getHeight(),getRegeneration(),getDeepRoots(),getBigLeaves(),getLargePetals(),
+                         getPorousRoots(),getSpreadRoots(),getThickStalk(),getEfficiency(),getInsects()};
+        return upgrades;
     }
 
-    public int getHeight() { return height; }
-    public int getRegeneration() { return regeneration; }
-    public int getDeepRoots() { return deepRoots; }
-    public int getBigLeaves() { return bigLeaves; }
-    public int getLargePetals() { return largePetals; }
-    public int getPorousRoots() { return porousRoots; }
-    public int getSpreadRoots() { return spreadRoots; }
-    public int getThickStalk() { return thickStalk; }
-    public int getEfficiency() { return efficiency; }
-    public int getInsects() { return insects; }
+    /// <summary>
+    /// Setze Upgrade auf bestimmtes Level.
+    /// </summary>
+    /// <param name="u">Upgrade</param>
+    /// <param name="i">Level</param>
+    public void setUpgradeLevel(BaseUpgrade u, int i)
+    {
+        u.setLevel(i);
+    }
 
-    public void setHeight(int i) {
-        if (i <= maxHeight || i >= 0) {
-            height = i;
+    /// <summary>
+    /// Inkrementiere bestimmtes Upgrade.
+    /// </summary>
+    /// <param name="u">UpgradeID des Upgrades das inkrementiert werden soll</param>
+    public void incrementUpgrade(int i) {
+        upgradeList[i].incrementLevel();
+    }
+
+    private void setUpUpgradeList() {
+        upgradeList = new List<BaseUpgrade> { height, regeneration, deepRoots, bigLeaves, largePetals,
+                                            porousRoots, spreadRoots, thickStalk, efficiency, insects};
+    }
+    public List<BaseUpgrade> getUpgradeList()
+    {
+        return upgradeList;
+    }
+    public int getNumOfUpgrades()
+    {
+        return numOfUpgrades;
+    }
+    /// <summary>
+    /// Füge abzuarbeitendes Upgrade der Sequenz hinzu
+    /// </summary>
+    /// <param name="upgradeNum">Einzelnes Upgrade als integer</param>
+    public void addToSequence(int upgradeNum) {
+        if (upgradeNum >= 0 && upgradeNum <= numOfUpgrades)
+        {
+            blueprintSequence.Add(upgradeNum);
+        }
+        else
+        {
+            Debug.Log(upgradeNum + "ist keine UpgradeID, kann nicht zur Sequenz hinzugefügt werden.");
         }
     }
-    public void setRegeneration(int i)
+
+    /// <summary>
+    /// Füge komplette Sequenz hinzu 
+    /// </summary>
+    /// <param name="seq">Integer array mit Upgradesequenz</param>
+    public void addWholeSequence(int[] seq)
     {
-        if (i <= maxRegeneration || i >= 0)
+        foreach (int i in seq)
         {
-            regeneration = i;
+            if (i >= 0 && i <= numOfUpgrades)
+            {
+                blueprintSequence.Add(i);
+            }
+            else
+            {
+                Debug.Log(i + "ist keine UpgradeID, kann nicht zur Sequenz hinzugefügt werden.");
+            }
         }
     }
-    public void setDeepRoots(int i)
+
+    /// <summary>
+    /// Leere vorhandene Sequenz
+    /// </summary>
+    public void resetSequence()
     {
-        if (i <= maxDeepRoots || i >= 0)
-        {
-            deepRoots = i;
-        }
-    }
-    public void setBigLeaves(int i)
-    {
-        if (i <= maxBigLeaves || i >= 0)
-        {
-            bigLeaves = i;
-        }
-    }
-    public void setLargePetals(int i)
-    {
-        if (i <= maxLargePetals || i >= 0)
-        {
-            largePetals = i;
-        }
-    }
-    public void setPorousRoots(int i)
-    {
-        if (i <= maxPorousRoots || i >= 0)
-        {
-            porousRoots = i;
-        }
-    }
-    public void setSpreadRoots(int i)
-    {
-        if (i <= maxSpreadRoots || i >= 0)
-        {
-            spreadRoots = i;
-        }
-    }
-    public void setThickStalk(int i)
-    {
-        if (i <= maxThickStalk || i >= 0)
-        {
-            thickStalk = i;
-        }
-    }
-    public void setEfficiency(int i)
-    {
-        if (i <= maxEfficieny || i >= 0)
-        {
-            efficiency = i;
-        }
-    }
-    public void setInsects(int i)
-    {
-        if (i <= maxInsects || i >= 0)
-        {
-            insects = i;
-        }
+        blueprintSequence.Clear();
     }
 }
