@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:PlantUP/Assets/Prefabs.meta
 guid: 5582a7d8bbfbb6147b48d5392895cefe
 folderAsset: yes
 timeCreated: 1494605420
+=======
+guid: c28b5d531c89a5f448ff574d6817ec8e
+folderAsset: yes
+timeCreated: 1494517381
+>>>>>>> PlantBlueprint:PlantUP/Assets/Sprites/FieldIcons.meta
 licenseType: Free
 DefaultImporter:
   userData: 
