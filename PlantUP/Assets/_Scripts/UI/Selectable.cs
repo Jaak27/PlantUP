@@ -44,20 +44,20 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             if (this.gameObject.GetComponent<GroundTile>() != null)
             {
 
-                text_Feld.text = "Felddaten " +
-                            "\n" + gameObject.name +
-                            "\n" + "Bodenwert: " + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
-                            //"/n Windwert: " + this.gameObject.GetComponent<GroundTile>().getWindStrength() +
+                text_Feld.text =
+                            "Bodenwert: " + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
+                            "\nWindwert: " + //this.gameObject.GetComponent<GroundTile>().getWindStrength() +
                             "\n" + "Sonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
 
-                text_Pflanze.text = "Pflanzendaten: (Falls vorhanden)" +
-                                    "\n" + "Produktion: 100" +
-                                     "\n" + "Verbrauch: 100" +
-                                     "\n" + "Alter: 100" +
-                                     "\n" + "Size: 111" +
-                                     "\n" + "Health: 100";
-          
-                            
+                text_Pflanze.text = "Health: 100/100" +
+                                     "\n" + "Energy: 100/100" +
+                                     "\n" + "Age: 100" +
+                                     "\n" + "" +
+                                     "\n" + "N:  100   Wa: 100" +
+                                     "\n" + "Wi: 100     S: 100";
+
+
+
             }
 
             if (this.gameObject.GetComponent<WaterTile>() != null)
@@ -67,10 +67,9 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 fenster_PflanzenInfo.setUp(false);
                 fenster_UpgradeInfo.setUp(false);
 
-                text_Feld.text = "Felddaten" +
-                            "\n" + gameObject.name +
-                            "\nWasserwert: " + this.gameObject.GetComponent<WaterTile>().getWaterStrength() +
-                            //"/n Windwert: " + this.gameObject.GetComponent<WaterTile>().getWindStrength() +
+                text_Feld.text =
+                            "Wasserwert: " + this.gameObject.GetComponent<WaterTile>().getWaterStrength() +
+                            "\nWindwert: " + //this.gameObject.GetComponent<WaterTile>().getWindStrength() +
                             "\nSonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
                             
             }
@@ -82,9 +81,8 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 fenster_PflanzenInfo.setUp(false);
                 fenster_UpgradeInfo.setUp(false);
 
-                text_Feld.text = "Felddaten" +
-                            "\n" + gameObject.name +
-                            //"\nWindwert: " + this.gameObject.GetComponent<MountainTile>().getWindStrength() +
+                text_Feld.text =
+                            "Windwert: " + //this.gameObject.GetComponent<MountainTile>().getWindStrength() +
                             "\nSonnenwert: " + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
                             
             }
