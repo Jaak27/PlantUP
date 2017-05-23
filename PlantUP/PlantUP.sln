@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantUP", "PlantUP.csproj", "{C810E6DF-7637-A293-1976-37F35A0CFEEF}"
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlantUP.CSharp", "PlantUP.CSharp.csproj", "{357B3ECB-016F-89A4-AF3A-D0C133A30E5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C810E6DF-7637-A293-1976-37F35A0CFEEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C810E6DF-7637-A293-1976-37F35A0CFEEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C810E6DF-7637-A293-1976-37F35A0CFEEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C810E6DF-7637-A293-1976-37F35A0CFEEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{357B3ECB-016F-89A4-AF3A-D0C133A30E5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{357B3ECB-016F-89A4-AF3A-D0C133A30E5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{357B3ECB-016F-89A4-AF3A-D0C133A30E5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{357B3ECB-016F-89A4-AF3A-D0C133A30E5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -52,8 +52,7 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
                 text_Feld.text ="-Feldata-" +
                                 "\nBodenwert.........." + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
-                                "\nWasserwert................" + 
-                                "\nWindwert......................" + //this.gameObject.GetComponent<GroundTile>().getWindStrength() +
+                                "\nWindwert................" + this.gameObject.GetComponent<GroundTile>().getWindStrength() +
                                 "\n" + "Sonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
 
                 text_Pflanze.text =  "-Planzendata-" + 
@@ -78,9 +77,8 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 fenster_UpgradeInfo.setUp(false);
 
                 text_Feld.text ="-Feldata-" +
-                                "\nBodenwert................." +
                                 "\nWasserwert..........." + this.gameObject.GetComponent<WaterTile>().getWaterStrength() +
-                                "\nWindwert......................" + //this.gameObject.GetComponent<WaterTile>().getWindStrength() +
+                                "\nWindwert................" + this.gameObject.GetComponent<WaterTile>().getWindStrength() +
                                 "\nSonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
                             
             }
@@ -92,10 +90,8 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 fenster_PflanzenInfo.setUp(false);
                 fenster_UpgradeInfo.setUp(false);
 
-                text_Feld.text ="-Feldata-" +    
-                                "\nBodenwert................." +
-                                "\nWasserwert................" +
-                                "\nWindwert......................" + //this.gameObject.GetComponent<MountainTile>().getWindStrength() +
+                text_Feld.text ="-Feldata-" +
+                                "\nWindwert................" + this.gameObject.GetComponent<MountainTile>().getWindStrength() +
                                 "\nSonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
                             
             }

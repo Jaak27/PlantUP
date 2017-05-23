@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 /// <summary>
 /// Markiert Felder auf dem Spielfeld.
 /// </summary>
@@ -26,6 +27,30 @@ public interface isTile
 
 public class PlayingFieldLogic : MonoBehaviour {
 
+    /// <summary>
+    /// Eine Struktur um Events zu speichern.
+    /// Events ändern die Windstärke, Richtung oder die Lichtstärke.
+    /// </summary>
+    private class RandomEvent
+    {
+        //"Licht" 
+        //"Windstärke"
+        //"Richtung"
+        public string type; 
+        //Eine Zahl die auf die Licht oder Windstärke addiert wird, negativ für schwächen.
+        //Für Windrichtung: positiv dreht den Wind im Uhrzeigersinn, eine Negative gegen den Uhrzeiger.
+        public int change;
+        //Wieviel Zeit zwischen diesem und dem vorherigen Event vergehen soll, in Ticks.
+        public int time;
+    }
+
+
+    /// <summary>
+    /// Speichert alle ausgewürfelten Events.
+    /// </summary>
+    List<RandomEvent> eventListe;
+
+
     public GroundTile groundTilePrefab;
     public WaterTile waterTilePrefab;
     public MountainTile mountainTilePrefab;
@@ -42,7 +67,8 @@ public class PlayingFieldLogic : MonoBehaviour {
     /// <summary>
     /// Die Richtung aus der der Wind weht.
     /// 0 = links oben
-    /// 1 = recht soben
+    /// 1 = rechts oben
+    /// 5 = links unten
     /// </summary>
     int windDirection;
 
@@ -80,11 +106,8 @@ public class PlayingFieldLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-
-
-
         GenerateRectangleMap();
-
+        GenerateEvents(18000);
 	}
 
 
@@ -264,6 +287,7 @@ public class PlayingFieldLogic : MonoBehaviour {
                 else
                     neighbours[j] = null;
             }
+            felder[i].setNeighbours(neighbours);
         }
 
 
@@ -277,11 +301,135 @@ public class PlayingFieldLogic : MonoBehaviour {
         windDirection = Mathf.FloorToInt(Random.Range(0f, 5.99f));
     }
 	
+    public void GenerateEvents(int maximaleTickAnzahl)
+    {
+        eventListe = new List<RandomEvent>();
+        int ticks = 0;
+        while (ticks < maximaleTickAnzahl)
+        {
+            RandomEvent neu = new RandomEvent();
+            //Würfel Typ aus
+            int random = Random.Range(0, 3);
+            switch (random)
+            {
+                case 0:
+                    neu.type = "Licht";
+                    //Würfel positiven oder negativenEffekt aus
+                    if (Random.Range(0,2) == 0)
+                    {
+                        //Positiv
+                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie 1 oder +15, nicht so häufig auftreten.
+                        //Durchschnitt wäre 7 oder 8.
+                        neu.change = Random.Range(0, 8) + Random.Range(1, 9);
+                    }
+                    else
+                    {
+                        //Negativ
+                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie -1 oder -15, nicht so häufig auftreten.
+                        //Durchschnitt wäre -7 oder -8.
+                        neu.change = Random.Range(0, -8) + Random.Range(-1, -9);
+                    }
+                    break;
+                case 1:
+                    neu.type = "Windstärke";
+                    //Würfel positiven oder negativenEffekt aus
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        //Positiv
+                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie 5 oder +35, nicht so häufig auftreten.
+                        neu.change = Random.Range(2, 18) + Random.Range(3, 19);
+                    }
+                    else
+                    {
+                        //Negativ
+                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie -5 oder -35, nicht so häufig auftreten.
+                        neu.change = Random.Range(-2, -18) + Random.Range(-3, -19);
+                    }
+                    break;
+                case 2:
+                    neu.type = "Richtung";
+                    //Würfel Änderung nach links oder rechts aus
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        //Rechts
+                        neu.change = 1;
+                    }
+                    else
+                    {
+                        //Links
+                        neu.change = -1;
+                    }
+                    break;
+                default:
+                    neu.type = "Error";
+                    //Ein Fehler wird ignoriert, und sollte sowieso nicht auftreten.
+                    break;
+            }
+            //Wirf eine Zeit aus
+            //Jeden Tick wird die Time des obersten Events um 1 verringert, erreicht sie 0 wird das Event ausgehandelt, und aus der Liste genommen.
+            //Minimalwert = 0, Maximalwert = 240 Ticks, Durschnitt ist ~120?
+            //Muss noch poliert werden.
+            neu.time = Random.Range(0, 120) + Random.Range(0, 120) + Random.Range(0, 120);
+
+            ticks += neu.time;
+            neu.time = 5;
+            eventListe.Add(neu);
+        }
+    }
+
+
 	// Update is called once per frame
 	void Update () 
-      {
-		
+    {
+        //Starte die Events
+        if (eventListe.Count > 0)
+        {
+            RandomEvent current = eventListe[0];
+            current.time--;
+            if (current.time <= 0)
+            {
+                eventListe.RemoveAt(0);
+                handleEvent(current);
+            }
+        }
 	}
+
+
+    private void handleEvent(RandomEvent currentEvent)
+    {
+        switch (currentEvent.type)
+        {
+            case "Licht":
+                lightStrength += currentEvent.change;
+                if (lightStrength < minimumLightStrength)
+                    lightStrength = minimumLightStrength;
+                else if (lightStrength > maximumLightStrength)
+                    lightStrength = maximumLightStrength;
+                break;
+            case "Windstärke":
+                windStrength += currentEvent.change;
+                if (windStrength < minimumWindStrength)
+                    windStrength = minimumWindStrength;
+                else if (windStrength > maximumWindStrength)
+                    windStrength = maximumWindStrength;
+
+                foreach (isTile tile in felder)
+                {
+                    tile.forceWindUpdate();
+                }
+                break;
+            case "Richtung":
+                windDirection += currentEvent.change;
+                windDirection = windDirection % 6;
+                foreach (isTile tile in felder)
+                {
+                    tile.forceWindUpdate();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     public int getLightStrength()
     {
