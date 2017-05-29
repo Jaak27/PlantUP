@@ -20,7 +20,7 @@ public class skillBarUI : MonoBehaviour {
 
         if(onScreen == true) // falls true auf dem Bildschirm bewegen
         {
-            float newY = Mathf.Lerp(gameObject.GetComponent<RectTransform>().anchoredPosition.y, 40, 0.3f);
+            float newY = Mathf.Lerp(gameObject.GetComponent<RectTransform>().anchoredPosition.y, 18, 0.3f);
             gameObject.GetComponent<Transform>().position = new Vector3(gameObject.GetComponent<Transform>().position.x, newY, 1);
         }
         else // falls false offScreen bewegen

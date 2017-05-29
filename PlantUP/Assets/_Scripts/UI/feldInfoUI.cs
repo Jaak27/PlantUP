@@ -20,7 +20,7 @@ public class feldInfoUI : MonoBehaviour {
 
             if (onScreen == true) // falls true auf dem Bildschirm bewegen
              {
-                float newX = Mathf.Lerp(gameObject.GetComponent<RectTransform>().anchoredPosition.x, -135, 0.3f);
+                float newX = Mathf.Lerp(gameObject.GetComponent<RectTransform>().anchoredPosition.x, -52, 0.3f);
                 gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(newX,gameObject.GetComponent<Transform>().position.y , 1);
             }
             else // falls false offScreen bewegen

@@ -200,7 +200,7 @@ public class PlayingFieldLogic : MonoBehaviour {
             {
                 
 
-                Vector2 size = new Vector2(0.866f, 0.747f);
+                Vector2 size = new Vector2(0.875f, 0.75f);
                 Vector2 position2d;
                 position2d = new Vector2(x - xSize / 2, y - ySize / 2);
                 if (y % 2 == 1)
