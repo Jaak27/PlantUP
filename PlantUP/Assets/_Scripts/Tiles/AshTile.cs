@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundTile : MonoBehaviour, isTile
+public class AshTile : MonoBehaviour, isTile
 {
     /// <summary>
     /// Eine Referenz auf das Spielfeld.
@@ -23,19 +23,14 @@ public class GroundTile : MonoBehaviour, isTile
     /// </summary>
     int nutrientValue;
     
-    public static int minimumNutrientValue = 300;
-    public static int maximumNutrientValue = 1300;
+    public static int minimumNutrientValue = 900;
+    public static int maximumNutrientValue = 1500;
 
     /// <summary>
     /// Die Windstärke die auf diesem Feld herrscht.
     /// </summary>
     int windstrength;
-
-    /// <summary>
-    /// Um wieviel % ein Bodenfeld den Wind wiederauffrischt.
-    /// Erhöht den Windwert um % der originalen Windstärke.
-    /// </summary>
-    static public float groundWindRefreshFactor = 0.5f;
+    
 
     /// <summary>
     /// Ist windUpdate = true, muss die Windstärke neu berechnet werden.
@@ -64,10 +59,10 @@ public class GroundTile : MonoBehaviour, isTile
     {
 
     }
-
+    
     public tileType getTileType()
     {
-        return tileType.GROUND;
+        return tileType.ASH;
     }
 
     public isTile[] getNeighbours()
@@ -113,7 +108,7 @@ public class GroundTile : MonoBehaviour, isTile
     {
 
         //Der Wind frischt ein bischen auf, bis auf den Maximalwert.
-        int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * groundWindRefreshFactor);
+        int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * GroundTile.groundWindRefreshFactor);
         if (windSpread > getPlayingField().getWindStrength())
             windSpread = getPlayingField().getWindStrength();
 

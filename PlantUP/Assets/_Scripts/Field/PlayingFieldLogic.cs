@@ -7,9 +7,9 @@ using UnityEngine;
 /// <summary>
 /// Markiert Felder auf dem Spielfeld.
 /// </summary>
-public interface isTile
+public interface isTile 
 {
-    string getTileType();
+    tileType getTileType();
     isTile[] getNeighbours();
     void setNeighbours(isTile[] neighbours);
 
@@ -20,9 +20,21 @@ public interface isTile
     int getWindStrength();
     int getWindSpread();
 
+    int getNutrientValue();
+    int getWaterStrength();
+
     void forceWindUpdate();
     void updateWindStrength();
+
+    void removeObject();
+    void replaceNeighbour(isTile oldTile, isTile newTile);
+    Transform getTransform();
     
+}
+
+public enum tileType
+{
+    GROUND, WATER, MOUNTAIN, VOLCANO, ASH
 }
 
 public class PlayingFieldLogic : MonoBehaviour {
@@ -45,6 +57,8 @@ public class PlayingFieldLogic : MonoBehaviour {
     }
 
 
+
+
     /// <summary>
     /// Speichert alle ausgewürfelten Events.
     /// </summary>
@@ -52,8 +66,10 @@ public class PlayingFieldLogic : MonoBehaviour {
 
 
     public GroundTile groundTilePrefab;
+    public AshTile ashTilePrefab;
     public WaterTile waterTilePrefab;
     public MountainTile mountainTilePrefab;
+    public VolcanoTile volcanoTilePrefab;
 
 
 
@@ -116,10 +132,12 @@ public class PlayingFieldLogic : MonoBehaviour {
         Random.InitState(seed);
 
         //Speichert den Typen jedes Feld bevor es finaliesiert wird.
-        int[,] tempField = new int[xSize, ySize];
+        tileType[,] tempField = new tileType[xSize, ySize];
 
 
         //Generiere ein Starttyp für jedes Feld.
+       
+
         for (int x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
@@ -130,17 +148,17 @@ public class PlayingFieldLogic : MonoBehaviour {
                 //80% Chance das es ein Groundfeld wird.
                 if (randomChance < 8f)
                 {
-                    tempField[x, y] = 0;
+                    tempField[x, y] = tileType.GROUND;
                 }
                 //10% Chance für ein Wasserfeld
                 else if (randomChance < 9f)
                 {
-                    tempField[x, y] = 1;
+                    tempField[x, y] = tileType.WATER;
                 }
                 //10% chance für ein Gebirgsfeld
                 else
                 {
-                    tempField[x, y] = 2;
+                    tempField[x, y] = tileType.MOUNTAIN;
                 }
             }
         }
@@ -155,6 +173,8 @@ public class PlayingFieldLogic : MonoBehaviour {
                 {
                     int countMountain = 0;
                     int countWater = 0;
+                    int countVolcano = 0;
+                    int countAsh = 0;
 
                     int[,] neighbourCoords;
 
@@ -171,42 +191,74 @@ public class PlayingFieldLogic : MonoBehaviour {
                             && y + neighbourCoords[j, 1] >= 0 && y + neighbourCoords[j, 1] < ySize)
                         { 
 
-                            if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 2)
+                            if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.MOUNTAIN)
                                 countMountain++;
-                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == 1)
+                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.WATER)
                                 countWater++;
+                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.VOLCANO)
+                                countVolcano++;
+                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.ASH)
+                                countAsh++;
                         }
                     }
 
                     //Ein GroundFeld das neben 3 oder mehr Wasserfeldern ist, kann sich selbst in ein Wassfeld verwandeln.
                     //Ist es neben 1 oder 2 Gebirgsfeldern, kann es sich auch in ein Gebirgsfeld verwandeln
-                    if (tempField[x, y] == 0)
+                    //Ist es neben einem Vulkan oder einem Ashefeld, kann es sich in ein Ashfeld wandeln.
+                    if (tempField[x, y] == tileType.GROUND)
                     {
                         //Chance sich in ein Wasserfeld zu verwandeln.
                         if (countWater >= 2)
                         {
                             float chance = Random.Range(0f, 1f);
                             if (chance <= 0.1 + 0.05 * countWater)
-                                tempField[x, y] = 1;
+                                tempField[x, y] = tileType.WATER;
                         }
                         //Chance sich in ein Gebirgsfeld zu verwandeln.
                         if (countMountain == 2 || countMountain == 1)
                         {
                             float chance = Random.Range(0f, 1f);
                             if (chance <= 0.15 * countMountain)
-                                tempField[x, y] = 2;
+                                tempField[x, y] = tileType.MOUNTAIN;
+                        }
+                        //Chance sich in ein Aschefeld zu verwandeln.
+                        if (countVolcano >= 1 || countAsh >= 1)
+                        {
+                            float chance = Random.Range(0f, 1f);
+                            if (chance <= 0.5 * countVolcano + 0.1 * countAsh)
+                                tempField[x, y] = tileType.ASH;
                         }
                     }
+                    //Wasserfelder neben Vulkanen > Boden
+                    else if (tempField[x, y] == tileType.WATER)
+                    {
+                        //Chance sich in ein Groundfeld zu verwandeln.
+                        if (countVolcano >= 1)
+                        {
+                            float chance = Random.Range(0f, 1f);
+                            if (chance <= 0.3 + 0.2 * countVolcano)
+                                tempField[x, y] = tileType.GROUND;
+                        }
+
+                    }
                     //Gebirgsfelder können sich in Groundfelder verwandeln, wenn sie 2 oder mehr Wasserfelder berühren.
-                    else if (tempField[x, y] == 2)
+                    //Gebirgsfelder können sich in Vulkane verwandeln.
+                    else if (tempField[x, y] == tileType.MOUNTAIN)
                     {
                         //Chance sich in ein Groundfeld zu verwandeln.
                         if (countWater >= 2)
                         {
                             float chance = Random.Range(0f, 1f);
                             if (chance <= 0.2 + 0.075 * countWater)
-                                tempField[x, y] = 0;
+                                tempField[x, y] = tileType.GROUND;
                         }
+                        //Chance sich in ein Vulkan zu verwandeln
+                        //0.05%
+                        if (Random.Range(0f, 1f) <= 0.01)
+                        {
+                            tempField[x, y] = tileType.VOLCANO;
+                        }
+
                     }
 
                 }
@@ -233,19 +285,31 @@ public class PlayingFieldLogic : MonoBehaviour {
 
                 switch (tempField[x, y])
                 {
-                    case 1:
+                    case tileType.WATER:
                         WaterTile tempWater = Instantiate(waterTilePrefab, position, Quaternion.identity);
                         
                         felder[y * xSize + x] = tempWater;
                         tempWater.setWaterStrength((int)Random.Range(WaterTile.minimumWaterStrength, WaterTile.maximumWaterStrength));
                         tempWater.setPlayingField(this);
                         break;
-                    case 2:
+                    case tileType.MOUNTAIN:
                         MountainTile tempMountain = Instantiate(mountainTilePrefab, position, Quaternion.identity);
                         tempMountain.setPlayingField(this);
                         felder[y * xSize + x] = tempMountain;
                         break;
-                    case 0:
+                    case tileType.VOLCANO:
+                        VolcanoTile tempVolcano = Instantiate(volcanoTilePrefab, position, Quaternion.identity);
+                        tempVolcano.setPlayingField(this);
+                        felder[y * xSize + x] = tempVolcano;
+                        break;
+                    case tileType.ASH:
+                        AshTile tempAsh = Instantiate(ashTilePrefab, position, Quaternion.identity);
+                        tempAsh.setPlayingField(this);
+                        tempAsh.setNutrientValue((int)Random.Range(AshTile.minimumNutrientValue, AshTile.maximumNutrientValue));
+
+                        felder[y * xSize + x] = tempAsh;
+                        break;
+                    case tileType.GROUND:
                     default:
                         GroundTile tempGround = Instantiate(groundTilePrefab, position, Quaternion.identity);
                         tempGround.setPlayingField(this);
@@ -298,7 +362,7 @@ public class PlayingFieldLogic : MonoBehaviour {
         windStrength = (int)Random.Range(minimumWindStrength, maximumWindStrength);
         lightStrength = (int)Random.Range(minimumLightStrength, maximumLightStrength);
         
-        windDirection = Mathf.FloorToInt(Random.Range(0f, 5.99f));
+        windDirection = Random.Range(0, 6);
     }
 	
     public void GenerateEvents(int maximaleTickAnzahl)
@@ -372,7 +436,6 @@ public class PlayingFieldLogic : MonoBehaviour {
             neu.time = Random.Range(0, 120) + Random.Range(0, 120) + Random.Range(0, 120);
 
             ticks += neu.time;
-            neu.time = 5;
             eventListe.Add(neu);
         }
     }
@@ -430,6 +493,93 @@ public class PlayingFieldLogic : MonoBehaviour {
                 break;
         }
     }
+
+
+
+
+    /// <summary>
+    /// Ersetzt ein Feld durch ein neugeneriertes Feld eines anderen (oder dem selben) Typs.
+    /// Tötet jede Pflanze die sich auf dem Feld befindet, automatisch.
+    /// </summary>
+    public void replaceTile (isTile tile, tileType newType)
+    {
+        int index = findPositionOfTile(tile);
+        switch (newType)
+        {
+            case tileType.GROUND:
+                GroundTile tempGround = Instantiate(groundTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                tempGround.setPlayingField(this);
+                tempGround.setNutrientValue((int)Random.Range(GroundTile.minimumNutrientValue, GroundTile.maximumNutrientValue));
+                tempGround.setNeighbours(felder[index].getNeighbours());
+                for (int i = 0; i < 6; i++)
+                {
+                    tempGround.getNeighbours()[i].replaceNeighbour(felder[index], tempGround);
+                }
+                felder[index].removeObject();
+                felder[index] = tempGround;
+                break;
+            case tileType.ASH:
+                AshTile tempAsh = Instantiate(ashTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                tempAsh.setPlayingField(this);
+                tempAsh.setNutrientValue((int)Random.Range(AshTile.minimumNutrientValue, AshTile.maximumNutrientValue));
+                tempAsh.setNeighbours(felder[index].getNeighbours());
+                for (int i = 0; i < 6; i++)
+                {
+                    tempAsh.getNeighbours()[i].replaceNeighbour(felder[index], tempAsh);
+                }
+                felder[index].removeObject();
+                felder[index] = tempAsh;
+                break;
+            case tileType.WATER:
+                WaterTile tempWater = Instantiate(waterTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                tempWater.setPlayingField(this);
+                tempWater.setWaterStrength((int)Random.Range(WaterTile.minimumWaterStrength, WaterTile.maximumWaterStrength));
+                tempWater.setNeighbours(felder[index].getNeighbours());
+                for (int i = 0; i < 6; i++)
+                {
+                    tempWater.getNeighbours()[i].replaceNeighbour(felder[index], tempWater);
+                }
+                felder[index].removeObject();
+                felder[index] = tempWater;
+                break;
+            case tileType.MOUNTAIN:
+                MountainTile tempMountain = Instantiate(mountainTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                tempMountain.setPlayingField(this);
+                tempMountain.setNeighbours(felder[index].getNeighbours());
+                for (int i = 0; i < 6; i++)
+                {
+                    tempMountain.getNeighbours()[i].replaceNeighbour(felder[index], tempMountain);
+                }
+                felder[index].removeObject();
+                felder[index] = tempMountain;
+                break;
+            case tileType.VOLCANO:
+                VolcanoTile tempVolcano = Instantiate(volcanoTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                tempVolcano.setPlayingField(this);
+                tempVolcano.setNeighbours(felder[index].getNeighbours());
+                for (int i = 0; i < 6; i++)
+                {
+                    tempVolcano.getNeighbours()[i].replaceNeighbour(felder[index], tempVolcano);
+                }
+                felder[index].removeObject();
+                felder[index] = tempVolcano;
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    int findPositionOfTile(isTile tile)
+    {
+        for (int i = 0; i < felder.Length;i++)
+        {
+            if (felder[0] == tile)
+                return i;
+        }
+        return -1;
+    }
+
 
     public int getLightStrength()
     {

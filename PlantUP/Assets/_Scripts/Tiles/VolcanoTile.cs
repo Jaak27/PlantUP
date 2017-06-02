@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MountainTile : MonoBehaviour, isTile
+public class VolcanoTile : MonoBehaviour, isTile
 {
     
     /// <summary>
-    /// Auf wieviel reduziert der Berg die Windstärke.
-    /// Für die Balance.
+    /// Vulkane verwenden die selben Werte wie Bege.
     /// </summary>
-    static public double mountainWindFactor = 0.5;
 
    
 
@@ -39,11 +37,11 @@ public class MountainTile : MonoBehaviour, isTile
     {
         this.neighbours = neighbours;
     }
-    
-    
+
+
     public tileType getTileType()
     {
-        return tileType.MOUNTAIN;
+        return tileType.VOLCANO;
     }
 
 
@@ -51,7 +49,7 @@ public class MountainTile : MonoBehaviour, isTile
     {
         //BergFelder verringern die Windstärke
         
-        return Mathf.RoundToInt((float) (getWindStrength() * mountainWindFactor));
+        return Mathf.RoundToInt((float) (getWindStrength() * MountainTile.mountainWindFactor));
     }
 
 
@@ -71,7 +69,6 @@ public class MountainTile : MonoBehaviour, isTile
     {
         return 0;
     }
-
 
     public void updateWindStrength()
     {

@@ -44,12 +44,12 @@ public class WaterTile : MonoBehaviour, isTile
         return neighbours;
     }
 
-    public string getTileType()
+    public tileType getTileType()
     {
-        return "water";
+        return tileType.WATER;
     }
 
-    
+
     public int getWindSpread()
     {
         int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * waterWindRefreshFactor);
@@ -64,6 +64,13 @@ public class WaterTile : MonoBehaviour, isTile
             updateWindStrength();
         return windstrength;
     }
+
+
+    public int getNutrientValue()
+    {
+        return 0;
+    }
+
 
    
     public void updateWindStrength()
@@ -122,5 +129,24 @@ public class WaterTile : MonoBehaviour, isTile
     public PlayingFieldLogic getPlayingField()
     {
         return playingField;
+    }
+
+    public Transform getTransform()
+    {
+        return transform;
+    }
+
+    public void replaceNeighbour(isTile oldTile, isTile newTile)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (neighbours[i] == oldTile)
+                neighbours[i] = newTile;
+        }
+    }
+
+    public void removeObject()
+    {
+        Destroy(this.gameObject);
     }
 }

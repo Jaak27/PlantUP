@@ -47,15 +47,22 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             fenster_UpgradeInfo.setUp(true);
 
             // Welche Infos angezeigt werden sollen abhängig von den Tiles
-            if (this.gameObject.GetComponent<GroundTile>() != null)
+            
+            if (this.gameObject.GetComponent<isTile>() != null)
             {
+                //getTileType gibt ein Enum zurück, das durch die Cases gejagt wird.
+                //Das macht es viel einfacher herauszufinden welche Daten angezeigt werden sollen
+                switch (this.gameObject.GetComponent<isTile>().getTileType())
+                {
+                    //Nährstoffe + Wind und Licht + Pflanze
+                    case (tileType.ASH):
+                    case (tileType.GROUND):
+                        text_Feld.text = "-Feldata-" +
+                                "\nNaehrstoffe........" + this.gameObject.GetComponent<isTile>().getNutrientValue() +
+                                "\nWindstaerke........" + this.gameObject.GetComponent<isTile>().getWindStrength() +
+                                "\nLichtintensitaet....." + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
 
-                text_Feld.text ="-Feldata-" +
-                                "\nBodenwert.........." + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
-                                "\nWindwert................" + this.gameObject.GetComponent<GroundTile>().getWindStrength() +
-                                "\n" + "Sonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
-
-                text_Pflanze.text =  "-Planzendata-" + 
+                        text_Pflanze.text = "-Planzendata-" +
                                      "\n" + "Health........100/100" +
                                      "\n" + "Energy.......100/100" +
                                      "\n" + "Age......................100" +
@@ -64,39 +71,41 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                                      "\n" + "Wi..........................100" +
                                      "\n" + "S............................100" +
                                      "\n" + "Usage..................100";
+                        break;
+
+                    //Wasserstärke + Wind und Licht 
+                    case (tileType.WATER):
+
+                        fenster_FeldInfo.setUp(true);
+                        fenster_PflanzenInfo.setUp(false);
+                        fenster_UpgradeInfo.setUp(false);
+                        text_Feld.text = "-Feldata-" +
+                                        "\nWasserwert..........." + this.gameObject.GetComponent<isTile>().getWaterStrength() +
+                                        "\nWindstaerke.........." + this.gameObject.GetComponent<isTile>().getWindStrength() +
+                                        "\nLichtintensitaet....." + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+
+                        break;
+
+                    //Wind und Licht
+                    case (tileType.MOUNTAIN):
+                    case (tileType.VOLCANO):
+                    default:
+
+                        fenster_FeldInfo.setUp(true);
+                        fenster_PflanzenInfo.setUp(false);
+                        fenster_UpgradeInfo.setUp(false);
+
+                        text_Feld.text = "-Feldata-" +
+                                "\nWindstaerke.........." + this.gameObject.GetComponent<isTile>().getWindStrength() +
+                                "\nLichtintensitaet....." + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+                        break;
+                }
+
+                
 
 
 
             }
-
-            if (this.gameObject.GetComponent<WaterTile>() != null)
-            {
-
-                fenster_FeldInfo.setUp(true);
-                fenster_PflanzenInfo.setUp(false);
-                fenster_UpgradeInfo.setUp(false);
-
-                text_Feld.text ="-Feldata-" +
-                                "\nWasserwert..........." + this.gameObject.GetComponent<WaterTile>().getWaterStrength() +
-                                "\nWindwert................" + this.gameObject.GetComponent<WaterTile>().getWindStrength() +
-                                "\nSonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
-                            
-            }
-
-            if (this.gameObject.GetComponent<MountainTile>() != null)
-            {
-
-                fenster_FeldInfo.setUp(true);
-                fenster_PflanzenInfo.setUp(false);
-                fenster_UpgradeInfo.setUp(false);
-
-                text_Feld.text ="-Feldata-" +
-                                "\nWindwert................" + this.gameObject.GetComponent<MountainTile>().getWindStrength() +
-                                "\nSonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
-                            
-            }
-
-
             
         }
         else
