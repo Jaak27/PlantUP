@@ -14,6 +14,7 @@ public class MountainTile : MonoBehaviour, isTile
    
 
     PlayingFieldLogic playingField;
+
     isTile[] neighbours;
 
     int windstrength;
@@ -106,4 +107,5 @@ public class MountainTile : MonoBehaviour, isTile
     {
         return playingField;
     }
+    
 }

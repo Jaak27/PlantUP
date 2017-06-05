@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,60 +10,60 @@ public class Blueprint : MonoBehaviour {
     /// Upgrade zum Erhöhen der FoV und des Alters.
     /// </summary>
     static readonly int maxHeight = 6;
-    BaseUpgrade height = new BaseUpgrade(maxHeight, "height");
+    BaseUpgrade height = new BaseUpgrade(maxHeight, "height", 100);
     /// <summary>
     /// Upgrade zum Erhöhen der hps, erhöht aber auch eps.
     /// </summary>
     static readonly int maxRegeneration = 6;
-    BaseUpgrade regeneration = new BaseUpgrade(maxHeight, "regeneration");
+    BaseUpgrade regeneration = new BaseUpgrade(maxHeight, "regeneration", 250);
 
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über benachbarte WaterTiles.
     /// </summary>
     static readonly int maxDeepRoots = 10;
-    BaseUpgrade deepRoots = new BaseUpgrade(maxHeight, "deepRoots");
+    BaseUpgrade deepRoots = new BaseUpgrade(maxHeight, "deepRoots", 100);
 
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über Windstärke.
     /// </summary>
     static readonly int maxBigLeaves = 10;
-    BaseUpgrade bigLeaves = new BaseUpgrade(maxHeight, "bigLeaves");
+    BaseUpgrade bigLeaves = new BaseUpgrade(maxHeight, "bigLeaves", 100);
 
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über Sonne.
     /// </summary>
     static readonly int maxLargePetals = 5;
-    BaseUpgrade largePetals = new BaseUpgrade(maxHeight, "largePetals");
+    BaseUpgrade largePetals = new BaseUpgrade(maxHeight, "largePetals", 100);
 
     /// <summary>
     /// Upgrade zur Aufnahme von Energie in der GroundTile.
     /// </summary>
     static readonly int maxPorousRoots = 10;
-    BaseUpgrade porousRoots = new BaseUpgrade(maxHeight, "porousRoots");
+    BaseUpgrade porousRoots = new BaseUpgrade(maxHeight, "porousRoots", 100);
 
     /// <summary>
     /// Upgrade zur Aufnahme von Energie über benachbarte GroundTiles.
     /// </summary>
     static readonly int maxSpreadRoots = 5;
-    BaseUpgrade spreadRoots = new BaseUpgrade(maxHeight, "spreadRoots");
+    BaseUpgrade spreadRoots = new BaseUpgrade(maxHeight, "spreadRoots", 100);
 
     /// <summary>
     /// Upgrade zum Schutz vor Angriffen, hemmt Energieaufnahme.
     /// </summary>
     static readonly int maxThickStalk = 5;
-    BaseUpgrade thickStalk = new BaseUpgrade(maxHeight, "thickStalk");
+    BaseUpgrade thickStalk = new BaseUpgrade(maxHeight, "thickStalk", 100);
 
     /// <summary>
     /// Upgrade zur effizienteren Energieausgabe.
     /// </summary>
     static readonly int maxEfficieny = 5;
-    BaseUpgrade efficiency = new BaseUpgrade(maxHeight, "efficiency");
+    BaseUpgrade efficiency = new BaseUpgrade(maxHeight, "efficiency", 250);
 
     /// <summary>
     /// Upgrade zur Chance auf periodische Samenverteilung.
     /// </summary>
     static readonly int maxInsects = 3;
-    BaseUpgrade insects = new BaseUpgrade(maxHeight, "insects");
+    BaseUpgrade insects = new BaseUpgrade(maxHeight, "insects", 450);
 
     /// <summary>
     /// Sequenz in welcher die Upgrades abgearbeitet werden sollen
@@ -182,5 +183,12 @@ public class Blueprint : MonoBehaviour {
 
     public List<int> getSequence() {
         return blueprintSequence;
+    }
+
+    internal int getCost(int v)
+    {
+        BaseUpgrade u = upgradeList[v];
+        int i = (u.getCurrentValue()+1) * u.getBaseCost();
+        return i;
     }
 }

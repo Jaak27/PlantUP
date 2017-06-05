@@ -212,7 +212,6 @@ public class PlayingFieldLogic : MonoBehaviour {
                 {
                     case 1:
                         WaterTile tempWater = Instantiate(waterTilePrefab, position, Quaternion.identity);
-                        
                         felder[y * xSize + x] = tempWater;
                         tempWater.setWaterStrength((int)Random.Range(WaterTile.minimumWaterStrength, WaterTile.maximumWaterStrength));
                         tempWater.setPlayingField(this);
@@ -296,5 +295,8 @@ public class PlayingFieldLogic : MonoBehaviour {
     public int getWindStrength()
     {
         return windStrength;
+    }
+    public isTile[] getFeld() {
+        return felder;
     }
 }

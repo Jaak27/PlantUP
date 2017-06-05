@@ -9,8 +9,7 @@ public class GroundTile : MonoBehaviour, isTile
     /// Eine Referenz auf das Spielfeld.
     /// </summary>
     PlayingFieldLogic playingField;
-
-   
+    
 
     /// <summary>
     /// Enthält die 6 nächsten Nachbarn.
@@ -47,7 +46,7 @@ public class GroundTile : MonoBehaviour, isTile
     /// Die Pflanze die auf diesem Feld wächst.
     /// Muss noch implementiert werden.
     /// </summary>
-    int plant;
+    ProtoPlant plant;
 
 
 
@@ -55,14 +54,12 @@ public class GroundTile : MonoBehaviour, isTile
     // Use this for initialization
     void Start()
     {
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public string getTileType()
@@ -178,4 +175,11 @@ public class GroundTile : MonoBehaviour, isTile
     {
         return playingField;
     }
+
+    public void GrowPlant() {
+        plant = Resources.Load<ProtoPlant>("ProtoPlant");
+        plant.SetGroundTile(this);
+        Instantiate(plant, this.transform.position, Quaternion.identity);
+    }
+    
 }

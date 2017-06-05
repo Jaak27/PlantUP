@@ -8,13 +8,18 @@ public class Plant : MonoBehaviour {
     /// <summary>
     /// Eine Referenz auf die GroundTile.
     /// </summary>
-    GroundTile myTile;
+    public GroundTile myTile;
 
     /// <summary>
     /// Eine Referenz auf den Blueprint.
     /// </summary>
-    Blueprint myBlueprint;
+    public Blueprint myBlueprint;
     int currentStage = 0;
+
+    List<int> builtSeq;
+    List<int> wholeSeq;
+
+    bool seqHasChanged = false;
 
     /// <summary>
     /// Das Alter der Pflanze.
@@ -84,24 +89,17 @@ public class Plant : MonoBehaviour {
     /// </summary>
     static readonly float baseEnergyPerSecond = 0;
     BaseStat energyPerSecond = new BaseStat(baseEnergyPerSecond, baseEnergyPerSecond);
+    
 
-    public Plant(Blueprint bp) {
-        if (bp != null)
-        {
-            myBlueprint = bp;
-        }
-        else {
-            myBlueprint = new Blueprint();
-        }
-    }
     // Use this for initialization
     void Start () {
-
-	}
+        myBlueprint = new Blueprint();
+        wholeSeq = myBlueprint.getSequence();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
+        checkSeqChange();
 	}
     
     // Getters for stats
@@ -278,5 +276,78 @@ public class Plant : MonoBehaviour {
             }
         }
 
+    }
+
+    /// <summary>
+    /// Wird aufgerufen wenn sich der Blueprint ändert
+    /// </summary>
+    public void notifySeqChange() {
+        seqHasChanged = true;
+    }
+
+    /// <summary>
+    /// Wurde die Sequenz geändert?
+    /// </summary>
+    private void checkSeqChange() {
+        if (!seqHasChanged)
+        {
+            checkSeqEnd();
+        }
+        else {
+            resetUpgrades();
+            checkUpgrades();
+        }
+    }
+
+    /// <summary>
+    /// Ist die Sequenz durchgearbeitet?
+    /// </summary>
+    private void checkSeqEnd() {
+        if (currentStage < wholeSeq.Count() - 1) {
+            checkUpgrades();
+        }
+    }
+
+
+    /// <summary>
+    /// Ist genug Energie für das nächste Upgrade vorhanden?
+    /// </summary>
+    private void checkUpgrades() {
+        float cost = getUpgradeCost();
+        if (cost <= bankCapacity.getCurrentValue()) {
+            bankCapacity.setCurrentValue(getBankCapacity() - cost);
+            upgradeNext();
+        }
+    }
+
+    /// <summary>
+    /// Gibt benötigte Energiekosten für nächstes Upgrade wieder
+    /// </summary>
+    /// <returns>Kosten werden pro Upgrade teurer</returns>
+    private float getUpgradeCost() {
+        return (currentStage + 1) * myBlueprint.getCost(wholeSeq[currentStage]);
+    }
+
+    /// <summary>
+    /// Gibt dem Blueprint Anweisung Upgrade zu erhöhen
+    /// </summary>
+    private void upgradeNext() {
+        myBlueprint.incrementUpgrade(currentStage);
+        currentStage++;
+        checkUpgrades();
+    }
+
+    /// <summary>
+    /// Macht alle Upgrades rückgängig und gibt Energie zurück
+    /// </summary>
+    private void resetUpgrades() {
+        int help = 1;
+        foreach (int i in builtSeq) {
+            BaseUpgrade u = myBlueprint.getUpgradeList()[i];
+            float cost = u.getBaseCost() * help;
+            help++;
+            bankCapacity.setCurrentValue(getBankCapacity() + cost);
+            u.decrementLevel();
+        }
     }
 }

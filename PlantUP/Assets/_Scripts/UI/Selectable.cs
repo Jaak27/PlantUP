@@ -15,7 +15,6 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
     bool mouseOverObject;
 
-
     bool selected = false;
 
 	// Use this for initialization
@@ -26,7 +25,6 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         fenster_FeldInfo = GameObject.Find("fenster_FeldInfo").GetComponent<feldInfoUI>();
         fenster_PflanzenInfo = GameObject.Find("fenster_PflanzenInfo").GetComponent<feldInfoUI>();
         fenster_UpgradeInfo = GameObject.Find("fenster_UpgradeInfo").GetComponent<feldInfoUI>();
-
 
     }
 	
@@ -56,7 +54,7 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                                 "\nWindwert......................" + //this.gameObject.GetComponent<GroundTile>().getWindStrength() +
                                 "\n" + "Sonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
 
-                text_Pflanze.text =  "-Planzendata-" + 
+                text_Pflanze.text =  "-Pflanzendata-" + 
                                      "\n" + "Health........100/100" +
                                      "\n" + "Energy.......100/100" +
                                      "\n" + "Age......................100" +
@@ -65,6 +63,9 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                                      "\n" + "Wi..........................100" +
                                      "\n" + "S............................100" +
                                      "\n" + "Usage..................100";
+
+
+                
 
 
 

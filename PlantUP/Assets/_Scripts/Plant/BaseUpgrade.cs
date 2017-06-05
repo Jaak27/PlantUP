@@ -7,6 +7,7 @@ public class BaseUpgrade : MonoBehaviour {
 
     private int value;
     private int maxValue;
+    private int baseCost;
     private string nameID;
 
     /// <summary>
@@ -14,10 +15,11 @@ public class BaseUpgrade : MonoBehaviour {
     /// </summary>
     /// <param name="value">Level des Upgrades</param>
     /// <param name="maxValue">Maximaler Level des Upgrades</param>
-    public BaseUpgrade(int maxValue, string name)
+    public BaseUpgrade(int maxValue, string name, int baseCost)
     {
         this.value = 0;
         this.maxValue = maxValue;
+        this.baseCost = baseCost;
         this.nameID = name;
     }
 
@@ -38,6 +40,16 @@ public class BaseUpgrade : MonoBehaviour {
     {
         return maxValue;
     }
+
+    /// <summary>
+    /// Getter für die BasisKosten des Upgrades.
+    /// </summary>
+    /// <returns>Maximallevel</returns>
+    public int getBaseCost()
+    {
+        return baseCost;
+    }
+
     /// <summary>
     /// Getter für die NamensID des Upgrades.
     /// </summary>
@@ -46,6 +58,7 @@ public class BaseUpgrade : MonoBehaviour {
     {
         return nameID;
     }
+
     /// <summary>
     /// Operation zum anpassen des Levels des Upgrades.
     /// </summary>
@@ -59,6 +72,7 @@ public class BaseUpgrade : MonoBehaviour {
             Debug.Log("Limit von " + nameID + "nicht im gültigen Bereich: " + i + "nicht zwischen 0 und " + maxValue + ".");
         }
     }
+
     /// <summary>
     /// Operation zum erhöhen des Levels des Upgrades.
     /// </summary>
@@ -70,7 +84,22 @@ public class BaseUpgrade : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Limit von " + nameID +", Level" + value + ", erreicht.");
+            Debug.Log("Inkrementierlimit von " + nameID +", Level" + value + ", erreicht.");
+        }
+    }
+
+    /// <summary>
+    /// Operation zum erhöhen des Levels des Upgrades.
+    /// </summary>
+    public void decrementLevel()
+    {
+        if (value > 0)
+        {
+            value--;
+        }
+        else
+        {
+            Debug.Log("Dekrementierlimit von " + nameID + ", Level" + value + ", erreicht.");
         }
     }
 }
