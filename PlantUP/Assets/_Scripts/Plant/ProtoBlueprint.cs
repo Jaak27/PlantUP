@@ -5,6 +5,7 @@ using UnityEngine;
 public class ProtoBlueprint : MonoBehaviour {
 
     public List<int> UpgradeSequence;
+    public bool hasChanged = true;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +16,15 @@ public class ProtoBlueprint : MonoBehaviour {
 		
 	}
 
-    public List<int> getSequence() {
+    public List<int> GetSequence() {
         return UpgradeSequence;
+    }
+
+    public bool HasChanged() {
+        return hasChanged;
+    }
+
+    public void ChangeNoticed() {
+        hasChanged = false;
     }
 }

@@ -111,8 +111,16 @@
     <Compile Include="Assets\_Scripts\UI\infoBox.cs" />
     <Compile Include="Assets\_Scripts\UI\skillBarUI.cs" />
     <Compile Include="Assets\_Scripts\UI\skills.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\DeepRoots.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\Efficiency.cs" />
     <Compile Include="Assets\_Scripts\Upgrades\Height.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\Insects.cs" />
     <Compile Include="Assets\_Scripts\Upgrades\Leaves.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\Petals.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\PorousRoots.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\Regenerate.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\SpreadRoots.cs" />
+    <Compile Include="Assets\_Scripts\Upgrades\Stalk.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

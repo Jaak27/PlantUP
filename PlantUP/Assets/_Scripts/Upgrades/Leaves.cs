@@ -37,6 +37,24 @@ public class Leaves : MonoBehaviour, isUpgrade {
         }
     }
 
+    public bool Dekrement()
+    {
+        if (current > 0)
+        {
+            current--;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void ResetUpgrade()
+    {
+        current = 0;
+    }
+
     public string getInfo()
     {
         return "Blätter Stufe " + current;

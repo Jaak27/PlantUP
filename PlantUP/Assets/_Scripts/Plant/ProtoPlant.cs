@@ -10,6 +10,8 @@ public interface isUpgrade
     int GetMax();
 
     bool Inkrement();
+    bool Dekrement();
+    void ResetUpgrade();
 
     string getInfo();
 
@@ -23,15 +25,19 @@ public class ProtoPlant : MonoBehaviour {
 
     private int index = 0;
 
-    public int height = 1;
-    private int maxHeight = 3;
-
-    public int leaves = 1;
-    private int maxLeaves = 1;
-
     public float energy = 0;
+
+    //Temporär um zu sehen ob Upgrades funktionieren
     public int hoehe;
     public int blaetter;
+    public int staengel;
+    public int bluete;
+    public int regeneration;
+    public int insekten;
+    public int tiefeWurzeln;
+    public int poroeseWuzeln;
+    public int reichweiteWurzeln;
+    public int effizienz;
 
     private int energyPerSecond = 10;
 
@@ -48,7 +54,7 @@ public class ProtoPlant : MonoBehaviour {
         else
         {
             myBlueprint = GameObject.Find("BluePrint").GetComponent<ProtoBlueprint>();
-            count = myBlueprint.getSequence().Count;
+            count = myBlueprint.GetSequence().Count;
         }
         InitUpgrades();
         InvokeRepeating("AdjustStats", 0, 0.1f);
@@ -68,7 +74,7 @@ public class ProtoPlant : MonoBehaviour {
     /// <param name="i">Nächst abzuarbeitendes Upgrade in der Sequenz</param>
     private void CheckForNextUpgrade(int i)
     {
-        int upgradeID = myBlueprint.getSequence()[i] - 1;
+        int upgradeID = myBlueprint.GetSequence()[i] - 1;
         isUpgrade upgrade = upgrades[upgradeID];
         int cost = upgrade.GetCost() * (i + 1);
 
@@ -104,9 +110,17 @@ public class ProtoPlant : MonoBehaviour {
         }
         hoehe = upgrades[0].GetCurrent();
         blaetter = upgrades[1].GetCurrent();
+        staengel = upgrades[2].GetCurrent(); ;
+        bluete = upgrades[3].GetCurrent();
+        regeneration = upgrades[4].GetCurrent();
+        insekten = upgrades[5].GetCurrent();
+        tiefeWurzeln = upgrades[6].GetCurrent();
+        poroeseWuzeln = upgrades[7].GetCurrent();
+        reichweiteWurzeln = upgrades[8].GetCurrent();
+        effizienz = upgrades[9].GetCurrent();
 
 
-    }
+}
 
     public void SetGroundTile(GroundTile groundTile) {
         if (groundTile != null)
@@ -116,8 +130,18 @@ public class ProtoPlant : MonoBehaviour {
     }
 
     private void InitUpgrades() {
-        Height h = new Height();
-        Leaves l = new Leaves();
-        upgrades = new List<isUpgrade> { h, l };
+
+        Height u1 = new Height();
+        Leaves u2 = new Leaves();
+        Stalk u3 = new Stalk();
+        Petals u4 = new Petals();
+        Regenerate u5 = new Regenerate();
+        Insects u6 = new Insects();
+        DeepRoots u7 = new DeepRoots();
+        PorousRoots u8 = new PorousRoots();
+        SpreadRoots u9 = new SpreadRoots();
+        Efficiency u10 = new Efficiency();
+
+        upgrades = new List<isUpgrade> { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10 };
     }
 }

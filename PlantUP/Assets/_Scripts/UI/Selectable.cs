@@ -36,8 +36,8 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         if (selected == true)
         {
             
-            print(this.gameObject.transform.position.x);
-            print(GameObject.Find("feldSelect").transform.position.x);
+            //print(this.gameObject.transform.position.x);
+            //print(GameObject.Find("feldSelect").transform.position.x);
             GameObject.Find("feldSelect").transform.position = new Vector3(this.gameObject.transform.position.x,this.gameObject.transform.position.y,1);
             GameObject.Find("feldSelect").GetComponent<SpriteRenderer>().enabled = true;
             fenster_FeldInfo.setUp(true);
