@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class Plant : MonoBehaviour {
     /// Eine Referenz auf die GroundTile.
     /// </summary>
     public GroundTile myGroundTile;
+    private List<WaterTile> waterNeighbours;
     
     /// <summary>
     /// Eine Referenz auf den Blueprint.
@@ -173,6 +175,7 @@ public class Plant : MonoBehaviour {
             count = myBlueprint.GetSequence().Count;
         }
         InitUpgrades();
+        SetWaterNeighbours();
         boughtUpgrades = new List<int>();
         InvokeRepeating("AdjustStats", 0, 0.1f);
     }
@@ -265,23 +268,15 @@ public class Plant : MonoBehaviour {
         //Erstmal nur Nutrient Absorb
         if (myGroundTile != null)
         {
-            int value = myGroundTile.getNutrientValue();
-            float nps = nutrientAbsorb.getCurrentValue();
-            float energy = bankCapacity.getCurrentValue();
-
-            if (value >= nps)
-            {
-                bankCapacity.setCurrentValue(energy + nps);
-                myGroundTile.setNutrientValue(value - (int)nps);
-            }
-            else
-            {
-                bankCapacity.setCurrentValue(energy + value);
-                myGroundTile.setNutrientValue(0);
-                CancelInvoke();
-                print("Groundtile empty");
-            }
+            CalcNutriValue();
+            CalcWaterValue();
+            CalcSunValue();
+            CalcWindValue();
+            //int sunValue = myGroundTile.getLightValue();
+            //int windValue = myGroundTile.getWindStrength();
+            
         }
+
 
         //Zum Testen der Upgrades
         hoehe = upgrades[0].GetCurrent();
@@ -294,6 +289,99 @@ public class Plant : MonoBehaviour {
         poroeseWuzeln = upgrades[7].GetCurrent();
         reichweiteWurzeln = upgrades[8].GetCurrent();
         effizienz = upgrades[9].GetCurrent();
+    }
+
+    private void CalcNutriValue()
+    {
+        int nutriValue = myGroundTile.getNutrientValue();
+        float nps = nutrientAbsorb.getCurrentValue();
+        float energy = bankCapacity.getCurrentValue();
+
+        if (nutriValue >= nps)
+        {
+            bankCapacity.setCurrentValue(energy + nps);
+            myGroundTile.setNutrientValue(nutriValue - (int)nps);
+        }
+        else
+        {
+            bankCapacity.setCurrentValue(energy + nutriValue);
+            myGroundTile.setNutrientValue(0);
+            print("Groundtile empty");
+        }
+    }
+
+    private void CalcWaterValue()
+    {
+        float wps = waterAbsorb.getCurrentValue();
+
+        if (myGroundTile.getNeighbours() != null)
+        {
+            foreach (WaterTile wTile in waterNeighbours)
+            {
+
+                float energy = bankCapacity.getCurrentValue();
+                int waterValue = wTile.getWaterStrength();
+
+                if (waterValue >= wps)
+                {
+                    bankCapacity.setCurrentValue(energy + wps);
+                    wTile.setWaterStrength(waterValue - (int)wps);
+                }
+                else if (waterValue > 0)
+                {
+                    bankCapacity.setCurrentValue(energy + waterValue);
+                    wTile.setWaterStrength(0);
+                    print("Watertile empty");
+                }
+
+            }
+        }
+        else
+        {
+            print("Nachbarfelder nicht gesetzt!");
+        }
+
+    }
+
+    private void CalcWindValue()
+    {
+        //TODO
+    }
+
+    private void CalcSunValue()
+    {
+        int sunValue = myGroundTile.getLightValue();
+        float lps = sunAbsorb.getCurrentValue();
+        float energy = bankCapacity.getCurrentValue();
+
+        if (sunValue >= lps)
+        {
+            bankCapacity.setCurrentValue(energy + lps);
+        }
+        else
+        {
+            bankCapacity.setCurrentValue(energy + sunValue);
+            //myGroundTile.setNutrientValue(0);
+        }
+    }
+
+
+    private void SetWaterNeighbours() {
+        if (myGroundTile.getNeighbours() != null)
+        {
+            foreach (isTile tile in myGroundTile.getNeighbours())
+            {
+                if (tile != null && tile.getTileType() == "water")
+                {
+                    waterNeighbours.Add((WaterTile)tile);
+                }
+            }
+        }
+        else
+        {
+            print("Nachbarfelder nicht gesetzt!");
+        }
+
     }
 
 
@@ -352,6 +440,7 @@ public class Plant : MonoBehaviour {
         PushNutrientAbsorb();
         PushBankCapacity();
         PushEps();
+        AdjustStats();
     }
     /// <summary>
     /// MaxHealth abhängig von height.
