@@ -9,7 +9,8 @@ public class GroundTile : MonoBehaviour, isTile
     /// Eine Referenz auf das Spielfeld.
     /// </summary>
     PlayingFieldLogic playingField;
-    
+
+
 
     /// <summary>
     /// Enthält die 6 nächsten Nachbarn.
@@ -21,7 +22,7 @@ public class GroundTile : MonoBehaviour, isTile
     /// Die Nährstoffe die noch auf diesem Feld lagern.
     /// </summary>
     int nutrientValue;
-    
+
     public static int minimumNutrientValue = 300;
     public static int maximumNutrientValue = 1300;
 
@@ -54,17 +55,19 @@ public class GroundTile : MonoBehaviour, isTile
     // Use this for initialization
     void Start()
     {
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public string getTileType()
+    public tileType getTileType()
     {
-        return "ground";
+        return tileType.GROUND;
     }
 
     public isTile[] getNeighbours()
@@ -75,6 +78,11 @@ public class GroundTile : MonoBehaviour, isTile
     public int getNutrientValue()
     {
         return nutrientValue;
+    }
+
+    public int getWaterStrength()
+    {
+        return 0;
     }
 
     public void addNutrientValue(int newValue)
@@ -95,7 +103,7 @@ public class GroundTile : MonoBehaviour, isTile
             updateWindStrength();
         return windstrength;
     }
-    
+
     /// <summary>
     /// Gibt die Windstärke an, die von diesem Feld zurück geht.
     /// Ist kleiner bei großen Pflanzen auf Groundfeldern oder generell bei Bergfeldern.
@@ -112,7 +120,7 @@ public class GroundTile : MonoBehaviour, isTile
 
 
         return windSpread;
-        
+
     }
 
     public void setWindStrength(int newValue)
@@ -154,7 +162,7 @@ public class GroundTile : MonoBehaviour, isTile
     {
         this.nutrientValue = nutrientValue;
     }
-    
+
 
     public int getLightValue()
     {
@@ -176,7 +184,23 @@ public class GroundTile : MonoBehaviour, isTile
         return playingField;
     }
 
-    public void GrowPlant() {
+    public Transform getTransform()
+    {
+        return transform;
+    }
+
+
+    public void replaceNeighbour(isTile oldTile, isTile newTile)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (neighbours[i] == oldTile)
+                neighbours[i] = newTile;
+        }
+    }
+
+    public void GrowPlant()
+    {
         if (plant == null)
         {
             plant = Resources.Load<Plant>("Plant");
@@ -184,5 +208,10 @@ public class GroundTile : MonoBehaviour, isTile
             Instantiate(plant, this.transform.position, Quaternion.identity);
         }
     }
-    
+
+    public void removeObject()
+    {
+        Destroy(this.gameObject);
+    }
+
 }

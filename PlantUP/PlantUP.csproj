@@ -88,19 +88,40 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook.Unity.Settings">
+      <HintPath>Library\FacebookSDK\Facebook.Unity.Settings.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_Scripts\Field\GrowPlant.cs" />
     <Compile Include="Assets\_Scripts\Field\PlayingFieldLogic.cs" />
-    <Compile Include="Assets\_Scripts\Plant\BaseStat.cs" />
-    <Compile Include="Assets\_Scripts\Plant\BaseUpgrade.cs" />
-    <Compile Include="Assets\_Scripts\Plant\Blueprint.cs" />
-    <Compile Include="Assets\_Scripts\Plant\ContainerStat.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Blueprint\Blueprint.cs" />
     <Compile Include="Assets\_Scripts\Plant\Plant.cs" />
-    <Compile Include="Assets\_Scripts\Plant\ProtoBlueprint.cs" />
-    <Compile Include="Assets\_Scripts\Plant\ProtoPlant.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\Age.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\Bank.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\DamageTaken.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\EnergyPerSecond.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\FieldOfView.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\Health.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\HealthPerSecond.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\NutrientAbsorb.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\SunAbsorb.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\WaterAbsorb.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Stats\WindAbsorb.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\DeepRoots.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Efficiency.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Height.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Insects.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Leaves.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Petals.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\PorousRoots.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Regenerate.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\SpreadRoots.cs" />
+    <Compile Include="Assets\_Scripts\Plant\Upgrades\Stalk.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\AshTile.cs" />
     <Compile Include="Assets\_Scripts\Tiles\GroundTile.cs" />
     <Compile Include="Assets\_Scripts\Tiles\MountainTile.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\VolcanoTile.cs" />
     <Compile Include="Assets\_Scripts\Tiles\WaterTile.cs" />
     <Compile Include="Assets\_Scripts\UI\Selectable.cs" />
     <Compile Include="Assets\_Scripts\UI\controls.cs" />
@@ -108,16 +129,6 @@
     <Compile Include="Assets\_Scripts\UI\infoBox.cs" />
     <Compile Include="Assets\_Scripts\UI\skillBarUI.cs" />
     <Compile Include="Assets\_Scripts\UI\skills.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\DeepRoots.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Efficiency.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Height.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Insects.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Leaves.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Petals.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\PorousRoots.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Regenerate.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\SpreadRoots.cs" />
-    <Compile Include="Assets\_Scripts\Upgrades\Stalk.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -6,19 +6,18 @@ using UnityEngine;
 public class WaterTile : MonoBehaviour, isTile
 {
     PlayingFieldLogic playingField;
-
     isTile[] neighbours;
 
     int windstrength;
     bool windUpdate = true;
-    
+
 
     /// <summary>
     /// Um wieviel % ein Wasserfeld den Wind wiederauffrischt.
     /// Erhöht den Windwert um % der originalen Windstärke.
     /// </summary>
     static public float waterWindRefreshFactor = 0.10f;
-    
+
 
 
     /// <summary>
@@ -28,7 +27,7 @@ public class WaterTile : MonoBehaviour, isTile
 
     public static int minimumWaterStrength = 50;
     public static int maximumWaterStrength = 150;
-    
+
 
     public void forceWindUpdate()
     {
@@ -45,12 +44,12 @@ public class WaterTile : MonoBehaviour, isTile
         return neighbours;
     }
 
-    public string getTileType()
+    public tileType getTileType()
     {
-        return "water";
+        return tileType.WATER;
     }
 
-    
+
     public int getWindSpread()
     {
         int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * waterWindRefreshFactor);
@@ -66,7 +65,14 @@ public class WaterTile : MonoBehaviour, isTile
         return windstrength;
     }
 
-   
+
+    public int getNutrientValue()
+    {
+        return 0;
+    }
+
+
+
     public void updateWindStrength()
     {
         if (windUpdate)
@@ -93,15 +99,16 @@ public class WaterTile : MonoBehaviour, isTile
     }
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-        
+
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
 
     public void setWaterStrength(int waterStrength)
@@ -124,5 +131,23 @@ public class WaterTile : MonoBehaviour, isTile
     {
         return playingField;
     }
-    
+
+    public Transform getTransform()
+    {
+        return transform;
+    }
+
+    public void replaceNeighbour(isTile oldTile, isTile newTile)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (neighbours[i] == oldTile)
+                neighbours[i] = newTile;
+        }
+    }
+
+    public void removeObject()
+    {
+        Destroy(this.gameObject);
+    }
 }

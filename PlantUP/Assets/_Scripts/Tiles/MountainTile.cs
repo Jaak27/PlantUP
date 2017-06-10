@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class MountainTile : MonoBehaviour, isTile
 {
-    
+
     /// <summary>
     /// Auf wieviel reduziert der Berg die Windstärke.
     /// Für die Balance.
     /// </summary>
     static public double mountainWindFactor = 0.5;
 
-   
+
 
     PlayingFieldLogic playingField;
-
     isTile[] neighbours;
 
     int windstrength;
     bool windUpdate = true;
-    
+
 
     public void forceWindUpdate()
     {
@@ -42,17 +41,17 @@ public class MountainTile : MonoBehaviour, isTile
     }
 
 
-    public string getTileType()
+    public tileType getTileType()
     {
-        return "mountain";
+        return tileType.MOUNTAIN;
     }
 
 
     public int getWindSpread()
     {
         //BergFelder verringern die Windstärke
-        
-        return Mathf.RoundToInt((float) (getWindStrength() * mountainWindFactor));
+
+        return Mathf.RoundToInt((float)(getWindStrength() * mountainWindFactor));
     }
 
 
@@ -61,6 +60,16 @@ public class MountainTile : MonoBehaviour, isTile
         if (windUpdate)
             updateWindStrength();
         return windstrength;
+    }
+
+    public int getNutrientValue()
+    {
+        return 0;
+    }
+
+    public int getWaterStrength()
+    {
+        return 0;
     }
 
 
@@ -87,16 +96,17 @@ public class MountainTile : MonoBehaviour, isTile
 
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
 
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void setPlayingField(PlayingFieldLogic playingField)
     {
@@ -107,5 +117,23 @@ public class MountainTile : MonoBehaviour, isTile
     {
         return playingField;
     }
-    
+
+    public Transform getTransform()
+    {
+        return transform;
+    }
+
+    public void replaceNeighbour(isTile oldTile, isTile newTile)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (neighbours[i] == oldTile)
+                neighbours[i] = newTile;
+        }
+    }
+
+    public void removeObject()
+    {
+        Destroy(this.gameObject);
+    }
 }
