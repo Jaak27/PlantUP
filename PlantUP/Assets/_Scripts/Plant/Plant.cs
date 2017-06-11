@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 
-public interface isStat
+public interface IsStat
 {
     float GetCurrent();
     float GetBase();
@@ -16,7 +16,7 @@ public interface isStat
     void SetMax(float value);
 }
 
-public interface isUpgrade
+public interface IsUpgrade
 {
     int GetCost();
     int GetCurrent();
@@ -35,31 +35,39 @@ public class Plant : MonoBehaviour {
     /// <summary>
     /// Eine Referenz auf die GroundTile.
     /// </summary>
-    public GroundTile myGroundTile;
     private List<WaterTile> waterNeighbours;
+    public GroundTile myGroundTile;
+    public AshTile myAshTile;
     
     /// <summary>
     /// Eine Referenz auf den Blueprint.
     /// </summary>
     public Blueprint myBlueprint;
+
+    /// <summary>
+    /// Eine Referenz auf den Besitzer der Pflanze.
+    /// </summary>
+    public PlayerPrototype player;
     
     /// <summary>
     /// Liste der Upgrades
     /// </summary>
-    private List<isUpgrade> upgrades;
+    private List<IsUpgrade> upgrades;
 
     /// <summary>
     /// Liste der Stats
     /// </summary>
-    private List<isStat> stats;
+    private List<IsStat> stats;
 
     /// <summary>
     /// Count -> wieviele Stufen hat der Blueprint
     /// Index -> An welcher Stelle des Blueprint wir sind
-    /// seqHasChanged -> Informiert uns wenn der Blueprint geändert wurde
+    /// Ticks -> Zeitintervall in dem AjustStats() aufgerufen wird
+    /// BoughtUpgrades -> Liste der bereits gekauften Upgrades, für wenn wir den BP ändern
     /// </summary>
     private int count;
     private int index;
+    private readonly float ticks = 1f;
     private List<int> boughtUpgrades;
 
     //Temporär um zu sehen ob Upgrades funktionieren
@@ -75,17 +83,17 @@ public class Plant : MonoBehaviour {
     public int effizienz;
 
     //Temporär um zu sehen ob Stats funktionieren
-    public int energie;
-    public int leben;
-    public int alter;
-    public int fov;
-    public int hps;
-    public int nAbsorb;
-    public int sAbsorb;
-    public int wiAbsorb;
-    public int waAbsorb;
-    public int eps;
-    public int schadenErlitten;
+    public float energie;
+    public float leben;
+    public float alter;
+    public float fov;
+    public float hps;
+    public float nAbsorb;
+    public float sAbsorb;
+    public float wiAbsorb;
+    public float waAbsorb;
+    public float eps;
+    public float schadenErlitten;
 
     public void SetGroundTile(GroundTile myTile)
     {
@@ -107,6 +115,17 @@ public class Plant : MonoBehaviour {
         return myBlueprint;
     }
 
+
+    public void SetPlayer(PlayerPrototype player)
+    {
+        this.player = player;
+    }
+
+    public PlayerPrototype GetPlayer()
+    {
+        return player;
+    }
+
     private void Awake()
     {
 
@@ -122,13 +141,13 @@ public class Plant : MonoBehaviour {
         InitPlant();
         SetWaterNeighbours();
         boughtUpgrades = new List<int>();
-        InvokeRepeating("AdjustStats", 0, 0.1f);
+        InvokeRepeating("AdjustStats", 0, ticks);
     }
 
     private void InitPlant()
     {
         index = 0;
-
+        
         InitUpgrades();
         InitStats();
     }
@@ -136,19 +155,20 @@ public class Plant : MonoBehaviour {
     private void Update()
     {
         // TODO: Nur zum Testen der Stats
-        alter = (int)stats[0].GetCurrent();
-        fov = (int)stats[1].GetCurrent();
-        leben = (int)stats[2].GetCurrent();
-        hps = (int)stats[3].GetCurrent();
-        nAbsorb = (int)stats[4].GetCurrent();
-        sAbsorb = (int)stats[5].GetCurrent();
-        wiAbsorb = (int)stats[6].GetCurrent();
-        waAbsorb = (int)stats[7].GetCurrent();
-        energie = (int)stats[8].GetCurrent();
-        schadenErlitten = (int)stats[9].GetCurrent();
-        eps = (int)stats[10].GetCurrent();
+        alter = stats[0].GetCurrent();
+        fov = stats[1].GetCurrent();
+        leben = stats[2].GetCurrent();
+        hps = stats[3].GetCurrent();
+        nAbsorb = stats[4].GetCurrent();
+        sAbsorb = stats[5].GetCurrent();
+        wiAbsorb = stats[6].GetCurrent();
+        waAbsorb = stats[7].GetCurrent();
+        energie = stats[8].GetCurrent();
+        schadenErlitten = stats[9].GetCurrent();
+        eps = stats[10].GetCurrent();
 
         CheckSeqChange();
+        
     }
 
     private void InitUpgrades()
@@ -165,7 +185,7 @@ public class Plant : MonoBehaviour {
         SpreadRoots u9 = new SpreadRoots();
         Efficiency u10 = new Efficiency();
 
-        upgrades = new List<isUpgrade> { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10 };
+        upgrades = new List<IsUpgrade> { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10 };
     }
 
     private void InitStats()
@@ -182,7 +202,7 @@ public class Plant : MonoBehaviour {
         DamageTaken s10 = new DamageTaken();
         EnergyPerSecond s11 = new EnergyPerSecond();
 
-        stats = new List<isStat> { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+        stats = new List<IsStat> { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
     }
 
     /// <summary>
@@ -215,8 +235,7 @@ public class Plant : MonoBehaviour {
     {
         int upgradeID = myBlueprint.GetSequence()[index] - 1;
         int cost = upgrades[upgradeID].GetCost() * (index + 1);
-        float energy =
-        schadenErlitten = (int)stats[8].GetCurrent();
+        float energy = stats[8].GetCurrent();
 
         if (cost <= energy)
         {
@@ -224,14 +243,13 @@ public class Plant : MonoBehaviour {
             {
                 stats[8].SetCurrent(energy - cost);
                 print("Upgrade " + upgrades[upgradeID].getInfo() + " für " + cost + " gekauft.");
-                AdjustStats();
                 boughtUpgrades.Add(upgradeID);
 
             }
             index++;
             PushChanges();
         }
-        
+
     }
 
     void AdjustStats()
@@ -244,9 +262,9 @@ public class Plant : MonoBehaviour {
             CalcWaterValue();
             CalcSunValue();
             CalcWindValue();
-            //int sunValue = myGroundTile.getLightValue();
-            //int windValue = myGroundTile.getWindStrength();
-            
+            CalcEnergy();
+            CalcHealth();
+
         }
 
 
@@ -266,17 +284,21 @@ public class Plant : MonoBehaviour {
     private void CalcNutriValue()
     {
         int nutriValue = myGroundTile.getNutrientValue();
-        float nps = stats[4].GetCurrent();
+        float nups = stats[4].GetCurrent();
         float energy = stats[8].GetCurrent();
 
-        if (nutriValue >= nps)
+        if (nutriValue >= nups)
         {
-            stats[8].SetCurrent(energy + nps);
-            myGroundTile.setNutrientValue(nutriValue - (int)nps);
+            stats[8].SetCurrent(energy + nups);
+            player.AddPoints(nups);
+            //TODO anpassen für asche und sumpf feder!
+            myGroundTile.setNutrientValue(nutriValue - (int)nups);
         }
-        else
+        else if(nutriValue > 0)
         {
             stats[8].SetCurrent(energy + nutriValue);
+            player.AddPoints(nutriValue);
+            //TODO anpassen für asche und sumpf feder!
             myGroundTile.setNutrientValue(0);
             print("Groundtile empty");
         }
@@ -284,67 +306,131 @@ public class Plant : MonoBehaviour {
 
     private void CalcWaterValue()
     {
-        float wps = stats[7].GetCurrent();
 
-        if (myGroundTile.getNeighbours() != null)
+        if (waterNeighbours.Count > 0)
         {
+            float waps = stats[7].GetCurrent();
             foreach (WaterTile wTile in waterNeighbours)
             {
-
+                
                 float energy = stats[8].GetCurrent();
                 int waterValue = wTile.getWaterStrength();
 
-                if (waterValue >= wps)
+                if (waterValue >= waps)
                 {
-                    stats[8].SetCurrent(energy + wps);
-                    wTile.setWaterStrength(waterValue - (int)wps);
+                    stats[8].SetCurrent(energy + waps);
+                    player.AddPoints(waps);
+                    wTile.setWaterStrength(waterValue - (int)waps);
                 }
                 else if (waterValue > 0)
                 {
                     stats[8].SetCurrent(energy + waterValue);
+                    player.AddPoints(waterValue);
                     wTile.setWaterStrength(0);
                     print("Watertile empty");
                 }
 
             }
         }
-        else
-        {
-            print("Nachbarfelder nicht gesetzt!");
-        }
 
     }
 
     private void CalcWindValue()
     {
-        //TODO
+        int windValue = myGroundTile.getWindStrength();
+        float wips = stats[6].GetCurrent();
+        float energy = stats[8].GetCurrent();
+        
+        if (windValue >= wips)
+        {
+            stats[8].SetCurrent(energy + wips);
+            player.AddPoints(wips);
+        }
+        else
+        {
+            stats[8].SetCurrent(energy + windValue);
+            player.AddPoints(windValue);
+        }
     }
 
     private void CalcSunValue()
     {
         int sunValue = myGroundTile.getLightValue();
-        float lps = stats[5].GetCurrent();
+        float sups = stats[5].GetCurrent();
         float energy = stats[8].GetCurrent();
-
-        if (sunValue == 0) { print("No SUN T_T"); }
-        if (sunValue >= lps)
+        
+        if (sunValue >= sups)
         {
-            stats[8].SetCurrent(energy + lps);
+            stats[8].SetCurrent(energy + sups);
+            player.AddPoints(sups);
         }
         else
         {
             stats[8].SetCurrent(energy + sunValue);
-            //myGroundTile.setNutrientValue(0);
+            player.AddPoints(sunValue);
         }
+    }
+
+    private void CalcEnergy()
+    {
+        float eps = stats[10].GetCurrent();
+        
+        float energy = stats[8].GetCurrent();
+        float health = stats[2].GetCurrent();
+        float result = energy + eps;
+
+        if (result >= 0)
+        {
+            stats[8].SetCurrent(result);
+        }
+        else
+        {
+            stats[2].SetCurrent(health+result);
+        }
+        
+    }
+
+    private void CalcHealth()
+    {
+        float hps = stats[3].GetCurrent();
+        float dps = stats[9].GetCurrent();
+        float health = stats[2].GetCurrent();
+        float newHealth = health + hps - dps;
+
+        if (newHealth <= stats[2].GetMax())
+        {
+            if (newHealth > 0)
+            {
+                stats[2].SetCurrent(newHealth);
+            }
+            else
+            {
+                print("Pflanze gestorben");
+                Destroy(gameObject);
+            }
+        }
+
+
+        stats[2].SetCurrent(health + hps - dps);
     }
 
 
     private void SetWaterNeighbours() {
-        if (myGroundTile.getNeighbours() != null)
+        waterNeighbours = new List<WaterTile>();
+        isTile[] neighbours = null;
+        if (myGroundTile != null)
         {
-            foreach (isTile tile in myGroundTile.getNeighbours())
+            neighbours = myGroundTile.getNeighbours();
+        }
+        if (myAshTile != null)
+        {
+            neighbours = myAshTile.getNeighbours();
+        }
+        if (neighbours.Length > 0)
+        {
+            foreach (isTile tile in neighbours)
             {
-                if (tile != null && tile.getTileType() == tileType.GROUND)
+                if (tile.getTileType() == tileType.WATER)
                 {
                     waterNeighbours.Add((WaterTile)tile);
                 }
@@ -413,8 +499,8 @@ public class Plant : MonoBehaviour {
         PushNutrientAbsorb();
         PushBankCapacity();
         PushEps();
-        AdjustStats();
     }
+
     /// <summary>
     /// MaxHealth abhängig von height.
     /// </summary>
@@ -443,7 +529,7 @@ public class Plant : MonoBehaviour {
         float efficiency = GetCurrentValueForUpgrade(9);
         float thickStalk = GetCurrentValueForUpgrade(2);
 
-        stats[9].SetCurrent(stats[9].GetBase() + (thickStalk * 0.1f) - (efficiency * 0.1f));
+        stats[9].SetCurrent((thickStalk - efficiency) * 0.1f);
     }
     /// <summary>
     /// HPS von regeneration und insect abhängig,
@@ -481,15 +567,10 @@ public class Plant : MonoBehaviour {
         float height = GetCurrentValueForUpgrade(0);
         float regen = GetCurrentValueForUpgrade(4);
         float efficiency = GetCurrentValueForUpgrade(9);
-        float deepRoots = GetCurrentValueForUpgrade(6);
-        float bigLeaves = GetCurrentValueForUpgrade(1);
-        float largePetals = GetCurrentValueForUpgrade(3);
 
-        stats[10].SetCurrent(
-            stats[8].GetCurrent()
-            * (height + regen + deepRoots + bigLeaves + largePetals - 2 * efficiency)
-            * 0.01f
-            );
+        float eps = (efficiency-regen-height);
+
+        stats[10].SetCurrent(eps);
     }
     /// <summary>
     /// Pflanze gewinnt Sonnenenergie abhängig vom allgemeinen NutrientAbsorb und dem largePetals Upgrade.

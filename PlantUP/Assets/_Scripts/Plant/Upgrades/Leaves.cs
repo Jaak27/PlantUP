@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Leaves : isUpgrade {
+public class Leaves : IsUpgrade {
 
 
     static readonly int cost = 10;

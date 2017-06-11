@@ -47,7 +47,7 @@ public class GroundTile : MonoBehaviour, isTile
     /// Die Pflanze die auf diesem Feld wächst.
     /// Muss noch implementiert werden.
     /// </summary>
-    Plant plant;
+    public Plant plant;
 
 
 
@@ -199,12 +199,13 @@ public class GroundTile : MonoBehaviour, isTile
         }
     }
 
-    public void GrowPlant()
+    public void GrowPlant(PlayerPrototype player)
     {
         if (plant == null)
         {
             plant = Resources.Load<Plant>("Plant");
             plant.SetGroundTile(this);
+            plant.SetPlayer(player);
             Instantiate(plant, this.transform.position, Quaternion.identity);
         }
     }

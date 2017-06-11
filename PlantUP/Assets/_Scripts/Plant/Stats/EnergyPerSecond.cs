@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnergyPerSecond : isStat {
+public class EnergyPerSecond : IsStat {
 
     private static readonly float baseValue = 1;
     private float currentValue = baseValue;
@@ -34,10 +34,9 @@ public class EnergyPerSecond : isStat {
 
     public void SetCurrent(float value)
     {
-        if (value > 0)
-        {
+        
             currentValue = value;
-        }
+        
     }
 
     public float GetMax()

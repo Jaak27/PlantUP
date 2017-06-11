@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeepRoots : isUpgrade
+public class DeepRoots : IsUpgrade
 {
 
     static readonly int cost = 10;

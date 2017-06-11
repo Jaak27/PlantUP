@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageTaken : isStat {
+public class DamageTaken : IsStat {
 
-    private static readonly float baseValue = 1;
+    private static readonly float baseValue = 0;
     private float currentValue = baseValue;
 
 

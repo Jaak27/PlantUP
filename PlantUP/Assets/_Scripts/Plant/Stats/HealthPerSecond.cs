@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPerSecond : isStat {
+public class HealthPerSecond : IsStat {
 
     private static readonly float baseValue = 0;
     private float currentValue = baseValue;

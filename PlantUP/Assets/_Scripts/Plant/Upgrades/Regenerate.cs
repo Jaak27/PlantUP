@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Regenerate : isUpgrade
+public class Regenerate : IsUpgrade
 {
 
     static readonly int cost = 10;

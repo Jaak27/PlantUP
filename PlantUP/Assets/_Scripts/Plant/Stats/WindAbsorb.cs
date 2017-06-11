@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WindAbsorb : isStat {
+public class WindAbsorb : IsStat {
 
     private static readonly float baseValue = 1;
     private float currentValue = baseValue;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpreadRoots : isUpgrade
+public class SpreadRoots : IsUpgrade
 {
 
     static readonly int cost = 10;

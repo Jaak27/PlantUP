@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.6.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -118,6 +120,7 @@
     <Compile Include="Assets\_Scripts\Plant\Upgrades\Regenerate.cs" />
     <Compile Include="Assets\_Scripts\Plant\Upgrades\SpreadRoots.cs" />
     <Compile Include="Assets\_Scripts\Plant\Upgrades\Stalk.cs" />
+    <Compile Include="Assets\_Scripts\Player\PlayerPrototype.cs" />
     <Compile Include="Assets\_Scripts\Tiles\AshTile.cs" />
     <Compile Include="Assets\_Scripts\Tiles\GroundTile.cs" />
     <Compile Include="Assets\_Scripts\Tiles\MountainTile.cs" />

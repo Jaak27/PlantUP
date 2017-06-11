@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PorousRoots : isUpgrade
+public class PorousRoots : IsUpgrade
 {
 
     static readonly int cost = 10;

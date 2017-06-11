@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Insects : isUpgrade
+public class Insects : IsUpgrade
 {
 
     static readonly int cost = 10;

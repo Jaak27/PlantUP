@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Efficiency : isUpgrade
+public class Efficiency : IsUpgrade
 {
 
     static readonly int cost = 10;

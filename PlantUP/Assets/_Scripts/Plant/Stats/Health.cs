@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health : isStat{
+public class Health : IsStat{
 
     private static readonly float baseValue = 100;
     private float maxValue = baseValue;

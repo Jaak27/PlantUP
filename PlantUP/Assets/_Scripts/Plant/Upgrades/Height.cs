@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Height :  isUpgrade {
+public class Height :  IsUpgrade {
 
     static readonly int cost = 10;
     int current = 0;
-    static readonly int max = 3;
+    static readonly int max = 7;
 
     public int GetCost()
     {
