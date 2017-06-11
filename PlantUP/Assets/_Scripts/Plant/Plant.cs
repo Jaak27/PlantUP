@@ -7,7 +7,7 @@ public class Plant : MonoBehaviour {
     /// <summary>
     /// Eine Referenz auf die GroundTile.
     /// </summary>
-    GroundTile myTile;
+    IsTile myTile;
 
     /// <summary>
     /// Eine Referenz auf den Blueprint.
@@ -111,12 +111,12 @@ public class Plant : MonoBehaviour {
     public float getEps() { return eps; }
 
 
-    public void setTile(GroundTile myTile)
+    public void setTile(IsTile myTile)
     {
         this.myTile = myTile;
     }
 
-    public GroundTile getTile()
+    public IsTile getTile()
     {
         return myTile;
     }
