@@ -126,7 +126,8 @@ public class PlayingFieldLogic : MonoBehaviour {
     /// <summary>
     /// Der Seed für den Zufallszahlengenerator.
     /// </summary>
-    public int seed;
+    //public int seed;
+    int seedTest = seed.getSeedField();
     
     int ticksHappened = 0;
 
@@ -155,7 +156,8 @@ public class PlayingFieldLogic : MonoBehaviour {
 
     public void GenerateRectangleMap()
     {
-        Random.InitState(seed);
+        //Random.InitState(seed);
+        Random.InitState(seedTest);
 
         //Speichert den Typen jedes Feld bevor es finaliesiert wird.
         tileType[,] tempField = new tileType[xSize, ySize];
