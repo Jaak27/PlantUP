@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class Selectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class tileControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 
     bool mouseOverObject;
@@ -21,7 +21,7 @@ public class Selectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     void Update()
     {
 
-        if (Input.GetMouseButton(1)) // feld wird deselektiert
+        if (mainControl.getUseSkills() | Input.GetMouseButton(1)) // feld wird deselektiert
         {
             GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(null);
             GameObject.Find("feldSelect").GetComponent<SpriteRenderer>().enabled = false;
@@ -31,7 +31,16 @@ public class Selectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             if (Input.GetMouseButtonDown(0))
             {
-                GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(this.gameObject);
+                if(!mainControl.getUseSkills())
+                {
+                    GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(this.gameObject);
+                }
+                else
+                {
+                    this.GetComponent<IsTile>().getPlayingField().replaceTile(this.GetComponent<IsTile>(), tileType.WATER);
+                }
+                
+                
 
             }
         }

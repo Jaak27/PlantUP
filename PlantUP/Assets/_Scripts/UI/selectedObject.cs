@@ -25,7 +25,7 @@ public class selectedObject : MonoBehaviour
         text_Pflanze = GameObject.Find("txt_PflanzenInfo").GetComponent<Text>();
         fenster_FeldInfo = GameObject.Find("fenster_FeldInfo").GetComponent<feldInfoUI>();
         fenster_PflanzenInfo = GameObject.Find("fenster_PflanzenInfo").GetComponent<feldInfoUI>();
-        fenster_UpgradeInfo = GameObject.Find("fenster_UpgradeInfo").GetComponent<feldInfoUI>();
+        //fenster_UpgradeInfo = GameObject.Find("fenster_UpgradeInfo").GetComponent<feldInfoUI>();
 
     }
 
@@ -132,9 +132,14 @@ public class selectedObject : MonoBehaviour
 
 
             }
+            
 
         }
-
+        else
+        {
+            fenster_FeldInfo.setUp(false);
+            fenster_PflanzenInfo.setUp(false);
+        }
         
     }
 
