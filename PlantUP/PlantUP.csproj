@@ -120,6 +120,11 @@
     <Compile Include="Assets\_Scripts\Plant\Upgrades\Stalk.cs" />
     <Compile Include="Assets\_Scripts\Player\PlayerPrototype.cs" />
     <Compile Include="Assets\_Scripts\Tiles\IsTile.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour\AbstractIf.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour\ChangeIf.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour\adjacendTo.cs" />
+    <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour\weatherInEffect.cs" />
     <Compile Include="Assets\_Scripts\UI\Selectable.cs" />
     <Compile Include="Assets\_Scripts\UI\controls.cs" />
     <Compile Include="Assets\_Scripts\UI\feldInfoUI.cs" />
