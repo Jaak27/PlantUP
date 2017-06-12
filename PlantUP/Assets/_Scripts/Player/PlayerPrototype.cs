@@ -8,7 +8,7 @@ public class PlayerPrototype : MonoBehaviour {
     /// <summary>
     /// Die Angesammelte Punktzahl des Spielers
     /// </summary>
-    public float points = 0;
+    public float points = 300;
     //private string name;
     private Text uiText;
     private static int count = 0;

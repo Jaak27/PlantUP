@@ -8,23 +8,21 @@ public class GrowPlant : MonoBehaviour, IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        IsTile tile = this.gameObject.GetComponent<IsTile>();
         PlayerPrototype player = GameObject.Find("Player1").GetComponent<PlayerPrototype>();
-        if (tile != null)
+        IsTile tile = this.gameObject.GetComponent<IsTile>();
+        float cost = GameObject.Find("BluePrint").GetComponent<Blueprint>().GetCost();
+        if (tile != null && tile.canSustainPlant && !tile.getPlant())
         {
-            tile.GrowPlant(player);
+            if (cost >= 0 && player.GetPoints() >= cost)
+            {
+                tile.GrowPlant(player);
+                player.AddPoints(-cost);
+            }
+            else
+            {
+                print("Nicht genug Energie! SPieler hat "+ player.GetPoints()+ " Punkte, BP kostet "+ cost);
+            }
         }
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     
 }

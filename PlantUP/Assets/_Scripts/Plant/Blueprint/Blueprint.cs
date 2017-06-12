@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class Blueprint : MonoBehaviour {
 
-    public List<int> UpgradeSequence;
+    public List<int> upgradeSequence;
     public bool hasChanged = true;
+    private float cost = 100;
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public float GetCost()
+    {
+        if (upgradeSequence.Count > 0)
+        {
+            cost = upgradeSequence.Count * 100;
+        }
+
+        return cost;
+    }
 
     public List<int> GetSequence() {
-        return UpgradeSequence;
+        return upgradeSequence;
     }
 
     public bool HasChanged() {
