@@ -3,46 +3,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AshTile : MonoBehaviour, isTile
+public class IsTile : MonoBehaviour
 {
     /// <summary>
     /// Eine Referenz auf das Spielfeld.
     /// </summary>
     PlayingFieldLogic playingField;
 
+    public Plant plant;
+
+    /// <summary>
+    /// Welcher Typ in diesem Feld dargestellt ist.
+    /// </summary>
+
+    public tileType type;
 
 
     /// <summary>
     /// Enthält die 6 nächsten Nachbarn.
     /// Von links oben, in Uhrzeigerrichtung
     /// </summary>
-    isTile[] neighbours;
+    IsTile[] neighbours;
 
     /// <summary>
     /// Die Nährstoffe die noch auf diesem Feld lagern.
+    /// Die Stärke des Wassers, sowie die Windstärke.
     /// </summary>
     int nutrientValue;
-
-    public static int minimumNutrientValue = 900;
-    public static int maximumNutrientValue = 1500;
-
-    /// <summary>
-    /// Die Windstärke die auf diesem Feld herrscht.
-    /// </summary>
+    int waterStrength;
     int windstrength;
 
 
     /// <summary>
     /// Ist windUpdate = true, muss die Windstärke neu berechnet werden.
+    /// windloss = wieviel Prozent der Wind verliert oder gewinnt wenn er über dieses Feld fliegt.
     /// </summary>
     bool windUpdate = true;
+    public float windloss;
 
 
     /// <summary>
-    /// Die Pflanze die auf diesem Feld wächst.
-    /// Muss noch implementiert werden.
+    /// CanSustainPlant = ob eine Pflanze auf diesem Feld wachsen kann
+    /// hasGroundValue = ob Nährstoffe aus dem Boden extrahiert werden können
+    /// hasWaterValue = ob Energie aus Wasser extrahiert werden kann
     /// </summary>
-    int plant;
+
+    public bool canSustainPlant;
+    public bool hasGroundValue;
+    public bool hasWaterValue;
 
 
 
@@ -60,24 +68,38 @@ public class AshTile : MonoBehaviour, isTile
 
     }
 
-    public tileType getTileType()
+    public Transform getTransform()
     {
-        return tileType.ASH;
+        return transform;
     }
 
-    public isTile[] getNeighbours()
+
+    public tileType getTileType()
+    {
+        return type;
+    }
+
+    public IsTile[] getNeighbours()
     {
         return neighbours;
     }
 
     public int getNutrientValue()
     {
-        return nutrientValue;
+        if (hasGroundValue)
+
+            return nutrientValue;
+        else
+            return 0;
     }
 
     public int getWaterStrength()
     {
-        return 0;
+        if (hasWaterValue)
+
+            return waterStrength;
+        else
+            return 0;
     }
 
     public void addNutrientValue(int newValue)
@@ -107,8 +129,12 @@ public class AshTile : MonoBehaviour, isTile
     public int getWindSpread()
     {
 
-        //Der Wind frischt ein bischen auf, bis auf den Maximalwert.
-        int windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * GroundTile.groundWindRefreshFactor);
+        //Ist windloss < 0 wird die Windstärke direkt multipliziert, für schneller Abfall
+        int windSpread;
+        if (windloss < 1)
+            windSpread = Mathf.CeilToInt(getWindStrength() * windloss);
+        else
+            windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * windloss);
         if (windSpread > getPlayingField().getWindStrength())
             windSpread = getPlayingField().getWindStrength();
 
@@ -118,10 +144,11 @@ public class AshTile : MonoBehaviour, isTile
 
     }
 
-    public void setWindStrength(int newValue)
+    public void setWaterStrength(int waterStrength)
     {
-        windstrength = newValue;
+        this.waterStrength = waterStrength;
     }
+
 
     /// <summary>
     /// Erneuert die Windstärke auf diesem Feld nachdem sich der Wind verändert hat.
@@ -134,7 +161,7 @@ public class AshTile : MonoBehaviour, isTile
         if (windUpdate)
         {
             //Findet das Feld aus dem der Wind auf dieses Feld weht.
-            isTile tile = neighbours[playingField.getWindDirection()];
+            IsTile tile = neighbours[playingField.getWindDirection()];
             if (tile != null)
             {
                 windstrength = tile.getWindSpread();
@@ -156,6 +183,8 @@ public class AshTile : MonoBehaviour, isTile
     public void setNutrientValue(int nutrientValue)
     {
         this.nutrientValue = nutrientValue;
+        if (this.nutrientValue < 0)
+            this.nutrientValue = 0;
     }
 
 
@@ -164,7 +193,7 @@ public class AshTile : MonoBehaviour, isTile
         return playingField.getLightStrength();
     }
 
-    public void setNeighbours(isTile[] neighbours)
+    public void setNeighbours(IsTile[] neighbours)
     {
         this.neighbours = neighbours;
     }
@@ -179,13 +208,7 @@ public class AshTile : MonoBehaviour, isTile
         return playingField;
     }
 
-    public Transform getTransform()
-    {
-        return transform;
-    }
-
-
-    public void replaceNeighbour(isTile oldTile, isTile newTile)
+    public void replaceNeighbour(IsTile oldTile, IsTile newTile)
     {
         for (int i = 0; i < 6; i++)
         {
@@ -199,4 +222,28 @@ public class AshTile : MonoBehaviour, isTile
     {
         Destroy(this.gameObject);
     }
+
+    public bool getCanSustainPlant()
+    {
+        return canSustainPlant;
+    }
+
+    public bool getHasGroundValue()
+    {
+        return hasGroundValue;
+    }
+    public bool getHasWaterValue()
+    {
+        return hasWaterValue;
+    }
+    
+    public void GrowPlant(PlayerPrototype player)
+    {
+        plant = Resources.Load<Plant>("Plant");
+        plant.SetMyTile(this);
+        plant.SetPlayer(player);
+        Instantiate(plant, this.transform.position, Quaternion.identity);
+    }
+
+
 }

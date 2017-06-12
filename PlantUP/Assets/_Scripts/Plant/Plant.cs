@@ -35,9 +35,8 @@ public class Plant : MonoBehaviour {
     /// <summary>
     /// Eine Referenz auf die GroundTile.
     /// </summary>
-    private List<WaterTile> waterNeighbours;
-    public GroundTile myGroundTile;
-    public AshTile myAshTile;
+    private List<IsTile> waterNeighbours;
+    public IsTile myTile;
     
     /// <summary>
     /// Eine Referenz auf den Blueprint.
@@ -95,14 +94,14 @@ public class Plant : MonoBehaviour {
     public float eps;
     public float schadenErlitten;
 
-    public void SetGroundTile(GroundTile myTile)
+    public void SetMyTile(IsTile myTile)
     {
-        this.myGroundTile = myTile;
+        this.myTile = myTile;
     }
 
-    public GroundTile GetTile()
+    public IsTile GetMyTile()
     {
-        return myGroundTile;
+        return myTile;
     }
 
     public void SetBlueprint(Blueprint myBlueprint)
@@ -256,7 +255,7 @@ public class Plant : MonoBehaviour {
     {
 
         //Erstmal nur Nutrient Absorb
-        if (myGroundTile != null)
+        if (myTile != null)
         {
             CalcNutriValue();
             CalcWaterValue();
@@ -283,7 +282,7 @@ public class Plant : MonoBehaviour {
 
     private void CalcNutriValue()
     {
-        int nutriValue = myGroundTile.getNutrientValue();
+        int nutriValue = myTile.getNutrientValue();
         float nups = stats[4].GetCurrent();
         float energy = stats[8].GetCurrent();
 
@@ -292,14 +291,14 @@ public class Plant : MonoBehaviour {
             stats[8].SetCurrent(energy + nups);
             player.AddPoints(nups);
             //TODO anpassen für asche und sumpf feder!
-            myGroundTile.setNutrientValue(nutriValue - (int)nups);
+            myTile.setNutrientValue(nutriValue - (int)nups);
         }
         else if(nutriValue > 0)
         {
             stats[8].SetCurrent(energy + nutriValue);
             player.AddPoints(nutriValue);
             //TODO anpassen für asche und sumpf feder!
-            myGroundTile.setNutrientValue(0);
+            myTile.setNutrientValue(0);
             print("Groundtile empty");
         }
     }
@@ -307,10 +306,10 @@ public class Plant : MonoBehaviour {
     private void CalcWaterValue()
     {
 
-        if (waterNeighbours.Count > 0)
+        if (myTile.getNeighbours().Length > 0)
         {
             float waps = stats[7].GetCurrent();
-            foreach (WaterTile wTile in waterNeighbours)
+            foreach (IsTile wTile in myTile.getNeighbours())
             {
                 
                 float energy = stats[8].GetCurrent();
@@ -337,7 +336,7 @@ public class Plant : MonoBehaviour {
 
     private void CalcWindValue()
     {
-        int windValue = myGroundTile.getWindStrength();
+        int windValue = myTile.getWindStrength();
         float wips = stats[6].GetCurrent();
         float energy = stats[8].GetCurrent();
         
@@ -355,7 +354,7 @@ public class Plant : MonoBehaviour {
 
     private void CalcSunValue()
     {
-        int sunValue = myGroundTile.getLightValue();
+        int sunValue = myTile.getLightValue();
         float sups = stats[5].GetCurrent();
         float energy = stats[8].GetCurrent();
         
@@ -414,25 +413,24 @@ public class Plant : MonoBehaviour {
         stats[2].SetCurrent(health + hps - dps);
     }
 
-
+    //TODO: Was passiert wenn Events Felder Wechseln?
     private void SetWaterNeighbours() {
-        waterNeighbours = new List<WaterTile>();
-        isTile[] neighbours = null;
-        if (myGroundTile != null)
+
+        waterNeighbours = new List<IsTile>();
+        IsTile[] neighbours = null;
+
+        if (myTile != null)
         {
-            neighbours = myGroundTile.getNeighbours();
+            neighbours = myTile.getNeighbours();
         }
-        if (myAshTile != null)
-        {
-            neighbours = myAshTile.getNeighbours();
-        }
+        
         if (neighbours.Length > 0)
         {
-            foreach (isTile tile in neighbours)
+            foreach (IsTile tile in neighbours)
             {
-                if (tile.getTileType() == tileType.WATER)
+                if (tile.getTileType() == tileType.WATER || tile.getTileType() == tileType.SWAMP)
                 {
-                    waterNeighbours.Add((WaterTile)tile);
+                    waterNeighbours.Add(tile);
                 }
             }
         }

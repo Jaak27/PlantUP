@@ -45,14 +45,16 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             fenster_UpgradeInfo.setUp(true);
 
             // Welche Infos angezeigt werden sollen abhängig von den Tiles
-            if (this.gameObject.GetComponent<GroundTile>() != null)
+            if (this.gameObject.GetComponent<IsTile>() != null && this.gameObject.GetComponent<IsTile>().getTileType() == tileType.GROUND)
             {
 
                 text_Feld.text ="-Feldata-" +
-                                "\nBodenwert.........." + this.gameObject.GetComponent<GroundTile>().getNutrientValue() +
+                                "\nBodenwert.........." + this.gameObject.GetComponent<IsTile>().getNutrientValue() +
                                 "\nWasserwert................" + 
                                 "\nWindwert......................" + //this.gameObject.GetComponent<GroundTile>().getWindStrength() +
                                 "\n" + "Sonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
+
+                Plant pflanze = this.gameObject.GetComponent<IsTile>().plant;
 
                 text_Pflanze.text =  "-Pflanzendata-" + 
                                      "\n" + "Health........100/100" +
@@ -71,7 +73,7 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
             }
 
-            if (this.gameObject.GetComponent<WaterTile>() != null)
+            if (this.gameObject.GetComponent<IsTile>() != null && this.gameObject.GetComponent<IsTile>().getTileType() == tileType.WATER)
             {
 
                 fenster_FeldInfo.setUp(true);
@@ -80,13 +82,13 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
                 text_Feld.text ="-Feldata-" +
                                 "\nBodenwert................." +
-                                "\nWasserwert..........." + this.gameObject.GetComponent<WaterTile>().getWaterStrength() +
-                                "\nWindwert......................" + //this.gameObject.GetComponent<WaterTile>().getWindStrength() +
+                                "\nWasserwert..........." + this.gameObject.GetComponent<IsTile>().getWaterStrength() +
+                                "\nWindwert......................" + this.gameObject.GetComponent<IsTile>().getWindStrength() +
                                 "\nSonnenwert............" + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
                             
             }
 
-            if (this.gameObject.GetComponent<MountainTile>() != null)
+            if (this.gameObject.GetComponent<IsTile>() != null && this.gameObject.GetComponent<IsTile>().getTileType() == tileType.MOUNTAIN)
             {
 
                 fenster_FeldInfo.setUp(true);
@@ -139,7 +141,7 @@ public class Selectable : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(this.gameObject.GetComponent<GroundTile>() != null)
+        if(this.gameObject.GetComponent<IsTile>() != null)
         {
 
         }

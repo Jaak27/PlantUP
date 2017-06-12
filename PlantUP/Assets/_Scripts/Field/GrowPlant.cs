@@ -8,10 +8,10 @@ public class GrowPlant : MonoBehaviour, IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        GroundTile groundTile = this.gameObject.GetComponent<GroundTile>();
+        IsTile tile = this.gameObject.GetComponent<IsTile>();
         PlayerPrototype player = GameObject.Find("Player1").GetComponent<PlayerPrototype>();
-        if (groundTile != null) { 
-        groundTile.GrowPlant(player);
+        if (tile != null) { 
+        tile.GrowPlant(player);
         }
     }
 

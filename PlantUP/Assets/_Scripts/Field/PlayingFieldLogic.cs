@@ -1,40 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 
 
-/// <summary>
-/// Markiert Felder auf dem Spielfeld.
-/// </summary>
-public interface isTile
-{
-    tileType getTileType();
-    isTile[] getNeighbours();
-    void setNeighbours(isTile[] neighbours);
-
-    void setPlayingField(PlayingFieldLogic playingField);
-    PlayingFieldLogic getPlayingField();
-
-    int getLightValue();
-    int getWindStrength();
-    int getWindSpread();
-
-    int getNutrientValue();
-    int getWaterStrength();
-
-    void forceWindUpdate();
-    void updateWindStrength();
-
-    void removeObject();
-    void replaceNeighbour(isTile oldTile, isTile newTile);
-    Transform getTransform();
-
-}
 
 public enum tileType
 {
-    GROUND, WATER, MOUNTAIN, VOLCANO, ASH
+    GROUND, WATER, MOUNTAIN, VOLCANO, ASH, ICE, FIRE, SWAMP
+}
+
+public enum weatherType
+{
+    NORMAL, BLIZZARD, ERUPTION
 }
 
 public class PlayingFieldLogic : MonoBehaviour
@@ -46,10 +25,7 @@ public class PlayingFieldLogic : MonoBehaviour
     /// </summary>
     private class RandomEvent
     {
-        //"Licht" 
-        //"Windstärke"
-        //"Richtung"
-        public string type;
+        public eventTypes type;
         //Eine Zahl die auf die Licht oder Windstärke addiert wird, negativ für schwächen.
         //Für Windrichtung: positiv dreht den Wind im Uhrzeigersinn, eine Negative gegen den Uhrzeiger.
         public int change;
@@ -57,30 +33,63 @@ public class PlayingFieldLogic : MonoBehaviour
         public int time;
     }
 
+    private enum eventTypes
+    {
+        LIGHT, WINDSTRENGTH, WINDDIRECTION, BLIZZARDSTART, ERUPTIONSTART, WEATHERSTOP, NULL
+    }
 
+    public static readonly int minimumBlizzardDuration = 400;
+    public static readonly int maximumBlizzardDuration = 1200;
 
+    public static readonly int minimumEruptionDuration = 100;
+    public static readonly int maximumEruptionDuration = 250;
+
+    public int normalEventChance = 3;
+    public int catastropheEventChance = 2;
 
     /// <summary>
     /// Speichert alle ausgewürfelten Events.
     /// </summary>
-    List<RandomEvent> eventListe;
+    List<RandomEvent> eventListe = null;
 
 
-    public GroundTile groundTilePrefab;
-    public AshTile ashTilePrefab;
-    public WaterTile waterTilePrefab;
-    public MountainTile mountainTilePrefab;
-    public VolcanoTile volcanoTilePrefab;
+    public IsTile groundTilePrefab;
+    public IsTile ashTilePrefab;
+    public IsTile waterTilePrefab;
+    public IsTile swampTilePrefab;
+    public IsTile iceTilePrefab;
+    public IsTile mountainTilePrefab;
+    public IsTile volcanoTilePrefab;
+    public IsTile fireTilePrefab;
 
-
+    Text timer;
 
     /// <summary>
     /// Die maximale Stärke des Windes der grad herrscht.
     /// </summary>
-    public int windStrength;
+    int windStrength;
 
+
+    /// <summary>
+    /// Basiswerte für viele Starteigenschaften
+    /// </summary>
     public static readonly int minimumWindStrength = 20;
     public static readonly int maximumWindStrength = 150;
+    public static readonly int minimumLightStrength = 10;
+    public static readonly int maximumLightStrength = 50;
+
+    public static readonly int minimumWaterStrength = 30;
+    public static readonly int maximumWaterStrength = 70;
+    public static readonly int minimumSwampStrength = 15;
+    public static readonly int maximumSwampStrength = 90;
+
+    public static readonly int minimumSwampValueStart = 1500;
+    public static readonly int maximumSwampValueStart = 3500;
+    public static readonly int minimumGroundValueStart = 1000;
+    public static readonly int maximumGroundValueStart = 3000;
+    public static readonly int minimumAshValueStart = 2000;
+    public static readonly int maximumAshValueStart = 4000;
+
     /// <summary>
     /// Die Richtung aus der der Wind weht.
     /// 0 = links oben
@@ -92,10 +101,10 @@ public class PlayingFieldLogic : MonoBehaviour
     /// <summary>
     /// Die Menge an Energie die an Licht auf jedes Feld fällt.
     /// </summary>
-    public int lightStrength;
+    int lightStrength;
 
-    public static readonly int minimumLightStrength = 10;
-    public static readonly int maximumLightStrength = 50;
+
+    public weatherType currentWeather = weatherType.NORMAL;
 
 
     /// <summary>
@@ -113,18 +122,35 @@ public class PlayingFieldLogic : MonoBehaviour
     /// Speichert alle Felder dieses Spielfeldes.
     /// Wollen wir ein Sechseckiges Spielfeld, oder ein viereckiges?
     /// </summary>
-    isTile[] felder;
+    IsTile[] felder;
 
     /// <summary>
     /// Der Seed für den Zufallszahlengenerator.
     /// </summary>
     public int seed;
 
+    int ticksHappened = 0;
+
     // Use this for initialization
     void Start()
     {
         GenerateRectangleMap();
         GenerateEvents(18000);
+        timer = GameObject.Find("txt_Timer").GetComponent<Text>();
+
+        //Test
+        /*
+        eventListe.Clear();
+        RandomEvent neu = new RandomEvent();
+        neu.type = eventTypes.ERUPTIONSTART;
+        neu.time = 5;
+        neu.change = Random.Range(minimumEruptionDuration, maximumEruptionDuration) + Random.Range(minimumEruptionDuration, maximumEruptionDuration);
+        eventListe.Add(neu);
+        neu = new RandomEvent();
+        neu.type = eventTypes.WEATHERSTOP;
+        neu.time = 300;
+        eventListe.Add(neu);
+        */
     }
 
 
@@ -143,23 +169,28 @@ public class PlayingFieldLogic : MonoBehaviour
         {
             for (int y = 0; y < ySize; y++)
             {
-                //Generiere eine zufällige Zahl zwischen 0 und 10.
-                float randomChance = Random.Range(0f, 10f);
+                float mountainChance = 7f;
+                float waterChance = 12f;
+                float swampChance = 2f;
 
-                //80% Chance das es ein Groundfeld wird.
-                if (randomChance < 8f)
+                //Generiere eine zufällige Zahl zwischen 0 und 10.
+                float randomChance = Random.Range(0f, 100f);
+
+                if (randomChance < mountainChance)
                 {
-                    tempField[x, y] = tileType.GROUND;
+                    tempField[x, y] = tileType.MOUNTAIN;
                 }
-                //10% Chance für ein Wasserfeld
-                else if (randomChance < 9f)
+                else if (randomChance < mountainChance + waterChance)
                 {
                     tempField[x, y] = tileType.WATER;
                 }
-                //10% chance für ein Gebirgsfeld
+                else if (randomChance < mountainChance + waterChance + swampChance)
+                {
+                    tempField[x, y] = tileType.SWAMP;
+                }
                 else
                 {
-                    tempField[x, y] = tileType.MOUNTAIN;
+                    tempField[x, y] = tileType.GROUND;
                 }
             }
         }
@@ -176,6 +207,7 @@ public class PlayingFieldLogic : MonoBehaviour
                     int countWater = 0;
                     int countVolcano = 0;
                     int countAsh = 0;
+                    int countSwamp = 0;
 
                     int[,] neighbourCoords;
 
@@ -200,6 +232,8 @@ public class PlayingFieldLogic : MonoBehaviour
                                 countVolcano++;
                             else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.ASH)
                                 countAsh++;
+                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.SWAMP)
+                                countSwamp++;
                         }
                     }
 
@@ -229,6 +263,15 @@ public class PlayingFieldLogic : MonoBehaviour
                             if (chance <= 0.5 * countVolcano + 0.1 * countAsh)
                                 tempField[x, y] = tileType.ASH;
                         }
+
+                        //Chance sich in ein Sumpffeld zu verwandeln.
+                        if (countVolcano < 1 && countSwamp > 0 && countMountain < 1)
+                        {
+                            float chance = Random.Range(0f, 1f);
+                            if (chance <= 0.05 * (countSwamp + 1))
+                                tempField[x, y] = tileType.SWAMP;
+                        }
+
                     }
                     //Wasserfelder neben Vulkanen > Boden
                     else if (tempField[x, y] == tileType.WATER)
@@ -259,16 +302,13 @@ public class PlayingFieldLogic : MonoBehaviour
                         {
                             tempField[x, y] = tileType.VOLCANO;
                         }
-
                     }
-
                 }
             }
         }
 
-
         //Die ausgewürfelten Feldertypen werden jetzt in richtige Felder verwandelt.
-        felder = new isTile[xSize * ySize];
+        felder = new IsTile[xSize * ySize];
 
         for (int y = 0; y < ySize; y++)
         {
@@ -283,55 +323,53 @@ public class PlayingFieldLogic : MonoBehaviour
                     position2d.x += 0.5f;
 
                 Vector3 position = new Vector3(this.transform.position.x + position2d.x * size.x, this.transform.position.y + position2d.y * size.y, 1);
-
+                IsTile newTile = null;
                 switch (tempField[x, y])
                 {
                     case tileType.WATER:
-                        WaterTile tempWater = Instantiate(waterTilePrefab, position, Quaternion.identity);
-
-                        felder[y * xSize + x] = tempWater;
-                        tempWater.setWaterStrength((int)Random.Range(WaterTile.minimumWaterStrength, WaterTile.maximumWaterStrength));
-                        tempWater.setPlayingField(this);
+                        newTile = Instantiate(waterTilePrefab, position, Quaternion.identity);
+                        break;
+                    case tileType.SWAMP:
+                        newTile = Instantiate(swampTilePrefab, position, Quaternion.identity);
                         break;
                     case tileType.MOUNTAIN:
-                        MountainTile tempMountain = Instantiate(mountainTilePrefab, position, Quaternion.identity);
-                        tempMountain.setPlayingField(this);
-                        felder[y * xSize + x] = tempMountain;
+                        newTile = Instantiate(mountainTilePrefab, position, Quaternion.identity);
                         break;
                     case tileType.VOLCANO:
-                        VolcanoTile tempVolcano = Instantiate(volcanoTilePrefab, position, Quaternion.identity);
-                        tempVolcano.setPlayingField(this);
-                        felder[y * xSize + x] = tempVolcano;
+                        newTile = Instantiate(volcanoTilePrefab, position, Quaternion.identity);
                         break;
                     case tileType.ASH:
-                        AshTile tempAsh = Instantiate(ashTilePrefab, position, Quaternion.identity);
-                        tempAsh.setPlayingField(this);
-                        tempAsh.setNutrientValue((int)Random.Range(AshTile.minimumNutrientValue, AshTile.maximumNutrientValue));
-
-                        felder[y * xSize + x] = tempAsh;
+                        newTile = Instantiate(ashTilePrefab, position, Quaternion.identity);
                         break;
                     case tileType.GROUND:
                     default:
-                        GroundTile tempGround = Instantiate(groundTilePrefab, position, Quaternion.identity);
-                        tempGround.setPlayingField(this);
-                        tempGround.setNutrientValue((int)Random.Range(GroundTile.minimumNutrientValue, GroundTile.maximumNutrientValue));
-                        felder[y * xSize + x] = tempGround;
+                        newTile = Instantiate(groundTilePrefab, position, Quaternion.identity);
                         break;
                 }
 
+                if (newTile.getHasGroundValue())
+                    newTile.setNutrientValue((int)Random.Range(getMinimumNutrientValue(newTile.type), getMaximumNutrientValue(newTile.type)));
+                if (newTile.getHasWaterValue())
+                    newTile.setWaterStrength((int)Random.Range(getMinimumWaterStrength(newTile.type), getMaximumWaterStrength(newTile.type)));
+
+
+
+
+                felder[y * xSize + x] = newTile;
+                newTile.setPlayingField(this);
 
             }
         }
 
         //Jetzt sind alle Felder erstellt, und allen Feldern können jetzt ihre Nachbarn gegeben werden.
+
         for (int i = 0; i < felder.Length; i++)
         {
-            print(felder.Length + "Felder erstellt!");
-            
+            //
             int tempX = i % xSize;
             int tempY = (i - i % xSize) / xSize;
 
-            isTile[] neighbours = new isTile[6];
+            IsTile[] neighbours = new IsTile[6];
 
             int[,] neighbourCoords;
 
@@ -349,15 +387,13 @@ public class PlayingFieldLogic : MonoBehaviour
 
                 if (tempListPosition >= 0 && tempListPosition < felder.Length)
                     neighbours[j] = felder[tempListPosition];
-                
                 else
                     neighbours[j] = null;
             }
             felder[i].setNeighbours(neighbours);
-            
         }
 
-        
+
 
 
         //Die Erstellung von allen Feldern ist jetzt abgeschlossen.
@@ -372,74 +408,109 @@ public class PlayingFieldLogic : MonoBehaviour
     {
         eventListe = new List<RandomEvent>();
         int ticks = 0;
+
+        int toCatastropheEnd = -1;
         while (ticks < maximaleTickAnzahl)
         {
             RandomEvent neu = new RandomEvent();
             //Würfel Typ aus
-            int random = Random.Range(0, 3);
-            switch (random)
+            int random;
+            if (toCatastropheEnd <= -1)
+                random = Random.Range(0, 3 * normalEventChance + catastropheEventChance);
+            else
+                random = Random.Range(0, 3 * normalEventChance);
+
+            if (random >= 0 && random < normalEventChance)
             {
-                case 0:
-                    neu.type = "Licht";
-                    //Würfel positiven oder negativenEffekt aus
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        //Positiv
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie 1 oder +15, nicht so häufig auftreten.
-                        //Durchschnitt wäre 7 oder 8.
-                        neu.change = Random.Range(0, 8) + Random.Range(1, 9);
-                    }
-                    else
-                    {
-                        //Negativ
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie -1 oder -15, nicht so häufig auftreten.
-                        //Durchschnitt wäre -7 oder -8.
-                        neu.change = Random.Range(0, -8) + Random.Range(-1, -9);
-                    }
-                    break;
-                case 1:
-                    neu.type = "Windstärke";
-                    //Würfel positiven oder negativenEffekt aus
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        //Positiv
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie 5 oder +35, nicht so häufig auftreten.
-                        neu.change = Random.Range(2, 18) + Random.Range(3, 19);
-                    }
-                    else
-                    {
-                        //Negativ
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie -5 oder -35, nicht so häufig auftreten.
-                        neu.change = Random.Range(-2, -18) + Random.Range(-3, -19);
-                    }
-                    break;
-                case 2:
-                    neu.type = "Richtung";
-                    //Würfel Änderung nach links oder rechts aus
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        //Rechts
-                        neu.change = 1;
-                    }
-                    else
-                    {
-                        //Links
-                        neu.change = -1;
-                    }
-                    break;
-                default:
-                    neu.type = "Error";
-                    //Ein Fehler wird ignoriert, und sollte sowieso nicht auftreten.
-                    break;
+                neu.type = eventTypes.LIGHT;
+                //Würfel positiven oder negativenEffekt aus
+                if (Random.Range(0, 2) == 0)
+                {
+                    //Positiv
+                    //Diese Methode sorgt dafür das extreme Ergebnisse, wie 1 oder +15, nicht so häufig auftreten.
+                    //Durchschnitt wäre 7 oder 8.
+                    neu.change = Random.Range(0, 7) + Random.Range(1, 8);
+                }
+                else
+                {
+                    //Negativ
+                    //Diese Methode sorgt dafür das extreme Ergebnisse, wie -1 oder -15, nicht so häufig auftreten.
+                    //Durchschnitt wäre -7 oder -8.
+                    neu.change = Random.Range(-7, 0) + Random.Range(-8, -1);
+                }
             }
+            else if (random >= 1 * normalEventChance && random < 2 * normalEventChance)
+            {
+                neu.type = eventTypes.WINDSTRENGTH;
+                //Würfel positiven oder negativenEffekt aus
+                if (Random.Range(0, 2) == 0)
+                {
+                    //Positiv
+                    //Diese Methode sorgt dafür das extreme Ergebnisse, nicht so häufig auftreten.
+                    neu.change = Random.Range(2, 18) + Random.Range(3, 19);
+                }
+                else
+                {
+                    //Negativ
+                    //Diese Methode sorgt dafür das extreme Ergebnisse, wie -5 oder -35, nicht so häufig auftreten.
+                    neu.change = Random.Range(-18, -2) + Random.Range(-19, -3);
+                }
+            }
+            else if (random >= 2 * normalEventChance && random < 3 * normalEventChance)
+            {
+                neu.type = eventTypes.WINDDIRECTION;
+                //Würfel Änderung nach links oder rechts aus
+                if (Random.Range(0, 1) == 0)
+                {
+                    //Rechts
+                    neu.change = 1;
+                }
+                else
+                {
+                    //Links
+                    neu.change = -1;
+                }
+            }
+            else if (random >= 3 * normalEventChance)
+            {
+                //Rolle für eine Katastrophe!
+                int randomCatastrophe = Random.Range(0, 2);
+                switch (randomCatastrophe)
+                {
+                    case 0:
+                        //Blizzard
+                        neu.type = eventTypes.BLIZZARDSTART;
+                        neu.change = Random.Range(minimumBlizzardDuration, maximumBlizzardDuration) + Random.Range(minimumBlizzardDuration, maximumBlizzardDuration);
+                        toCatastropheEnd = neu.change;
+                        break;
+                    case 1:
+                        //Eruption
+                        neu.type = eventTypes.ERUPTIONSTART;
+                        neu.change = Random.Range(minimumEruptionDuration, maximumEruptionDuration) + Random.Range(minimumEruptionDuration, maximumEruptionDuration);
+                        toCatastropheEnd = neu.change;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
             //Wirf eine Zeit aus
             //Jeden Tick wird die Time des obersten Events um 1 verringert, erreicht sie 0 wird das Event ausgehandelt, und aus der Liste genommen.
-            //Minimalwert = 0, Maximalwert = 240 Ticks, Durschnitt ist ~120?
+            //Minimalwert = 0, Maximalwert = 360 Ticks, Durschnitt ist ~120?
             //Muss noch poliert werden.
             neu.time = Random.Range(0, 120) + Random.Range(0, 120) + Random.Range(0, 120);
-
+            toCatastropheEnd -= neu.time;
             ticks += neu.time;
             eventListe.Add(neu);
+
+            if (toCatastropheEnd < 0)
+            {
+                RandomEvent weatherEnd = new RandomEvent();
+                weatherEnd.type = eventTypes.WEATHERSTOP;
+                weatherEnd.time = 0;
+                eventListe.Add(weatherEnd);
+            }
         }
     }
 
@@ -447,8 +518,18 @@ public class PlayingFieldLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ticksHappened++;
+        int seconds = Mathf.FloorToInt((float)ticksHappened * Time.smoothDeltaTime);
+        if (seconds % 60 > 9 && seconds / 60 > 10)
+            timer.text = "Timer: " + seconds / 60 + ":" + seconds % 60;
+        else if (seconds % 60 < 10 && seconds / 60 > 10)
+            timer.text = "Timer: " + seconds / 60 + ":0" + seconds % 60;
+        else if (seconds % 60 > 9 && seconds / 60 < 10)
+            timer.text = "Timer: 0" + seconds / 60 + ":" + seconds % 60;
+        else if (seconds % 60 < 10 && seconds / 60 < 10)
+            timer.text = "Timer: 0" + seconds / 60 + ":0" + seconds % 60;
         //Starte die Events
-        if (eventListe.Count > 0)
+        if (eventListe != null && eventListe.Count > 0)
         {
             RandomEvent current = eventListe[0];
             current.time--;
@@ -465,119 +546,193 @@ public class PlayingFieldLogic : MonoBehaviour
     {
         switch (currentEvent.type)
         {
-            case "Licht":
+            case eventTypes.LIGHT:
                 lightStrength += currentEvent.change;
                 if (lightStrength < minimumLightStrength)
                     lightStrength = minimumLightStrength;
                 else if (lightStrength > maximumLightStrength)
                     lightStrength = maximumLightStrength;
                 break;
-            case "Windstärke":
+            case eventTypes.WINDSTRENGTH:
                 windStrength += currentEvent.change;
                 if (windStrength < minimumWindStrength)
                     windStrength = minimumWindStrength;
                 else if (windStrength > maximumWindStrength)
                     windStrength = maximumWindStrength;
 
-                foreach (isTile tile in felder)
-                {
-                    tile.forceWindUpdate();
-                }
+                forceWindupate();
                 break;
-            case "Richtung":
+            case eventTypes.WINDDIRECTION:
                 windDirection += currentEvent.change;
-                windDirection = windDirection % 6;
-                foreach (isTile tile in felder)
-                {
-                    tile.forceWindUpdate();
-                }
+                if (windDirection == -1)
+                    windDirection = 5;
+                else if (windDirection == 6)
+                    windDirection = 0;
+
+                forceWindupate();
+                break;
+            case eventTypes.BLIZZARDSTART:
+                currentWeather = weatherType.BLIZZARD;
+                forceWindupate();
+                break;
+            case eventTypes.ERUPTIONSTART:
+                currentWeather = weatherType.ERUPTION;
+                break;
+            case eventTypes.WEATHERSTOP:
+                currentWeather = weatherType.NORMAL;
+                forceWindupate();
                 break;
             default:
                 break;
         }
     }
 
-
+    public void forceWindupate()
+    {
+        foreach (IsTile tile in felder)
+        {
+            tile.forceWindUpdate();
+        }
+    }
 
 
     /// <summary>
     /// Ersetzt ein Feld durch ein neugeneriertes Feld eines anderen (oder dem selben) Typs.
     /// Tötet jede Pflanze die sich auf dem Feld befindet, automatisch.
     /// </summary>
-    public void replaceTile(isTile tile, tileType newType)
+    public void replaceTile(IsTile tile, tileType newType)
+    {
+        replaceTile(tile, newType, false, false);
+    }
+
+    public void replaceTile(IsTile tile, tileType newType, bool keepStats, bool keepPlant)
     {
         int index = findPositionOfTile(tile);
-        switch (newType)
+        if (index >= 0)
+        {
+
+            IsTile newTile = null;
+            switch (newType)
+            {
+                case tileType.GROUND:
+                    newTile = Instantiate(groundTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.ASH:
+                    newTile = Instantiate(ashTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.WATER:
+                    newTile = Instantiate(waterTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.SWAMP:
+                    newTile = Instantiate(swampTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.ICE:
+                    newTile = Instantiate(iceTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.MOUNTAIN:
+                    newTile = Instantiate(mountainTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.VOLCANO:
+                    newTile = Instantiate(volcanoTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+                case tileType.FIRE:
+                    newTile = Instantiate(fireTilePrefab, felder[index].getTransform().position, Quaternion.identity);
+                    break;
+
+                default:
+                    return;
+            }
+
+
+
+            if (newTile != null)
+            {
+                if (keepStats && felder[index].getHasGroundValue() && newTile.getHasGroundValue())
+                    newTile.setNutrientValue(felder[index].getNutrientValue());
+                else if (newTile.getHasGroundValue())
+                    newTile.setNutrientValue(Random.Range(getMinimumNutrientValue(newType), getMaximumNutrientValue(newType)));
+
+                if (keepStats && felder[index].getHasWaterValue() && newTile.getHasWaterValue())
+                    newTile.setWaterStrength(felder[index].getWaterStrength());
+                else if (newTile.getHasWaterValue())
+                    newTile.setWaterStrength(Random.Range(getMinimumWaterStrength(newType), getMaximumWaterStrength(newType)));
+
+                newTile.setPlayingField(this);
+                newTile.setNeighbours(felder[index].getNeighbours());
+                for (int i = 0; i < 6; i++)
+                {
+                    if (newTile.getNeighbours()[i] != null)
+                        newTile.getNeighbours()[i].replaceNeighbour(felder[index], newTile);
+                }
+                felder[index].removeObject();
+                felder[index] = newTile;
+            }
+        }
+    }
+
+    private int getMinimumWaterStrength(tileType type)
+    {
+        switch (type)
+        {
+            case tileType.WATER:
+                return minimumWaterStrength;
+            case tileType.SWAMP:
+                return minimumSwampStrength;
+            default:
+                return 0;
+        }
+    }
+
+    private int getMaximumWaterStrength(tileType type)
+    {
+        switch (type)
+        {
+            case tileType.WATER:
+                return maximumWaterStrength;
+            case tileType.SWAMP:
+                return maximumSwampStrength;
+            default:
+                return 0;
+        }
+    }
+
+    private int getMinimumNutrientValue(tileType type)
+    {
+        switch (type)
         {
             case tileType.GROUND:
-                GroundTile tempGround = Instantiate(groundTilePrefab, felder[index].getTransform().position, Quaternion.identity);
-                tempGround.setPlayingField(this);
-                tempGround.setNutrientValue((int)Random.Range(GroundTile.minimumNutrientValue, GroundTile.maximumNutrientValue));
-                tempGround.setNeighbours(felder[index].getNeighbours());
-                for (int i = 0; i < 6; i++)
-                {
-                    tempGround.getNeighbours()[i].replaceNeighbour(felder[index], tempGround);
-                }
-                felder[index].removeObject();
-                felder[index] = tempGround;
-                break;
+                return minimumGroundValueStart;
             case tileType.ASH:
-                AshTile tempAsh = Instantiate(ashTilePrefab, felder[index].getTransform().position, Quaternion.identity);
-                tempAsh.setPlayingField(this);
-                tempAsh.setNutrientValue((int)Random.Range(AshTile.minimumNutrientValue, AshTile.maximumNutrientValue));
-                tempAsh.setNeighbours(felder[index].getNeighbours());
-                for (int i = 0; i < 6; i++)
-                {
-                    tempAsh.getNeighbours()[i].replaceNeighbour(felder[index], tempAsh);
-                }
-                felder[index].removeObject();
-                felder[index] = tempAsh;
-                break;
-            case tileType.WATER:
-                WaterTile tempWater = Instantiate(waterTilePrefab, felder[index].getTransform().position, Quaternion.identity);
-                tempWater.setPlayingField(this);
-                tempWater.setWaterStrength((int)Random.Range(WaterTile.minimumWaterStrength, WaterTile.maximumWaterStrength));
-                tempWater.setNeighbours(felder[index].getNeighbours());
-                for (int i = 0; i < 6; i++)
-                {
-                    tempWater.getNeighbours()[i].replaceNeighbour(felder[index], tempWater);
-                }
-                felder[index].removeObject();
-                felder[index] = tempWater;
-                break;
-            case tileType.MOUNTAIN:
-                MountainTile tempMountain = Instantiate(mountainTilePrefab, felder[index].getTransform().position, Quaternion.identity);
-                tempMountain.setPlayingField(this);
-                tempMountain.setNeighbours(felder[index].getNeighbours());
-                for (int i = 0; i < 6; i++)
-                {
-                    tempMountain.getNeighbours()[i].replaceNeighbour(felder[index], tempMountain);
-                }
-                felder[index].removeObject();
-                felder[index] = tempMountain;
-                break;
-            case tileType.VOLCANO:
-                VolcanoTile tempVolcano = Instantiate(volcanoTilePrefab, felder[index].getTransform().position, Quaternion.identity);
-                tempVolcano.setPlayingField(this);
-                tempVolcano.setNeighbours(felder[index].getNeighbours());
-                for (int i = 0; i < 6; i++)
-                {
-                    tempVolcano.getNeighbours()[i].replaceNeighbour(felder[index], tempVolcano);
-                }
-                felder[index].removeObject();
-                felder[index] = tempVolcano;
-                break;
+                return minimumAshValueStart;
+            case tileType.SWAMP:
+                return minimumSwampValueStart;
             default:
-                break;
+                return 0;
+        }
+    }
+
+    private int getMaximumNutrientValue(tileType type)
+    {
+        switch (type)
+        {
+            case tileType.GROUND:
+                return maximumGroundValueStart;
+            case tileType.ASH:
+                return maximumAshValueStart;
+            case tileType.SWAMP:
+                return maximumSwampValueStart;
+            default:
+                return 0;
         }
     }
 
 
-    int findPositionOfTile(isTile tile)
+
+    int findPositionOfTile(IsTile tile)
     {
         for (int i = 0; i < felder.Length; i++)
         {
-            if (felder[0] == tile)
+            if (felder[i] == tile)
                 return i;
         }
         return -1;
@@ -586,7 +741,14 @@ public class PlayingFieldLogic : MonoBehaviour
 
     public int getLightStrength()
     {
-        return lightStrength;
+        switch (currentWeather)
+        {
+            case (weatherType.BLIZZARD):
+                return lightStrength / 3;
+            default:
+                return lightStrength;
+        }
+
     }
 
     public int getWindDirection()
@@ -596,6 +758,12 @@ public class PlayingFieldLogic : MonoBehaviour
 
     public int getWindStrength()
     {
-        return windStrength;
+        switch (currentWeather)
+        {
+            case (weatherType.BLIZZARD):
+                return Mathf.FloorToInt(windStrength * 1.5f);
+            default:
+                return windStrength;
+        }
     }
 }
