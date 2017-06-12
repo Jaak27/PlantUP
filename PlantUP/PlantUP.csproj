@@ -126,9 +126,13 @@
     <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour\adjacendTo.cs" />
     <Compile Include="Assets\_Scripts\Tiles\SpecialBehaviour\weatherInEffect.cs" />
     <Compile Include="Assets\_Scripts\UI\Selectable.cs" />
+    <Compile Include="Assets\_Scripts\UI\button_Random.cs" />
     <Compile Include="Assets\_Scripts\UI\controls.cs" />
     <Compile Include="Assets\_Scripts\UI\feldInfoUI.cs" />
     <Compile Include="Assets\_Scripts\UI\infoBox.cs" />
+    <Compile Include="Assets\_Scripts\UI\menuButton.cs" />
+    <Compile Include="Assets\_Scripts\UI\seed.cs" />
+    <Compile Include="Assets\_Scripts\UI\selectedObject.cs" />
     <Compile Include="Assets\_Scripts\UI\skillBarUI.cs" />
     <Compile Include="Assets\_Scripts\UI\skills.cs" />
   </ItemGroup>

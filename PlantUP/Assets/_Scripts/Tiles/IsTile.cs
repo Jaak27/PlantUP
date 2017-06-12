@@ -10,7 +10,7 @@ public class IsTile : MonoBehaviour
     /// </summary>
     PlayingFieldLogic playingField;
 
-    public Plant plant;
+    Plant plant;
 
     /// <summary>
     /// Welcher Typ in diesem Feld dargestellt ist.
@@ -206,6 +206,18 @@ public class IsTile : MonoBehaviour
     public PlayingFieldLogic getPlayingField()
     {
         return playingField;
+    }
+
+    public Plant getPlant()
+    {
+        if (canSustainPlant && plant != null)
+        {
+            return plant;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void replaceNeighbour(IsTile oldTile, IsTile newTile)

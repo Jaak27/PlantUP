@@ -125,6 +125,11 @@ public class Plant : MonoBehaviour {
         return player;
     }
 
+    public List<IsStat> GetStats()
+    {
+        return stats;
+    }
+
     private void Awake()
     {
 
