@@ -254,7 +254,9 @@ public class IsTile : MonoBehaviour
         plant = Resources.Load<Plant>("Plant");
         plant.SetMyTile(this);
         plant.SetPlayer(player);
+        plant.SetBlueprint(player.blueprints[0]);
         Instantiate(plant, this.transform.position, Quaternion.identity);
+        player.AddPlant();
     }
 
 

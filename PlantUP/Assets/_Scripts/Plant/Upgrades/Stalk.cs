@@ -7,6 +7,7 @@ public class Stalk : IsUpgrade {
     static readonly int cost = 10;
     int current = 0;
     static readonly int max = 2;
+    static readonly UpgradeType upgradeType = UpgradeType.STALK;
 
     public int GetCost()
     {
@@ -52,6 +53,11 @@ public class Stalk : IsUpgrade {
     public void ResetUpgrade()
     {
         current = 0;
+    }
+
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
     }
 
     public string getInfo()

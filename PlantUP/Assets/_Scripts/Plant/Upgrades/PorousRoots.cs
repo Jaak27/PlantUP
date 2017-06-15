@@ -8,6 +8,7 @@ public class PorousRoots : IsUpgrade
     static readonly int cost = 10;
     int current = 0;
     static readonly int max = 10;
+    static readonly UpgradeType upgradeType = UpgradeType.POROUSROOTS;
 
     public int GetCost()
     {
@@ -53,6 +54,11 @@ public class PorousRoots : IsUpgrade
     public void ResetUpgrade()
     {
         current = 0;
+    }
+
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
     }
 
     public string getInfo()

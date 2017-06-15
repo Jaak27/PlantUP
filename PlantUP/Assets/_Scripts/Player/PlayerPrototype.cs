@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,24 +10,47 @@ public class PlayerPrototype : MonoBehaviour {
     /// Die Angesammelte Punktzahl des Spielers
     /// </summary>
     public float points = 300;
+    public List<Blueprint> blueprints;
     //private string name;
-    private Text uiText;
-    private static int count = 0;
+    public Text uiText;
+    public static int playerCount = 0;
+    public int myNum;
+    private int plantCount = 0;
 
     private void Awake()
     {
-        uiText = GameObject.Find("txt_Energie").GetComponent<Text>();
-        count++;
+        myNum = ++playerCount;
+        UpdateUIText();
     }
 
     public void AddPoints(float value)
     {
         points += value;
-        uiText.text = "Player"+count + ": " + points;
+
+        UpdateUIText();
+        
     }
 
     public float GetPoints() {
         return points;
     }
 
+    public void AddPlant()
+    {
+        plantCount++;
+    }
+    public int GetPlantCount()
+    {
+        return plantCount;
+    }
+
+    public int GetPlayerNum()
+    {
+        return myNum;
+    }
+
+    private void UpdateUIText()
+    {
+        uiText.text = "Player" + playerCount + ": " + points;
+    }
 }

@@ -6,11 +6,16 @@ using UnityEngine.EventSystems;
 
 public class GrowPlant : MonoBehaviour, IPointerClickHandler
 {
+    private Blueprint blueprint ;
+    private PlayerPrototype player;
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        PlayerPrototype player = GameObject.Find("Player1").GetComponent<PlayerPrototype>();
+        player = this.GetComponent<IsTile>().getPlayingField().players[0];
+        blueprint = player.blueprints[0];
+
         IsTile tile = this.gameObject.GetComponent<IsTile>();
-        float cost = GameObject.Find("BluePrint").GetComponent<Blueprint>().GetCost();
+        float cost = blueprint.GetCost();
         if (tile != null && tile.canSustainPlant && !tile.getPlant())
         {
             if (cost >= 0 && player.GetPoints() >= cost)
@@ -20,7 +25,7 @@ public class GrowPlant : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                print("Nicht genug Energie! SPieler hat "+ player.GetPoints()+ " Punkte, BP kostet "+ cost);
+                print("Nicht genug Energie! Spieler" + player.GetPlayerNum()+ " hat "+ player.GetPoints()+ " Punkte, BP kostet "+ cost);
             }
         }
     }

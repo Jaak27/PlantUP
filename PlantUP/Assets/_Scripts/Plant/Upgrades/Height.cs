@@ -8,6 +8,7 @@ public class Height :  IsUpgrade {
     static readonly int cost = 10;
     int current = 0;
     static readonly int max = 7;
+    static readonly UpgradeType upgradeType = UpgradeType.HEIGHT;
 
     public int GetCost()
     {
@@ -51,6 +52,11 @@ public class Height :  IsUpgrade {
     public void ResetUpgrade()
     {
         current = 0;
+    }
+
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
     }
 
     public string getInfo() {

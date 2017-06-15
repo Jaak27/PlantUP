@@ -4,32 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-public interface IsStat
-{
-    float GetCurrent();
-    float GetBase();
-    float GetMax();
-
-    void AddToCurrent(float value);
-    void SetCurrent(float value);
-    void SetMax(float value);
-}
-
-public interface IsUpgrade
-{
-    int GetCost();
-    int GetCurrent();
-    int GetMax();
-
-    bool Inkrement();
-    bool Dekrement();
-    void ResetUpgrade();
-
-    string getInfo();
-
-}
-
 public class Plant : MonoBehaviour {
     
     /// <summary>
@@ -64,22 +38,25 @@ public class Plant : MonoBehaviour {
     /// Ticks -> Zeitintervall in dem AjustStats() aufgerufen wird
     /// BoughtUpgrades -> Liste der bereits gekauften Upgrades, für wenn wir den BP ändern
     /// </summary>
-    private int count;
+    private int blueprintCount;
     private int index;
+    private float blueprintCost;
+    private static int plantCount;
+    private int myNum;
     private readonly float ticks = 1f;
     private List<int> boughtUpgrades;
 
     //Temporär um zu sehen ob Upgrades funktionieren
-    public int hoehe;
-    public int blaetter;
-    public int staengel;
-    public int bluete;
-    public int regeneration;
-    public int insekten;
-    public int tiefeWurzeln;
-    public int poroeseWuzeln;
-    public int reichweiteWurzeln;
-    public int effizienz;
+    public int height;
+    public int leaves;
+    public int thickStalk;
+    public int petals;
+    public int regen;
+    public int insects;
+    public int deepRoots;
+    public int porousRoots;
+    public int spreadRoots;
+    public int efficiency;
 
     //Temporär um zu sehen ob Stats funktionieren
     public float energie;
@@ -130,21 +107,22 @@ public class Plant : MonoBehaviour {
         return stats;
     }
 
+    public static int getPlantCount()
+    {
+        return plantCount;
+    }
+
     private void Awake()
     {
+        myNum = ++plantCount;
 
-        if (GameObject.Find("BluePrint").GetComponent<Blueprint>() == null)
-        {
-            print("Blueprint konnte nicht gefunden und zur Pflanze hinzugefügt werden!");
-        }
-        else
-        {
-            myBlueprint = GameObject.Find("BluePrint").GetComponent<Blueprint>();
-            count = myBlueprint.GetSequence().Count;
-        }
-        InitPlant();
+        blueprintCount = myBlueprint.GetSequence().Count;
+        
+        
         SetWaterNeighbours();
         boughtUpgrades = new List<int>();
+        blueprintCost = myBlueprint.GetCost();
+        InitPlant();
         InvokeRepeating("AdjustStats", 0, ticks);
     }
 
@@ -226,7 +204,8 @@ public class Plant : MonoBehaviour {
         {
             myBlueprint.ChangeNoticed();
             ResetUpgrades();
-            CheckForNextUpgrade();
+            //CheckForNextUpgrade();
+            
         }
     }
 
@@ -237,8 +216,9 @@ public class Plant : MonoBehaviour {
     /// <param name="i">Nächst abzuarbeitendes Upgrade in der Sequenz</param>
     private void CheckForNextUpgrade()
     {
-        int upgradeID = myBlueprint.GetSequence()[index] - 1;
+        int upgradeID = myBlueprint.GetSequence()[index];
         int cost = upgrades[upgradeID].GetCost() * (index + 1);
+        
         float energy = stats[8].GetCurrent();
 
         if (cost <= energy)
@@ -246,7 +226,7 @@ public class Plant : MonoBehaviour {
             if (upgrades[upgradeID].Inkrement())
             {
                 stats[8].SetCurrent(energy - cost);
-                print("Upgrade " + upgrades[upgradeID].getInfo() + " für " + cost + " gekauft.");
+                print("Spieler"+player.GetPlayerNum()+"'s Pflanze Nr." + myNum + " hat Upgrade " + upgrades[upgradeID].getInfo() + " für " + cost + " gekauft.");
                 boughtUpgrades.Add(upgradeID);
 
             }
@@ -273,16 +253,16 @@ public class Plant : MonoBehaviour {
 
 
         //Zum Testen der Upgrades
-        hoehe = upgrades[0].GetCurrent();
-        blaetter = upgrades[1].GetCurrent();
-        staengel = upgrades[2].GetCurrent(); ;
-        bluete = upgrades[3].GetCurrent();
-        regeneration = upgrades[4].GetCurrent();
-        insekten = upgrades[5].GetCurrent();
-        tiefeWurzeln = upgrades[6].GetCurrent();
-        poroeseWuzeln = upgrades[7].GetCurrent();
-        reichweiteWurzeln = upgrades[8].GetCurrent();
-        effizienz = upgrades[9].GetCurrent();
+        height = upgrades[0].GetCurrent();
+        leaves = upgrades[1].GetCurrent();
+        thickStalk = upgrades[2].GetCurrent(); ;
+        petals = upgrades[3].GetCurrent();
+        regen = upgrades[4].GetCurrent();
+        insects = upgrades[5].GetCurrent();
+        deepRoots = upgrades[6].GetCurrent();
+        porousRoots = upgrades[7].GetCurrent();
+        spreadRoots = upgrades[8].GetCurrent();
+        efficiency = upgrades[9].GetCurrent();
     }
 
     private void CalcNutriValue()
@@ -311,10 +291,10 @@ public class Plant : MonoBehaviour {
     private void CalcWaterValue()
     {
 
-        if (myTile.getNeighbours().Length > 0)
+        if (waterNeighbours.Count > 0)
         {
             float waps = stats[7].GetCurrent();
-            foreach (IsTile wTile in myTile.getNeighbours())
+            foreach (IsTile wTile in waterNeighbours)
             {
                 
                 float energy = stats[8].GetCurrent();
@@ -431,9 +411,10 @@ public class Plant : MonoBehaviour {
         
         if (neighbours.Length > 0)
         {
-            foreach (IsTile tile in neighbours)
+            for (int i =0; i< 6; i++)
             {
-                if (tile.getTileType() == tileType.WATER || tile.getTileType() == tileType.SWAMP)
+                IsTile tile = neighbours[i];
+                if (tile != null && (tile.getTileType() == tileType.WATER || tile.getTileType() == tileType.SWAMP))
                 {
                     waterNeighbours.Add(tile);
                 }
@@ -454,24 +435,29 @@ public class Plant : MonoBehaviour {
     private void ResetUpgrades()
     {
         int help = 1;
-        print("Verkaufe " + boughtUpgrades.Count + " Upgrades!");
+        int bought = boughtUpgrades.Count;
+        if (bought > 0)
+        {
+            print("Pflanze Nr."+myNum+" Verkauft " + boughtUpgrades.Count + " Upgrades!");
+        }
         foreach (int i in boughtUpgrades)
         {
             if (upgrades[i].Dekrement())
             {
                 int cost = upgrades[i].GetCost() * help;
                 stats[8].SetCurrent(stats[8].GetCurrent() + cost);
-                print("Upgrade " + i + " für " + cost + " verkauft.");
+                print("Pflanze Nr." + myNum + " hat ein Upgrade " + (i+1) + " für " + cost + " verkauft.");
                 help++;
             }
         }
+        boughtUpgrades = new List<int>();
         index = 0;
-        count = myBlueprint.GetSequence().Count;
+        blueprintCount = myBlueprint.GetSequence().Count;
     }
 
     private bool HasNext()
     {
-        if (index < count)
+        if (index < blueprintCount)
         {
             return true;
         }
@@ -494,6 +480,18 @@ public class Plant : MonoBehaviour {
     /// Passt die Stats neu an.
     /// </summary>
     public void PushChanges() {
+        /*height = upgrades[0].GetCurrent();
+        leaves = upgrades[1].GetCurrent();
+        thickStalk = upgrades[2].GetCurrent(); ;
+        petals = upgrades[3].GetCurrent();
+        regen = upgrades[4].GetCurrent();
+        insects = upgrades[5].GetCurrent();
+        deepRoots = upgrades[6].GetCurrent();
+        porousRoots = upgrades[7].GetCurrent();
+        spreadRoots = upgrades[8].GetCurrent();
+        efficiency = upgrades[9].GetCurrent();
+        */
+
         PushMaxHealth();
         PushFoV();
         PushMaxAge();
@@ -508,14 +506,12 @@ public class Plant : MonoBehaviour {
     /// MaxHealth abhängig von height.
     /// </summary>
     private void PushMaxHealth() {
-        float height = GetCurrentValueForUpgrade(0);
         stats[2].SetMax( (int)System.Math.Pow(2, height+1) * stats[2].GetBase());
     }
     /// <summary>
     /// Field of View abhängig von height.
     /// </summary>
     private void PushFoV() {
-        float height = GetCurrentValueForUpgrade(0);
         stats[1].SetCurrent(stats[1].GetBase() + height);
     }
     //TODO: Define params
@@ -529,18 +525,13 @@ public class Plant : MonoBehaviour {
     /// DamageTaken abhängig von efficiency und thickStalk, range 50% - 150%.
     /// </summary>
     private void PushDamageTaken() {
-        float efficiency = GetCurrentValueForUpgrade(9);
-        float thickStalk = GetCurrentValueForUpgrade(2);
-
-        stats[9].SetCurrent((thickStalk - efficiency) * 0.1f);
+        stats[9].SetCurrent((efficiency - thickStalk) * 0.1f);
     }
     /// <summary>
     /// HPS von regeneration und insect abhängig,
     /// bei negativ spielt damageTaken eine Rolle.
     /// </summary>
     private void PushHps() {
-        float regen = GetCurrentValueForUpgrade(4);
-        float insects = GetCurrentValueForUpgrade(5);
         float maxHealth = stats[2].GetMax();
 
         stats[3].SetCurrent((maxHealth * regen * 0.02f) - (maxHealth * insects * 0.01f * stats[9].GetCurrent()));
@@ -549,8 +540,6 @@ public class Plant : MonoBehaviour {
     /// Basic Nutrient Absorb Value abhängig von thickStalk und largePetals, range 50% - 150%.
     /// </summary>
     private void PushNutrientAbsorb() {
-        float thickStalk = GetCurrentValueForUpgrade(2);
-        float porousRoots = GetCurrentValueForUpgrade(7);
 
         stats[4].SetCurrent(stats[4].GetBase() + (porousRoots) - (thickStalk));
     }
@@ -558,8 +547,6 @@ public class Plant : MonoBehaviour {
     /// Maximale Bank Kapazität abhängig von height und thickStalk.
     /// </summary>
     private void PushBankCapacity() {
-        float thickStalk = GetCurrentValueForUpgrade(2);
-        float height = GetCurrentValueForUpgrade(0);
 
         stats[8].SetMax(stats[8].GetBase() + ((height+1) * 100) + (thickStalk * 25));
     }
@@ -567,9 +554,6 @@ public class Plant : MonoBehaviour {
     /// Energieausgabe abhängig von height, regen, deepRoots, bigLeaves, largePetals und efficiency.
     /// </summary>
     private void PushEps() {
-        float height = GetCurrentValueForUpgrade(0);
-        float regen = GetCurrentValueForUpgrade(4);
-        float efficiency = GetCurrentValueForUpgrade(9);
 
         float eps = (efficiency-regen-height);
 
@@ -579,25 +563,22 @@ public class Plant : MonoBehaviour {
     /// Pflanze gewinnt Sonnenenergie abhängig vom allgemeinen NutrientAbsorb und dem largePetals Upgrade.
     /// </summary>
     private void PushSunAbsorb() {
-        float largePetals = GetCurrentValueForUpgrade(3);
 
-        stats[5].SetCurrent(stats[4].GetCurrent() + largePetals * 0.1f);
+        stats[5].SetCurrent(stats[4].GetCurrent() + petals * 0.1f);
     }
     /// <summary>
     /// Pflanze gewinnt Windergie abhängig vom allgemeinen NutrientAbsorb und dem bigLeaves Upgrade.
     /// </summary>
     private void PushWindAbsorb()
     {
-        float bigLeaves = GetCurrentValueForUpgrade(1);
 
-        stats[6].SetCurrent(stats[4].GetCurrent() + bigLeaves * 0.1f);
+        stats[6].SetCurrent(stats[4].GetCurrent() + leaves * 0.1f);
     }
     /// <summary>
     /// Pflanze gewinnt Wasserergie abhängig vom allgemeinen NutrientAbsorb und dem deepRoots Upgrade.
     /// </summary>
     private void PushWaterAbsorb()
     {
-        float deepRoots = GetCurrentValueForUpgrade(6);
 
         stats[7].SetCurrent(stats[4].GetCurrent() + deepRoots * 0.1f);
     }

@@ -8,6 +8,7 @@ public class Insects : IsUpgrade
     static readonly int cost = 10;
     int current = 0;
     static readonly int max = 2;
+    static readonly UpgradeType upgradeType = UpgradeType.INSECTS;
 
     public int GetCost()
     {
@@ -53,6 +54,11 @@ public class Insects : IsUpgrade
     public void ResetUpgrade()
     {
         current = 0;
+    }
+
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
     }
 
     public string getInfo()

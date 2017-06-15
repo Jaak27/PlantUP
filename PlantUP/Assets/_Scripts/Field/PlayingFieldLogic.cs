@@ -52,6 +52,7 @@ public class PlayingFieldLogic : MonoBehaviour
     /// </summary>
     List<RandomEvent> eventListe = null;
 
+    public List<PlayerPrototype> players;
 
     public IsTile groundTilePrefab;
     public IsTile ashTilePrefab;
