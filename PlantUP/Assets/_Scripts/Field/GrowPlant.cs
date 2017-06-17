@@ -25,7 +25,7 @@ public class GrowPlant : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                print("Nicht genug Energie! Spieler" + player.GetPlayerNum()+ " hat "+ player.GetPoints()+ " Punkte, BP kostet "+ cost);
+                //print("Nicht genug Energie! Spieler" + player.myNum+ " hat "+ player.GetPoints()+ " Punkte, BP kostet "+ cost);
             }
         }
     }
