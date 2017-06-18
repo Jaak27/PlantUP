@@ -86,7 +86,8 @@ public class Plant : MonoBehaviour {
     float eps;
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
 		
 	}
 	

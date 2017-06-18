@@ -22,7 +22,7 @@ public class IsTile : MonoBehaviour
     /// Enthält die 6 nächsten Nachbarn.
     /// Von links oben, in Uhrzeigerrichtung
     /// </summary>
-    IsTile[] neighbours;
+    public IsTile[] neighbours;
 
     /// <summary>
     /// Die Nährstoffe die noch auf diesem Feld lagern.
@@ -52,6 +52,7 @@ public class IsTile : MonoBehaviour
     public bool hasWaterValue;
 
 
+    Plant plant = null;
 
 
     // Use this for initialization
@@ -60,6 +61,18 @@ public class IsTile : MonoBehaviour
 
 
     }
+
+    public Plant getPlant()
+    {
+        return plant;
+    }
+
+    public void setPlant( Plant newPlant)
+    {
+        plant = newPlant;
+        plant.setTile(this); 
+    }
+
 
     // Update is called once per frame
     void Update()

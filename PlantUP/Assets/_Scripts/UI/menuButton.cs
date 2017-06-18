@@ -16,6 +16,7 @@ public class menuButton : MonoBehaviour, IPointerClickHandler
         if(Int32.TryParse(str, out s))
         {
             seed.setSeedField(s);
+            seed.setAutoStart(true);
             SceneManager.LoadScene("UI_Test");
         }
         else
