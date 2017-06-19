@@ -10,6 +10,8 @@ public class IsTile : MonoBehaviour
     /// </summary>
     PlayingFieldLogic playingField;
 
+    Plant plant;
+
 
     /// <summary>
     /// Welcher Typ in diesem Feld dargestellt ist.
@@ -234,5 +236,29 @@ public class IsTile : MonoBehaviour
     public bool getHasWaterValue()
     {
         return hasWaterValue;
+    }
+
+    public void GrowPlant(PlayerPrototype player, IsTile tile, Blueprint bp)
+    {
+        plant = Resources.Load<Plant>("Plant");
+        plant.SetMyTile(tile);
+        plant.SetPlayer(player);
+        plant.SetBlueprint(bp);
+        Instantiate(plant, this.transform.position, Quaternion.identity);
+    }
+
+    public Plant getPlant()
+    {
+        /*
+        if (canSustainPlant && plant != null)
+        {
+            return plant;
+        }
+        else
+        {
+            return null;
+        }
+        */
+        return plant;
     }
 }

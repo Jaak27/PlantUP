@@ -15,6 +15,9 @@ public class selectedObject : MonoBehaviour
     feldInfoUI fenster_PflanzenInfo;
     feldInfoUI fenster_UpgradeInfo;
 
+    public GameObject plantText;
+    public GameObject createPlantPanel;
+
 
 
     // Use this for initialization
@@ -58,89 +61,46 @@ public class selectedObject : MonoBehaviour
 
                 if (tile.getCanSustainPlant())
                 {
-                    
                     fenster_PflanzenInfo.setUp(true);
-                    text_Pflanze.text = "-Planzendata-" +
-                                     "\n" + "Health........100/100" +
-                                     "\n" + "Energy.......100/100" +
-                                     "\n" + "Age......................100" +
-                                     "\n" + "N...........................100" +
-                                     "\n" + "Wa.........................100" +
-                                     "\n" + "Wi..........................100" +
-                                     "\n" + "S............................100" +
-                                     "\n" + "Usage..................100";
+
+                    if(tile.getPlant() != null)
+                    {
+
+                        createPlantPanel.SetActive(false);
+                        plantText.SetActive(true);
+                        text_Pflanze.text = "-Planzendata-" +
+                                         "\n" + "Health........100/100" +
+                                         "\n" + "Energy.......100/100" +
+                                         "\n" + "Age......................100" +
+                                         "\n" + "N...........................100" +
+                                         "\n" + "Wa.........................100" +
+                                         "\n" + "Wi..........................100" +
+                                         "\n" + "S............................100" +
+                                         "\n" + "Usage..................100";
+                    }
+                    else
+                    {
+                        createPlantPanel.SetActive(true);
+                        plantText.SetActive(false);
+                    }
+
                 }
                 else
                 {
                     fenster_PflanzenInfo.setUp(false);
                 }
 
-                /*
-                //getTileType gibt ein Enum zurück, das durch die Cases gejagt wird.
-                //Das macht es viel einfacher herauszufinden welche Daten angezeigt werden sollen
-                switch (this.gameObject.GetComponent<IsTile>().getTileType())
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    //Nährstoffe + Wind und Licht + Pflanze
-                    case (tileType.ASH):
-                    case (tileType.GROUND):
-                        text_Feld.text = "-Feldata-" +
-                                "\nNaehrstoffe.........." + this.gameObject.GetComponent<IsTile>().getNutrientValue() +
-                                "\nWindstaerke.........." + this.gameObject.GetComponent<IsTile>().getWindStrength() +
-                                "\nLichtintensitaet....." + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
-
-                        text_Pflanze.text = "-Planzendata-" +
-                                     "\n" + "Health........100/100" +
-                                     "\n" + "Energy.......100/100" +
-                                     "\n" + "Age......................100" +
-                                     "\n" + "N...........................100" +
-                                     "\n" + "Wa.........................100" +
-                                     "\n" + "Wi..........................100" +
-                                     "\n" + "S............................100" +
-                                     "\n" + "Usage..................100";
-                        break;
-
-                    //Wasserstärke + Wind und Licht 
-                    case (tileType.WATER):
-
-                        fenster_FeldInfo.setUp(true);
-                        fenster_PflanzenInfo.setUp(false);
-                        fenster_UpgradeInfo.setUp(false);
-                        text_Feld.text = "-Feldata-" +
-                                        "\nWasserwert..........." + this.gameObject.GetComponent<IsTile>().getWaterStrength() +
-                                        "\nWindstaerke.........." + this.gameObject.GetComponent<IsTile>().getWindStrength() +
-                                        "\nLichtintensitaet....." + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
-
-                        break;
-
-                    //Wind und Licht
-                    case (tileType.MOUNTAIN):
-                    case (tileType.VOLCANO):
-                    default:
-
-                        fenster_FeldInfo.setUp(true);
-                        fenster_PflanzenInfo.setUp(false);
-                        fenster_UpgradeInfo.setUp(false);
-
-                        text_Feld.text = "-Feldata-" +
-                                "\nWindstaerke.........." + this.gameObject.GetComponent<IsTile>().getWindStrength() +
-                                "\nLichtintensitaet....." + GameObject.Find("playingFieldTest").GetComponent<PlayingFieldLogic>().getLightStrength();
-                        break;
+ 
                 }
-                */
-
-
-
-
             }
-            
-
+            else
+            {
+                fenster_FeldInfo.setUp(false);
+                fenster_PflanzenInfo.setUp(false);
+            }
         }
-        else
-        {
-            fenster_FeldInfo.setUp(false);
-            fenster_PflanzenInfo.setUp(false);
-        }
-        
     }
 
     public GameObject getTile()
