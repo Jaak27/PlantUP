@@ -55,10 +55,42 @@ public class IsTile : MonoBehaviour
     Plant plant = null;
 
 
+    bool getMoving = false;
+    Vector3 target;
+    float distanceLeft;
+    Vector3 movementDirection;
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (getMoving)
+        {
+            if (movementDirection == null || movementDirection == Vector3.zero)
+            {
+                movementDirection = target - this.transform.position;
+                movementDirection.Normalize();
+                movementDirection = movementDirection * playingField.getSpeed();
+            }
+
+            this.transform.Translate(movementDirection);
+
+            distanceLeft = Vector3.Distance(target, this.transform.position);
+            if (Math.Abs(distanceLeft) < playingField.getSpeed() / 2) 
+            {
+                this.transform.position = target;
+                getMoving = false;
+            }
+
+        }
+
+
+    }
+
     // Use this for initialization
     void Start()
     {
-
+        
 
     }
 
@@ -74,11 +106,7 @@ public class IsTile : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
 
     public Transform getTransform()
     {
@@ -98,7 +126,12 @@ public class IsTile : MonoBehaviour
 
     public int getNutrientValue()
     {
-        if (hasGroundValue)
+        return getNutrientValue(false);
+    }
+
+    public int getNutrientValue(bool ignoreHasNutrientValue)
+    {
+        if (hasGroundValue || ignoreHasNutrientValue)
 
             return nutrientValue;
         else
@@ -107,7 +140,13 @@ public class IsTile : MonoBehaviour
 
     public int getWaterStrength()
     {
-        if (hasWaterValue)
+        return getWaterStrength(false);
+    }
+    
+
+    public int getWaterStrength(bool ignoreHasWaterValue)
+    {
+        if (hasWaterValue || ignoreHasWaterValue)
 
             return waterStrength;
         else
@@ -247,5 +286,21 @@ public class IsTile : MonoBehaviour
     public bool getHasWaterValue()
     {
         return hasWaterValue;
+    }
+
+
+    public bool hasReachedTarget()
+    {
+        return !getMoving;
+    }
+    public void setTarget(Vector3 target)
+    {
+        this.target = target;
+    }
+    
+    public void setMoving()
+    {
+        if (target != null)
+        getMoving = true;
     }
 }

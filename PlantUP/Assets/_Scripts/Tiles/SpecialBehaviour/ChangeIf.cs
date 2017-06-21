@@ -36,28 +36,31 @@ public class ChangeIf : SpecialBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        
-        if (skippedTicks <= 0)
+        if (!this.GetComponent<IsTile>().getPlayingField().getPaused())
         {
-            skippedTicks = skipTicks;
+            if (skippedTicks <= 0)
+            {
+                skippedTicks = skipTicks;
 
-            bool conditionsFullfilled = true;
-            foreach (AbstractIf test in conditions)
-            {
-                if (!test.conditionFulfilled(this.GetComponent<IsTile>()))
-                    conditionsFullfilled = false;
-            }
-            
-                
-            if (conditionsFullfilled)
-            {
-                if (Random.Range(0, changeChance) == 0)
+                bool conditionsFullfilled = true;
+                foreach (AbstractIf test in conditions)
                 {
-                    this.GetComponent<IsTile>().getPlayingField().replaceTile(this.GetComponent<IsTile>(), targetTile, !refreshing, !destructive);
+                    if (!test.conditionFulfilled(this.GetComponent<IsTile>()))
+                        conditionsFullfilled = false;
                 }
 
+
+                if (conditionsFullfilled)
+                {
+                    if (Random.Range(0, changeChance) == 0)
+                    {
+                        this.GetComponent<IsTile>().getPlayingField().replaceTile(this.GetComponent<IsTile>(), targetTile, !refreshing, !destructive);
+                    }
+
+                }
             }
+            skippedTicks--;
         }
-        skippedTicks--;
+        
     }
 }

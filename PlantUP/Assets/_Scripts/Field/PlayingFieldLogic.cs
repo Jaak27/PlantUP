@@ -101,9 +101,6 @@ public class PlayingFieldLogic : MonoBehaviour {
 
     /// <summary>
     /// Die Richtung aus der der Wind weht.
-    /// 0 = links oben
-    /// 1 = rechts oben
-    /// 5 = links unten
     /// </summary>
     int windDirection;
 
@@ -140,10 +137,23 @@ public class PlayingFieldLogic : MonoBehaviour {
     
     float timeHappened = 0;
     int ticksHappened = 0;
-    
 
-	// Use this for initialization
-	void Start ()
+    bool isPaused = true;
+    bool isFinished = false;
+    bool isSetupPhase = false;
+    public movementTypes spawnPattern;
+    int maxNumberOfPatterns = 2;
+    float tileSpeed = 0.1f;
+
+
+    public enum movementTypes
+    {
+        MIDDLE, SLIDEIN, RANDOM
+    }
+
+
+    // Use this for initialization
+    void Start ()
     {
         
         
@@ -339,6 +349,12 @@ public class PlayingFieldLogic : MonoBehaviour {
         //Die ausgewürfelten Feldertypen werden jetzt in richtige Felder verwandelt.
         felder = new IsTile[xSize * ySize];
 
+        movementTypes pattern = spawnPattern;
+        if (pattern == movementTypes.RANDOM)
+        {
+            pattern = (movementTypes)Random.Range(0, maxNumberOfPatterns);
+        }
+        
         for (int y = 0; y < ySize; y++)
         {
             for (int x = 0; x < xSize; x++)
@@ -350,8 +366,27 @@ public class PlayingFieldLogic : MonoBehaviour {
                 position2d = new Vector2(x - xSize / 2, y - ySize / 2);
                 if (y % 2 == 1)
                     position2d.x += 0.5f;
+                
 
-                Vector3 position = new Vector3(this.transform.position.x + position2d.x * size.x, this.transform.position.y + position2d.y * size.y, 1);
+
+                Vector3 targetPosition = new Vector3(this.transform.position.x + position2d.x * size.x, this.transform.position.y + position2d.y * size.y, 1);
+                Vector3 position;
+
+                switch (pattern)
+                {
+                    case movementTypes.MIDDLE:
+                        position = this.transform.position;
+                        tileSpeed = 0.1F;
+                        break;
+                    case movementTypes.SLIDEIN:
+                        position = new Vector3(targetPosition.x + (1 + y) * 5, targetPosition.y, targetPosition.z);
+                        tileSpeed = 0.35F;
+                        break;
+                    default:
+                        position = targetPosition;
+                        break;
+                }
+
                 IsTile newTile = null;
                 switch (typeTiles[x, y])
                 {
@@ -386,6 +421,7 @@ public class PlayingFieldLogic : MonoBehaviour {
                         }
                         break;
                 }
+                newTile.setTarget(targetPosition);
 
                 if (newTile != null)
                 {
@@ -403,6 +439,7 @@ public class PlayingFieldLogic : MonoBehaviour {
         }
 
         //Jetzt sind alle Felder erstellt, und allen Feldern können jetzt ihre Nachbarn gegeben werden.
+        //Sie werden dann auch in Bewegung gesetzt.
 
         for (int i = 0; i < felder.Length; i++)
         {
@@ -437,8 +474,12 @@ public class PlayingFieldLogic : MonoBehaviour {
                     neighbours[j] = null;
             }
             felder[i].setNeighbours(neighbours);
+
+            felder[i].setMoving();
         }
 
+
+        isSetupPhase = true;
         return true;
     }
 
@@ -559,24 +600,39 @@ public class PlayingFieldLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        //Setze den Timer
-        timeHappened += Time.deltaTime;
-        ticksHappened++;
-        int seconds = Mathf.FloorToInt(timeHappened);
-        timer.text = "Time: " + string.Format("{0:00}", seconds / 60) + ":" + string.Format("{0:00}", seconds % 60);
-        
-       
-        //Starte die Events
-        if (eventListe != null && eventListe.Count > 0)
+        //Ist das Spiel pausiert, bewegt sich der Timer nicht.
+        if (!isPaused)
         {
-            RandomEvent current = eventListe[0];
-            current.time--;
-            if (current.time <= 0)
+            //Setze den Timer
+            timeHappened += Time.deltaTime;
+            ticksHappened++;
+            int seconds = Mathf.FloorToInt(timeHappened);
+            timer.text = "Timer: " + string.Format("{0:00}", seconds / 60) + ":" + string.Format("{0:00}", seconds % 60);
+            if (seconds == seed.getTime() / 60) 
             {
-                eventListe.RemoveAt(0);
-                handleEvent(current);
+                isPaused = true;
+                isFinished = true;
+            }
+                
+
+            //Starte die Events
+            if (eventListe != null && eventListe.Count > 0)
+            {
+                RandomEvent current = eventListe[0];
+                current.time--;
+                if (current.time <= 0)
+                {
+                    eventListe.RemoveAt(0);
+                    handleEvent(current);
+                }
             }
         }
+        else if (felder[felder.GetLength(0)-1].hasReachedTarget() && isSetupPhase)
+        {
+            isPaused = false;
+            isSetupPhase = false;
+        }
+        
 	}
 
 
@@ -689,13 +745,13 @@ public class PlayingFieldLogic : MonoBehaviour {
 
             if (newTile != null)
             {
-                if (keepStats && felder[index].getHasGroundValue() && newTile.getHasGroundValue())
-                    newTile.setNutrientValue(felder[index].getNutrientValue());
+                if (keepStats)
+                    newTile.setNutrientValue(felder[index].getNutrientValue(true));
                 else if (newTile.getHasGroundValue())
                     newTile.setNutrientValue(Random.Range(getMinimumNutrientValue(newType), getMaximumNutrientValue(newType)));
 
-                if (keepStats && felder[index].getHasWaterValue() && newTile.getHasWaterValue())
-                    newTile.setWaterStrength(felder[index].getWaterStrength());
+                if (keepStats)
+                    newTile.setWaterStrength(felder[index].getWaterStrength(true));
                 else if (newTile.getHasWaterValue())
                     newTile.setWaterStrength(Random.Range(getMinimumWaterStrength(newType), getMaximumWaterStrength(newType)));
 
@@ -838,4 +894,24 @@ public class PlayingFieldLogic : MonoBehaviour {
             eventListe = new List<RandomEvent>();
         return eventListe;
     }
+
+    public bool getPaused()
+    {
+        return isPaused;
+    }
+
+    public void setPaused(bool isPaused)
+    {
+        this.isPaused = isPaused;
+    }
+    
+    public float getSpeed()
+    {
+        return tileSpeed;
+    }
+    public bool getIsFinished()
+    {
+        return isFinished;
+    }
+    
 }

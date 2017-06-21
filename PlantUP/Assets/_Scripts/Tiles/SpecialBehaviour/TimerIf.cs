@@ -18,7 +18,8 @@ public class TimerIf : AbstractIf {
 
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
 		
 	}
 	
@@ -26,20 +27,24 @@ public class TimerIf : AbstractIf {
 	void Update ()
     {
         bool conditionsFullfilled = true;
-        if (conditions != null)
+        if (!this.GetComponent<IsTile>().getPlayingField().getPaused())
         {
-            foreach (AbstractIf test in conditions)
+            if (conditions != null)
             {
-                if (!test.conditionFulfilled(this.GetComponent<IsTile>()))
-                    conditionsFullfilled = false;
+                foreach (AbstractIf test in conditions)
+                {
+                    if (!test.conditionFulfilled(this.GetComponent<IsTile>()))
+                        conditionsFullfilled = false;
+                }
+            }
+
+
+            if (conditionsFullfilled && maxTime > time)
+            {
+                time++;
             }
         }
-
-
-        if (conditionsFullfilled && maxTime > time)
-        {
-            time++;
-        }
+        
         
     }
 }
