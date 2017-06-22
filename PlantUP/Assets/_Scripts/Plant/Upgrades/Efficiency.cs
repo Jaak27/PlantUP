@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Efficiency : IsUpgrade
+public class Efficiency : _IsUpgrade
 {
 
     static readonly int cost = 10;
@@ -61,7 +61,7 @@ public class Efficiency : IsUpgrade
         return upgradeType;
     }
 
-    public string getInfo()
+    public string GetInfo()
     {
         return "Effizienz Stufe " + current;
     }

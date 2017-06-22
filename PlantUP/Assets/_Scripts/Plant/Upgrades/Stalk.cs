@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stalk : IsUpgrade {
+public class Stalk : _IsUpgrade {
 
     static readonly int cost = 10;
     int current = 0;
@@ -60,7 +60,7 @@ public class Stalk : IsUpgrade {
         return upgradeType;
     }
 
-    public string getInfo()
+    public string GetInfo()
     {
         return "Stängel Stufe " + current;
     }

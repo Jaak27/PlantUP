@@ -8,6 +8,7 @@ public class GrowPlant : MonoBehaviour, IPointerClickHandler
 {
     private Blueprint blueprint ;
     private PlayerPrototype player;
+    public Plant plant;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -20,7 +21,7 @@ public class GrowPlant : MonoBehaviour, IPointerClickHandler
         {
             if (cost >= 0 && player.GetPoints() >= cost)
             {
-                tile.GrowPlant(player);
+                tile.GrowPlant(player, plant);
                 player.AddPoints(-cost);
             }
             else

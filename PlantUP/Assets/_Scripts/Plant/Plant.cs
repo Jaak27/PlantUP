@@ -24,12 +24,12 @@ public class Plant : MonoBehaviour {
     /// <summary>
     /// Liste der Upgrades
     /// </summary>
-    private List<IsUpgrade> upgrades;
+    private List<_IsUpgrade> upgrades;
 
     /// <summary>
     /// Liste der Stats
     /// </summary>
-    private List<IsStat> stats;
+    private List<_IsStat> stats;
 
     /// <summary>
     /// Sammlung der Tiles in Reichweite der Upgrades
@@ -37,6 +37,7 @@ public class Plant : MonoBehaviour {
     private Dictionary<IsTile, int> inFoVReach;
     private Dictionary<IsTile, int> inSpreadRootsReach;
     private Dictionary<IsTile, int> inPorousRootsReach;
+    private Dictionary<IsTile, int> inSunReach;
 
     /// <summary>
     /// SeqCount -> Stufen des Blueprints
@@ -44,14 +45,16 @@ public class Plant : MonoBehaviour {
     /// BlueprintCost -> Kosten des Blueprints
     /// plantCount -> Anzahl aller Pflanzen
     /// MyNum -> ID der Pflanze
+    /// AbsorbRate -> Regler für Absorbierfähigkeit
     /// Ticks -> Zeitintervall in dem AjustStats() aufgerufen wird
     /// BoughtUpgrades -> Liste der bereits gekauften Upgrades, für wenn wir den BP ändern
     /// </summary>
     private int seqCount;
     private int index;
     private float blueprintCost;
-    public static int plantCount;
-    private int myNum;
+    public static int plantCount = 0;
+    public int myNum;
+    public float absorbRate = 0.01f;
     private readonly float ticks = 1f;
     private List<int> boughtUpgrades;
 
@@ -76,10 +79,10 @@ public class Plant : MonoBehaviour {
     public float alter;
     public float fov;
     public float hps;
-    public float nAbsorb;
-    public float sAbsorb;
-    public float wiAbsorb;
-    public float waAbsorb;
+    public float nutriAbsorb;
+    public float sunAbsorb;
+    public float windAbsorb;
+    public float waterAbsorb;
     public float eps;
     public float schadenErlitten;
 
@@ -113,9 +116,14 @@ public class Plant : MonoBehaviour {
         return player;
     }
 
-    public List<IsStat> GetStats()
+    public List<_IsStat> GetStats()
     {
         return stats;
+    }
+
+    public List<_IsUpgrade> GetUpgrades()
+    {
+        return upgrades;
     }
 
     public static int GetPlantCount()
@@ -123,18 +131,24 @@ public class Plant : MonoBehaviour {
         return plantCount;
     }
 
+    public int GetMyNum()
+    {
+        return myNum;
+    }
+
     /// <summary>
     /// Initialisiere Pflanze, rufe AdjustStats()-Loop auf
     /// </summary>
-    private void Awake()
+    private void Start()
     {
         myNum = ++plantCount;
 
         seqCount = myBlueprint.GetSequence().Count;
-        
+
         boughtUpgrades = new List<int>();
         blueprintCost = myBlueprint.GetCost();
         InitPlant();
+        PushChanges();
         InvokeRepeating("AdjustStats", 0, ticks);
     }
 
@@ -149,6 +163,7 @@ public class Plant : MonoBehaviour {
         inFoVReach = new Dictionary<IsTile, int>();
         inSpreadRootsReach = new Dictionary<IsTile, int>();
         inPorousRootsReach = new Dictionary<IsTile, int>();
+        inSunReach = new Dictionary<IsTile, int>();
         InitUpgrades();
         InitStats();
     }
@@ -170,7 +185,7 @@ public class Plant : MonoBehaviour {
         SpreadRoots u9 = new SpreadRoots();
         Efficiency u10 = new Efficiency();
 
-        upgrades = new List<IsUpgrade> { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10 };
+        upgrades = new List<_IsUpgrade> { u1, u2, u3, u4, u5, u6, u7, u8, u9, u10 };
     }
 
     /// <summary>
@@ -190,7 +205,7 @@ public class Plant : MonoBehaviour {
         DamageTaken s10 = new DamageTaken();
         EnergyPerSecond s11 = new EnergyPerSecond();
 
-        stats = new List<IsStat> { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+        stats = new List<_IsStat> { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
     }
 
     /// <summary>
@@ -204,10 +219,10 @@ public class Plant : MonoBehaviour {
         fov = stats[1].GetCurrent();
         leben = stats[2].GetCurrent();
         hps = stats[3].GetCurrent();
-        nAbsorb = stats[4].GetCurrent();
-        sAbsorb = stats[5].GetCurrent();
-        wiAbsorb = stats[6].GetCurrent();
-        waAbsorb = stats[7].GetCurrent();
+        nutriAbsorb = stats[4].GetCurrent();
+        sunAbsorb = stats[5].GetCurrent();
+        windAbsorb = stats[6].GetCurrent();
+        waterAbsorb = stats[7].GetCurrent();
         energie = stats[8].GetCurrent();
         schadenErlitten = stats[9].GetCurrent();
         eps = stats[10].GetCurrent();
@@ -228,6 +243,10 @@ public class Plant : MonoBehaviour {
             if (HasNext())
             {
                 CheckForNextUpgrade();
+            }
+            else
+            {
+                ReachOut();
             }
         }
         else
@@ -278,6 +297,8 @@ public class Plant : MonoBehaviour {
             index++;
         }
 
+        PushChanges();
+
     }
 
     /// <summary>
@@ -306,11 +327,11 @@ public class Plant : MonoBehaviour {
         PushNutrientAbsorb();
         PushBankCapacity();
         PushEps();
+        PushSunAbsorb();
+        PushWaterAbsorb();
+        PushWindAbsorb();
 
-
-        inFoVReach = SetInReach(height);
-        inSpreadRootsReach = SetInReach(spreadRoots);
-        inPorousRootsReach = SetInReach(1 + porousRoots);
+        ReachOut();
     }
 
     /// <summary>
@@ -320,6 +341,7 @@ public class Plant : MonoBehaviour {
     {
         stats[2].SetMax((int)System.Math.Pow(2, height + 1) * stats[2].GetBase());
     }
+
     /// <summary>
     /// Field of View abhängig von height.
     /// </summary>
@@ -327,6 +349,7 @@ public class Plant : MonoBehaviour {
     {
         stats[1].SetCurrent(height);
     }
+
     //TODO: Define params
     private void PushMaxAge()
     {
@@ -336,6 +359,7 @@ public class Plant : MonoBehaviour {
             stats[0].SetMax(stats[0].GetMax() + GetCurrentValueForUpgrade(n) + 1);
         }
     }
+
     /// <summary>
     /// DamageTaken abhängig von efficiency und thickStalk, range 50% - 150%.
     /// </summary>
@@ -343,6 +367,7 @@ public class Plant : MonoBehaviour {
     {
         stats[9].SetCurrent((efficiency - thickStalk) * 0.1f);
     }
+
     /// <summary>
     /// HPS von regeneration und insect abhängig,
     /// bei negativ spielt damageTaken eine Rolle.
@@ -353,14 +378,15 @@ public class Plant : MonoBehaviour {
 
         stats[3].SetCurrent((maxHealth * regen * 0.02f) - (maxHealth * insects * 0.01f * stats[9].GetCurrent()));
     }
+
     /// <summary>
-    /// Basic Nutrient Absorb Value abhängig von thickStalk und largePetals, range 50% - 150%.
+    /// Basic Nutrient Absorb Value abhängig von thickStalk, range 50% - 150%.
     /// </summary>
     private void PushNutrientAbsorb()
     {
-
-        stats[4].SetCurrent(stats[4].GetBase() + (porousRoots) - (thickStalk));
+        stats[4].SetCurrent((stats[4].GetBase() - (thickStalk)) * absorbRate);
     }
+
     /// <summary>
     /// Maximale Bank Kapazität abhängig von height und thickStalk.
     /// </summary>
@@ -369,39 +395,52 @@ public class Plant : MonoBehaviour {
 
         stats[8].SetMax(stats[8].GetBase() + ((height + 1) * 100) + (thickStalk * 25));
     }
+
     /// <summary>
     /// Energieausgabe abhängig von height, regen, deepRoots, bigLeaves, largePetals und efficiency.
     /// </summary>
     private void PushEps()
     {
 
-        float eps = (efficiency - regen - height);
+        float eps = (efficiency - regen - height) * absorbRate;
 
         stats[10].SetCurrent(eps);
     }
+
     /// <summary>
     /// Pflanze gewinnt Sonnenenergie abhängig vom allgemeinen NutrientAbsorb und dem largePetals Upgrade.
     /// </summary>
     private void PushSunAbsorb()
     {
 
-        stats[5].SetCurrent(stats[4].GetCurrent() + petals * 0.1f);
+        stats[5].SetCurrent((stats[5].GetBase() + petals )* absorbRate);
     }
+
     /// <summary>
     /// Pflanze gewinnt Windergie abhängig vom allgemeinen NutrientAbsorb und dem bigLeaves Upgrade.
     /// </summary>
     private void PushWindAbsorb()
     {
 
-        stats[6].SetCurrent(stats[4].GetCurrent() + leaves * 0.1f);
+        stats[6].SetCurrent((stats[6].GetBase() + leaves )* absorbRate);
     }
+
     /// <summary>
     /// Pflanze gewinnt Wasserergie abhängig vom allgemeinen NutrientAbsorb und dem deepRoots Upgrade.
     /// </summary>
     private void PushWaterAbsorb()
     {
 
-        stats[7].SetCurrent(stats[4].GetCurrent() + deepRoots * 0.1f);
+        stats[7].SetCurrent((stats[7].GetBase() + deepRoots )* absorbRate);
+    }
+
+    /// <summary>
+    /// Setze Tiles in Reichweite der Pflanze fest
+    /// </summary>
+    public void ReachOut()
+    {
+        inFoVReach = SetInReach(height);
+        inSpreadRootsReach = SetInReach(spreadRoots);
     }
 
     /// <summary>
@@ -428,6 +467,7 @@ public class Plant : MonoBehaviour {
         {
             {myTile, 0}
         };
+        int reach = 1;
         while (level > 0)
         {
             foreach (var tile in inReach)
@@ -438,7 +478,7 @@ public class Plant : MonoBehaviour {
                     {
                         if (!inReach.ContainsKey(nTile) && !helpSet.ContainsKey(nTile))
                         {
-                            helpSet.Add(nTile, level);
+                            helpSet.Add(nTile, reach);
                         }
                     }
                 }
@@ -453,6 +493,7 @@ public class Plant : MonoBehaviour {
             }
             helpSet.Clear();
             --level;
+            ++reach;
         }
 
         return inReach;
@@ -510,18 +551,36 @@ public class Plant : MonoBehaviour {
 
         IsTile thisTile;
         int thisLevel;
+        float reach = 0;
 
         //Für jede Tile in der "Verbreitete Wurzeln" Reichweite der Pflanze
         foreach (KeyValuePair<IsTile, int> pair in inSpreadRootsReach)
         {
             thisTile = pair.Key;
             thisLevel = pair.Value;
-            int nutriValue;
+
+            switch (thisLevel)
+            {
+                case 0:
+                    reach = 1.0f;
+                    break;
+                case 1:
+                    reach = 0.14f;
+                    break;
+                case 2:
+                    reach = 0.05f;
+                    break;
+                case 3:
+                    reach = 0.001f;
+                    break;
+            }
+
+            float nutriValue = thisTile.getNutrientValue();
             //Wenn die Tile Nährstoffe enthält
-            if ((nutriValue = thisTile.getNutrientValue()) > 0)
+            if (nutriValue > 0)
             {
                 
-                float nups = stats[4].GetCurrent();
+                float nups = stats[4].GetCurrent() * reach;
                 float energy = stats[8].GetCurrent();
 
                 //Wenn die Tile mehr Nährstoffe enthält als die Pflanze gebrauchen kann
@@ -529,7 +588,7 @@ public class Plant : MonoBehaviour {
                 {
                     stats[8].SetCurrent(energy + nups);                 //Berechne gewonnene Energie dazu
                     player.AddPoints(nups);                             //Berechne Spielerpunkte dazu
-                    thisTile.setNutrientValue(nutriValue - (int)nups);  //Entziehe der Tile die Nährstoffe
+                    thisTile.setNutrientValue(nutriValue - nups);  //Entziehe der Tile die Nährstoffe
                 }
                 //Enthält die Tile weniger Nährstoffe als benötigt ziehen wir den Rest ab
                 else
@@ -547,36 +606,59 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void CalcWaterValue()
     {
+        int reach = porousRoots;
+
+        if (reach == 0)
+        {
+            reach = 1;
+        }
+
+        inPorousRootsReach = SetInReach(reach);
 
         IsTile thisTile;
         int thisLevel;
+        float reachMultiplier = 0;
 
         //Für jede Tile in der "Poröse Wurzeln" Reichweite der Pflanze
         foreach (KeyValuePair<IsTile, int> pair in inPorousRootsReach)
         {
             thisTile = pair.Key;
             thisLevel = pair.Value;
-            int waterValue;
+            
+            switch (thisLevel)
+            {
+                case 0:
+                    reachMultiplier = 1.0f;
+                    break;
+                case 1:
+                    reachMultiplier = 0.5f;
+                    break;
+                case 2:
+                    reachMultiplier = 0.05f;
+                    break;
+            }
+
+            float waterValue = thisTile.getWaterStrength();
 
             //Wenn die Tile Wasser enthält
-            if ((waterValue = thisTile.getWaterStrength()) > 0)
+            if (waterValue > 0)
             {
-                float waps = stats[7].GetCurrent();
+                float waps = stats[7].GetCurrent() * reachMultiplier;
                 float energy = stats[8].GetCurrent();
 
                 //Wenn die Tile mehr Wasser enthält als die Pflanze gebrauchen kann
                 if (waterValue >= waps)
                 {
-                    stats[8].SetCurrent(energy + waps);                 //Berechne gewonnene Energie dazu
-                    player.AddPoints(waps);                             //Berechne Spielerpunkte dazu
-                    thisTile.setWaterStrength(waterValue - (int)waps);  //Entziehe der Tile die Nährstoffe
+                    stats[8].SetCurrent(energy + waps);                     //Berechne gewonnene Energie dazu
+                    player.AddPoints(waps);                                 //Berechne Spielerpunkte dazu
+                    //thisTile.setWaterStrength(waterValue - waps); //Entziehe der Tile die Nährstoffe
                 }
                 //Enthält die Tile weniger Wasser als benötigt ziehen wir den Rest ab
                 else
                 {
                     stats[8].SetCurrent(energy + waterValue);
                     player.AddPoints(waterValue);
-                    thisTile.setWaterStrength(0);                       //Jetzt ist die Tile komplett leer
+                    //thisTile.setWaterStrength(0);                           //Jetzt ist die Tile komplett leer
                 }
             }
             
@@ -588,7 +670,7 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void CalcWindValue()
     {
-        int windValue = myTile.getWindStrength();
+        float windValue = myTile.getWindStrength();
         float wips = stats[6].GetCurrent();
         float energy = stats[8].GetCurrent();
 
@@ -611,8 +693,61 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void CalcSunValue()
     {
-        int sunValue = myTile.getLightValue();
-        float sups = stats[5].GetCurrent();
+        //=================================================Schatten Berechnen======================================================================
+        float shadowPenalty = 0.8f;
+
+        int maxReach = upgrades[0].GetMax();
+        int myReach = height;
+        int otherFoV = 0;
+        int awayFromMe = 0;
+
+        Plant otherPlant;
+        List<int> shadowCasters = new List<int>();
+
+        inSunReach = SetInReach(maxReach);
+
+        foreach (KeyValuePair<IsTile, int> pair in inSunReach)
+        {
+            
+            IsTile tile = pair.Key;
+            
+            awayFromMe = pair.Value;
+
+            if (awayFromMe != 0)
+            {
+                //Wenn die Tile eine Pflanze beherbergen kann
+                if (tile.canSustainPlant)
+                {
+                    
+                    //Und eine Pflanze beherbergt
+                    if ((otherPlant = tile.getPlant()) != null)
+                    {
+                        otherFoV = otherPlant.height;
+                        //Bin ich in der FoV dieser Pflanze und ist sie grösser als ich
+                        if ((otherFoV - awayFromMe) >= 0 && otherFoV > myReach)
+                        {
+                            if (!shadowCasters.Contains(otherPlant.height))
+                            {
+                                shadowCasters.Add(otherPlant.height);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
+        
+        float sunValue = myTile.getLightValue();
+        //Für jeden Layer von Schatten ziehen wir 20% Lichtstärke ab
+        foreach (int i in shadowCasters)
+        {
+            sunValue *= shadowPenalty;
+        }
+
+        //=================================================Energie aus Licht ziehen======================================================================
+
+        float sups = stats[5].GetCurrent() * sunValue;
         float energy = stats[8].GetCurrent();
 
         //Scheint die Sonne stark genug gibt es die vollen Werte dafür
@@ -620,6 +755,7 @@ public class Plant : MonoBehaviour {
         {
             stats[8].SetCurrent(energy + sups);
             player.AddPoints(sups);
+            //print(sups);
         }
         //Wenn nicht gibt es nur den maximalen Wert der die Map hergibt
         else

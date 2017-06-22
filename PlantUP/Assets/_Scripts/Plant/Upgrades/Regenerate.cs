@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Regenerate : IsUpgrade
+public class Regenerate : _IsUpgrade
 {
 
     static readonly int cost = 10;
@@ -61,7 +61,7 @@ public class Regenerate : IsUpgrade
         return upgradeType;
     }
 
-    public string getInfo()
+    public string GetInfo()
     {
         return "Regeneration Stufe " + current;
     }

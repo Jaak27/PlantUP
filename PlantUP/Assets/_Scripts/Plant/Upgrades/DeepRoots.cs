@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeepRoots : IsUpgrade
+public class DeepRoots : _IsUpgrade
 {
 
     static readonly int cost = 10;
@@ -61,7 +61,7 @@ public class DeepRoots : IsUpgrade
         return upgradeType;
     }
 
-    public string getInfo()
+    public string GetInfo()
     {
         return "Tiefe Wurzeln Stufe " + current;
     }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NutrientAbsorb : IsStat {
+public class NutrientAbsorb : _IsStat {
 
     private static readonly float baseValue = 1;
     private float currentValue = baseValue;

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Height :  IsUpgrade {
+public class Height :  _IsUpgrade {
 
     static readonly int cost = 10;
     int current = 0;
-    static readonly int max = 7;
+    static readonly int max = 5;
     static readonly UpgradeType upgradeType = UpgradeType.HEIGHT;
 
     public int GetCost()
@@ -59,7 +59,7 @@ public class Height :  IsUpgrade {
         return upgradeType;
     }
 
-    public string getInfo() {
+    public string GetInfo() {
         return "Höhe Stufe " + current;
     }
     

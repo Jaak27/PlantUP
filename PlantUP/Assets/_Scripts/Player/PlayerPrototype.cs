@@ -9,7 +9,7 @@ public class PlayerPrototype : MonoBehaviour {
     /// <summary>
     /// Die Angesammelte Punktzahl des Spielers
     /// </summary>
-    public float points = 300;
+    public float points = 0;
     public List<Blueprint> blueprints;
     //private string name;
     public Text uiText;

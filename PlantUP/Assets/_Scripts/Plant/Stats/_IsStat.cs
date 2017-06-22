@@ -1,4 +1,4 @@
-﻿public interface IsStat
+﻿public interface _IsStat
 {
     float GetCurrent();
     float GetBase();

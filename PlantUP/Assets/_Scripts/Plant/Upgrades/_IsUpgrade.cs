@@ -1,4 +1,4 @@
-﻿public interface IsUpgrade
+﻿public interface _IsUpgrade
 {
     int GetCost();
     int GetCurrent();
@@ -10,7 +10,7 @@
     void ResetUpgrade();
 
     UpgradeType GetUpgradeType();
-    string getInfo();
+    string GetInfo();
 
 }
 public enum UpgradeType
