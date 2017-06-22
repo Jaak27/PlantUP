@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Height :  _IsUpgrade {
 
-    static readonly int cost = 10;
+    static readonly int cost = 700;
     int current = 0;
     static readonly int max = 5;
     static readonly UpgradeType upgradeType = UpgradeType.HEIGHT;

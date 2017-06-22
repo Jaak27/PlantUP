@@ -34,7 +34,7 @@ public class WindAbsorb : _IsStat {
 
     public void SetCurrent(float value)
     {
-        if (value > 0)
+        if (value >= 0)
         {
             currentValue = value;
         }

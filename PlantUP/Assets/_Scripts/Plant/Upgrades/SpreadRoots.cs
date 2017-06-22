@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpreadRoots : _IsUpgrade
 {
 
-    static readonly int cost = 10;
+    static readonly int cost = 1000;
     int current = 0;
     static readonly int max = 2;
     static readonly UpgradeType upgradeType = UpgradeType.SPREADROOTS;
