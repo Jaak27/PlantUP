@@ -8,40 +8,26 @@ public class createBlueprint : MonoBehaviour, IPointerClickHandler{
 
     //Blueprint
     public Blueprint bp;
+    public addedSlotGroup slotGroup;
+
     Blueprint newBp;
+    addedSlotGroup newAddedSlotGroup;
 
-    //Blueprint Slot Create
-
-    public GameObject bpSlotCreate;
-    GameObject newBpSlotCreate;
-
-
-    // BLueprint Slot Plant
-
-    GameObject newBpSlotPlant;
-
-
-
-    //Parent Object
-    public Transform parentCreate;
-    public Transform parentPlant;
 
     //Menus
     public GameObject addUpgrades;
     public GameObject createBP;
-
     public void OnPointerClick(PointerEventData eventData)
     {
         newBp = Instantiate(bp);
-        newBpSlotCreate = Instantiate(bpSlotCreate, parentCreate);
+        newAddedSlotGroup = Instantiate(slotGroup, addUpgrades.transform);
 
-        newBpSlotPlant= Instantiate(bpSlotCreate, parentPlant);
-        newBpSlotPlant.AddComponent<createPlant>();
+        newBp.gameObject.GetComponent<myAddedSlotGroup>().myGroup = newAddedSlotGroup.gameObject;
+        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(newBp);
 
-        newBpSlotCreate.GetComponent<knowBlueprint>().setBlueprint(newBp);
-        newBpSlotPlant.GetComponent<knowBlueprint>().setBlueprint(newBp);
+       
+        newAddedSlotGroup.setMyBp(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint());
 
-        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(newBpSlotCreate);
         addUpgrades.SetActive(true);
         createBP.SetActive(false);
     }

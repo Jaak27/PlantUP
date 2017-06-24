@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class knowBlueprint : MonoBehaviour {
 
-    Blueprint blueprint;
+    public Blueprint blueprint;
     
     public void setBlueprint(Blueprint bp)
     {

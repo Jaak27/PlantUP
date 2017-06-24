@@ -143,10 +143,14 @@ public class Plant : MonoBehaviour {
         }
         else
         {
-            myBlueprint = GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetComponent<knowBlueprint>().getBlueprint();
-            count = myBlueprint.GetSequence().Count;
-        }
         */
+            //myBlueprint = GameObject.Find("BluePrint").GetComponent<Blueprint>();
+
+            myBlueprint = GameObject.Find("bpSelectHandlerPlant").GetComponent<selectedBP>().getBlueprint();
+            count = myBlueprint.GetSequence().Count;
+        //}
+        
+        
         InitPlant();
         SetWaterNeighbours();
         boughtUpgrades = new List<int>();

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class selectedBP : MonoBehaviour {
 
-    GameObject blueprint;
+    public Blueprint blueprint;
 
-    public void setBlueprint(GameObject bp)
+    public void setBlueprint(Blueprint bp)
     {
         blueprint = bp;
     }
 
-    public GameObject getBlueprint()
+    public Blueprint getBlueprint()
     {
         return blueprint;
     }

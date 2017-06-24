@@ -3,29 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class bpControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 
     bool mouseOverObject;
+    public Text blueprintInfo;
 
 
     // Update is called once per frame
-    void Update()
+    private void Start()
     {
 
-        if (Input.GetMouseButton(1)) // feld wird deselektiert
-        {
+    }
 
-        }
-
+    void Update()
+    {
         if (mouseOverObject)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                    GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(this.gameObject);
+                    GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(this.gameObject.GetComponent<knowBlueprint>().getBlueprint());
 
             }
+
+            Blueprint test = this.GetComponent<knowBlueprint>().getBlueprint();
+
+            blueprintInfo = GameObject.Find("txt_BlueprintInfo").GetComponent<Text>();
+
+            blueprintInfo.text = "" + test.ToString();
+
+
+
+
+
+
+
+        }
+        else
+        {
+
         }
 
 

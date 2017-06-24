@@ -69,14 +69,15 @@ public class selectedObject : MonoBehaviour
                         createPlantPanel.SetActive(false);
                         plantText.SetActive(true);
                         text_Pflanze.text = "-Planzendata-" +
-                                         "\n" + "Health........100/100" +
-                                         "\n" + "Energy.......100/100" +
-                                         "\n" + "Age......................100" +
-                                         "\n" + "N...........................100" +
-                                         "\n" + "Wa.........................100" +
-                                         "\n" + "Wi..........................100" +
-                                         "\n" + "S............................100" +
-                                         "\n" + "Usage..................100";
+                                         "\n" + "Health........" + tile.getPlant().GetStats()[2].GetCurrent() + 
+                                         "\n" + "Energy......." + tile.getPlant().GetStats()[8].GetCurrent() +
+                                         "\n" + "Age......................" + tile.getPlant().GetStats()[7].GetCurrent() +
+                                         "\n" + "N..........................." + tile.getPlant().GetStats()[4].GetCurrent() +
+                                         "\n" + "Wa........................." + tile.getPlant().GetStats()[7].GetCurrent() +
+                                         "\n" + "Wi.........................." + tile.getPlant().GetStats()[6].GetCurrent() +
+                                         "\n" + "S............................" + tile.getPlant().GetStats()[5].GetCurrent() +
+                                         "\n" + "Usage.................." +  tile.getPlant().GetStats()[10].GetCurrent();
+         
                     }
                     else
                     {

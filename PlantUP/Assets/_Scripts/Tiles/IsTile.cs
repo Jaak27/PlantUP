@@ -244,12 +244,12 @@ public class IsTile : MonoBehaviour
         plant.SetMyTile(tile);
         plant.SetPlayer(player);
         plant.SetBlueprint(bp);
-        Instantiate(plant, this.transform.position, Quaternion.identity);
+        plant = Instantiate(plant, this.transform.position, Quaternion.identity);
     }
 
     public Plant getPlant()
     {
-        /*
+
         if (canSustainPlant && plant != null)
         {
             return plant;
@@ -258,7 +258,6 @@ public class IsTile : MonoBehaviour
         {
             return null;
         }
-        */
-        return plant;
+
     }
 }

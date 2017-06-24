@@ -11,6 +11,8 @@ public class createPlant : MonoBehaviour, IPointerClickHandler
     {
         IsTile tile = GameObject.Find("selectHandler").GetComponent<selectedObject>().getTile().GetComponent<IsTile>();
 
+        GameObject.Find("bpSelectHandlerPlant").GetComponent<selectedBP>().setBlueprint(gameObject.GetComponent<knowBlueprint>().getBlueprint());
+
         PlayerPrototype player = GameObject.Find("Player1").GetComponent<PlayerPrototype>();
         float cost = GameObject.Find("BluePrint").GetComponent<Blueprint>().GetCost();
         if (tile != null && tile.canSustainPlant && !tile.getPlant())
