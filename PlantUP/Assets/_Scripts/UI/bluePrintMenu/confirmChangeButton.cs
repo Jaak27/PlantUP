@@ -14,9 +14,14 @@ public class confirmChangeButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        selectedChange.getBlueprint().setTypeSequence(selected.getBlueprint().GetTypeSequence());
 
+        Destroy(selectedChange.getBlueprint().GetComponent<myAddedSlotGroup>().myGroup);
+        selectedChange.getBlueprint().GetComponent<myAddedSlotGroup>().myGroup = selected.getBlueprint().GetComponent<myAddedSlotGroup>().myGroup;
+        selectedChange.getBlueprint().setTypeSequence(selected.getBlueprint().GetTypeSequence());
+        selectedChange.getBlueprint().SetSequence();
         selectedChange.getBlueprint().setHasChanged(true);
+        selectedChange.getBlueprint().updateCost();
+
 
         Destroy(selected.getBlueprint().gameObject);
 

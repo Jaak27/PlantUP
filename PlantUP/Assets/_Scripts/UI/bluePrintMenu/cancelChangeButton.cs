@@ -11,6 +11,7 @@ public class cancelChangeButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Destroy(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetComponent<myAddedSlotGroup>().myGroup.gameObject);
         Destroy(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject);
 
         createPanel.SetActive(true);

@@ -257,6 +257,7 @@ public class IsTile : MonoBehaviour
     public void GrowPlant(PlayerPrototype player, Plant plant, Blueprint bp)
     {
         myPlant = plant;
+        myPlant.GetComponent<SpriteRenderer>().sprite = bp.s;
 
         myPlant.SetMyTile(this);
         myPlant.SetPlayer(player);

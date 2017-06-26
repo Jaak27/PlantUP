@@ -135,8 +135,23 @@ public class PlayingFieldLogic : MonoBehaviour {
     
     int ticksHappened = 0;
 
-	// Use this for initialization
-	void Start ()
+    float timeHappened = 0;
+
+    bool isPaused = true;
+    bool isFinished = false;
+    bool isSetupPhase = false;
+    public movementTypes spawnPattern;
+    int maxNumberOfPatterns = 2;
+    float tileSpeed = 0.1f;
+
+
+    public enum movementTypes
+    {
+        MIDDLE, SLIDEIN, RANDOM
+    }
+
+    // Use this for initialization
+    void Start ()
     {
         GenerateRectangleMap();
         GenerateEvents(18000);

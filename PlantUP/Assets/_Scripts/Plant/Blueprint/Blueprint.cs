@@ -11,7 +11,11 @@ public class Blueprint : MonoBehaviour {
     public bool hasChanged = true;
     public int playerPlants = 0;
     public int plantsNoticed = 0;
-    private float cost = 100;
+    public float cost = 100;
+
+    public int index;
+
+    public Sprite s;
 
     private void Awake()
     {
@@ -28,6 +32,22 @@ public class Blueprint : MonoBehaviour {
         }
 
         return cost;
+    }
+
+    public void updateCost()
+    {
+        cost = typeSequence.Count * 100;
+    }
+
+    public float GetCostTypSequence()
+    {
+        int costn = 0;
+        if (typeSequence.Count > 0)
+        {
+            costn = typeSequence.Count * 100;
+        }
+
+        return costn;
     }
 
     public List<int> GetSequence() {

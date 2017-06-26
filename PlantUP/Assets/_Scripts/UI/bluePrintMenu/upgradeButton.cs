@@ -13,6 +13,7 @@ public class upgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Text upgradeInfo;
     public GameObject added;
     public Text addedSlotText;
+    public String infoText;
     
 
     public Transform parentAdded;
@@ -35,24 +36,44 @@ public class upgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     print("AAA");
                 }
-                GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().typeSequence.Add(upgrade);
-                GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().hasChanged = true;
+
+                int count = 0;
+                    
+                for(int i = 0; i < GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().typeSequence.Count; i++ )
+                {
+                    if(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().typeSequence[i] == upgrade)
+                    {
+                        count++;
+                    }
+                }
+
+                if(count < 2)
+                {
+                        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().typeSequence.Add(upgrade);
+                        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().hasChanged = true;
 
 
-                addedSlotGroup group = GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.GetComponent<addedSlotGroup>();
+                        addedSlotGroup group = GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.GetComponent<addedSlotGroup>();
 
-                GameObject addedSlot = Instantiate(added, GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.transform);
-                Text txt = Instantiate(addedSlotText, addedSlot.transform);
-                //txt.GetComponent<RectTransform>().position = new Vector3(70, -4, 1);
+                        GameObject addedSlot = Instantiate(added, GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.transform);
+                        Text txt = Instantiate(addedSlotText, addedSlot.transform);
+                        //txt.GetComponent<RectTransform>().position = new Vector3(70, -4, 1);
 
 
-                group.elements.Add(addedSlot.GetComponent<addedSlot>());
-                addedSlot.GetComponent<addedSlot>().setListpos(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetTypeSequence().Count-1);
-                addedSlot.GetComponent<Image>().sprite = gameObject.GetComponent<Image>().sprite;
+                        group.elements.Add(addedSlot.GetComponent<addedSlot>());
+                        addedSlot.GetComponent<addedSlot>().setListpos(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetTypeSequence().Count-1);
+                        addedSlot.GetComponent<Image>().sprite = gameObject.GetComponent<Image>().sprite;
                 
-                print("TEST " + upgrade);
+                        print("TEST " + upgrade);
+
+                }
+                else
+                {
+                    print("VOLL");
+                }
+                
             }
-            upgradeInfo.text = "" + upgrade;
+            upgradeInfo.text = "" + infoText;
         }
 
     } 
