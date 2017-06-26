@@ -149,12 +149,6 @@ public class IsTile : MonoBehaviour
         this.waterStrength = waterStrength;
     }
 
-
-    public void SetPlant(Plant p)
-    {
-        myPlant = p;
-    }
-
     /// <summary>
     /// Erneuert die Windstärke auf diesem Feld nachdem sich der Wind verändert hat.
     /// Wird aufgerufen wenn die Windstärke abgefragt wird, und fragt den vorherigen Feld in Richtung des Windes nach 
@@ -261,11 +255,14 @@ public class IsTile : MonoBehaviour
         myPlant.SetPlayer(player);
         myPlant.SetBlueprint(player.blueprints[0]);
 
-        SetPlant(Instantiate(myPlant, this.transform.position, Quaternion.identity));
+        Instantiate(myPlant, this.transform.position, Quaternion.identity);
         
 
         player.AddPlant();
     }
 
-
+    internal void setPlant(Plant p)
+    {
+        myPlant = p;
+    }
 }

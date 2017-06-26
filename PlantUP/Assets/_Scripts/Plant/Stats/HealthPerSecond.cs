@@ -34,10 +34,9 @@ public class HealthPerSecond : _IsStat {
 
     public void SetCurrent(float value)
     {
-        if (value > 0)
-        {
+        
             currentValue = value;
-        }
+        
     }
 
     public float GetMax()

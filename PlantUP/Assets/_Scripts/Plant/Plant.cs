@@ -21,6 +21,7 @@ public class Plant : MonoBehaviour {
     /// </summary>
     public PlayerPrototype player;
 
+    public AudioClip dieSound;
     /// <summary>
     /// Liste der Upgrades
     /// </summary>
@@ -51,6 +52,7 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private int seqCount;
     private int index;
+    private float costModifier = 1f;
     private float blueprintCost;
     public static int plantCount = 0;
     public int myNum;
@@ -145,7 +147,6 @@ public class Plant : MonoBehaviour {
         myNum = ++plantCount;
 
         seqCount = myBlueprint.GetSequence().Count;
-
         boughtUpgrades = new List<int>();
         blueprintCost = myBlueprint.GetCost();
         InitPlant();
@@ -248,7 +249,7 @@ public class Plant : MonoBehaviour {
             else
             {
                 ReachOut();
-                PushChanges();
+                //PushChanges();
             }
         }
         else
@@ -283,7 +284,7 @@ public class Plant : MonoBehaviour {
     private void CheckForNextUpgrade()
     {
         int upgradeID = myBlueprint.GetSequence()[index];
-        int cost = upgrades[upgradeID].GetCost() * (index + 1);
+        int cost = (int)(upgrades[upgradeID].GetCost() * (index + 1) * costModifier);
 
         float energy = stats[8].GetCurrent();
 
@@ -298,7 +299,7 @@ public class Plant : MonoBehaviour {
             index++;
         }
 
-        PushChanges();
+        //PushChanges();
 
     }
 
@@ -331,6 +332,7 @@ public class Plant : MonoBehaviour {
         PushSunAbsorb();
         PushWaterAbsorb();
         PushWindAbsorb();
+        PushInsects();
 
         ReachOut();
     }
@@ -340,7 +342,9 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void PushMaxHealth()
     {
+        float healthPercentage = stats[2].GetMax() / stats[2].GetCurrent();
         stats[2].SetMax((int)System.Math.Pow(2, height + 1) * stats[2].GetBase());
+        stats[2].SetCurrent(stats[2].GetMax() / healthPercentage);
     }
 
     /// <summary>
@@ -366,7 +370,8 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void PushDamageTaken()
     {
-        stats[9].SetCurrent((efficiency - stalk) * 0.1f);
+        float dmgTaken = 1 + efficiency * 0.25f - stalk * 0.25f;
+        stats[9].SetCurrent(dmgTaken);
     }
 
     /// <summary>
@@ -376,12 +381,11 @@ public class Plant : MonoBehaviour {
     private void PushHps()
     {
         float maxHealth = stats[2].GetMax();
-
-        stats[3].SetCurrent((maxHealth * regen * 0.02f) - (maxHealth * insects * 0.01f * stats[9].GetCurrent()));
+        stats[3].SetCurrent((regen * 2f) - (insects * 2f * stats[9].GetCurrent()));
     }
 
     /// <summary>
-    /// Basic Nutrient Absorb Value abhängig von thickStalk und deepRoots, range 50% - 150%.
+    /// Basic Nutrient Absorb Value abhängig von thickStalk und deepRoots
     /// </summary>
     private void PushNutrientAbsorb()
     {
@@ -434,6 +438,34 @@ public class Plant : MonoBehaviour {
 
         stats[7].SetCurrent((stats[7].GetBase() + deepRoots - stalk) * absorbRate);
     }
+
+
+    private void PushInsects()
+    {
+        float rand = UnityEngine.Random.Range(0f, 1f);
+        List<IsTile> tiles = new List<IsTile>();
+        if (insects > 0 && rand < 0.01f * insects)
+        {
+            if (height > 0)
+            {
+                foreach (IsTile tile in inFoVReach.Keys)
+                {
+                    if (tile.canSustainPlant && tile.getPlant() == null)
+                    {
+                        tiles.Add(tile);
+                    }
+                }
+
+                rand = UnityEngine.Random.Range(0, tiles.Count - 1);
+                if (tiles.Count > 0)
+                {
+                    tiles[(int)rand].GrowPlant(player, Resources.Load<Plant>("Plant"));
+                }
+            }
+        }
+
+    }
+
 
     /// <summary>
     /// Setze Tiles in Reichweite der Pflanze fest
@@ -516,7 +548,7 @@ public class Plant : MonoBehaviour {
         {
             if (upgrades[i].Dekrement())
             {
-                int cost = upgrades[i].GetCost() * help;
+                int cost = (int)(upgrades[i].GetCost() * help * costModifier);
                 stats[8].SetCurrent(stats[8].GetCurrent() + cost);
                 //print("Pflanze Nr." + myNum + " hat ein Upgrade " + (i+1) + " für " + cost + " verkauft.");
                 help++;
@@ -532,8 +564,11 @@ public class Plant : MonoBehaviour {
     /// </summary>
     private void AdjustStats()
     {
+        
         if (myTile != null)
         {
+            PushChanges();
+
             CalcNutriValue();
             CalcWaterValue();
             CalcSunValue();
@@ -541,17 +576,22 @@ public class Plant : MonoBehaviour {
             CalcEnergyLoss();
             CalcHealth();
 
-            if (myNum == 1)
-            {
-                Debug.Log("<color=red>" + output + "</color>");
-            }
-            if (myNum == 2)
-            {
-                Debug.Log("<color=green>" + output + "</color>");
-            }
-            output = "";
+            //DebugLog();
+            
         }
+    }
 
+    private void DebugLog()
+    {
+        if (myNum == 1)
+        {
+            Debug.Log("<color=red>" + output + "</color>");
+        }
+        if (myNum == 2)
+        {
+            Debug.Log("<color=green>" + output + "</color>");
+        }
+        output = "";
     }
 
     /// <summary>
@@ -819,9 +859,8 @@ public class Plant : MonoBehaviour {
     private void CalcHealth()
     {
         float hps = stats[3].GetCurrent();
-        float dps = stats[9].GetCurrent();
         float health = stats[2].GetCurrent();
-        float newHealth = health + hps - dps;                                                           //Leben + regeneration - schaden erlitten
+        float newHealth = health + hps;
 
         //Sind die neuerechneten Lebenspunkte unter der Maximalgrenze
         if (newHealth <= stats[2].GetMax())
@@ -834,13 +873,20 @@ public class Plant : MonoBehaviour {
             //Sind die Lebenspunkte 0 oder weniger
             else
             {
-                print("Pflanze gestorben");
-                myTile.setNutrientValue((int)(myTile.getNutrientValue() + stats[8].GetCurrent()) / 10);   //Gebe der Tile einen Teil der angesammelten Nährstoffe zurück
-                //myTile.setPlant(null);
-                --plantCount;
-                Destroy(gameObject);                                                                    //Die Pflanze ist tot
+                KillPlant();//Die Pflanze ist tot
             }
         }
     }
-    
+
+    public void KillPlant()
+    {
+        CancelInvoke();
+        print("Pflanze gestorben");
+        myTile.setNutrientValue((int)(myTile.getNutrientValue() + stats[8].GetCurrent()) / 10);   //Gebe der Tile einen Teil der angesammelten Nährstoffe zurück
+        myTile.setPlant(null);                                                                                          //myTile.setPlant(null);
+        --plantCount;
+        GetComponent<AudioSource>().PlayOneShot(dieSound, 0.3f);
+        GetComponent<Renderer>().enabled = false;
+        Destroy(gameObject, dieSound.length);
+    }
 }
