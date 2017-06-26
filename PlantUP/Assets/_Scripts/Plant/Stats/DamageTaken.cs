@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageTaken : IsStat {
+public class DamageTaken : _IsStat {
 
     private static readonly float baseValue = 0;
     private float currentValue = baseValue;

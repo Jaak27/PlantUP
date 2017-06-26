@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Age : IsStat{
+public class Age : _IsStat{
 
     private static readonly float baseValue = 0;
     private float maxValue = 99;

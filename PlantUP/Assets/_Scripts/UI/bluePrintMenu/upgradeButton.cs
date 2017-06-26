@@ -8,9 +8,11 @@ using UnityEngine.UI;
 public class upgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     bool overObject;
-    public int upgrade;
+    public //int upgrade;
+    UpgradeType upgrade;
     public Text upgradeInfo;
     public GameObject added;
+    public Text addedSlotText;
     
 
     public Transform parentAdded;
@@ -33,16 +35,19 @@ public class upgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     print("AAA");
                 }
-                GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetSequence().Add(upgrade);
+                GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().typeSequence.Add(upgrade);
                 GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().hasChanged = true;
 
 
                 addedSlotGroup group = GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.GetComponent<addedSlotGroup>();
 
                 GameObject addedSlot = Instantiate(added, GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.transform);
+                Text txt = Instantiate(addedSlotText, addedSlot.transform);
+                //txt.GetComponent<RectTransform>().position = new Vector3(70, -4, 1);
+
 
                 group.elements.Add(addedSlot.GetComponent<addedSlot>());
-                addedSlot.GetComponent<addedSlot>().setListpos(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetSequence().Count-1);
+                addedSlot.GetComponent<addedSlot>().setListpos(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetTypeSequence().Count-1);
                 addedSlot.GetComponent<Image>().sprite = gameObject.GetComponent<Image>().sprite;
                 
                 print("TEST " + upgrade);

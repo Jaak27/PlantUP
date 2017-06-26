@@ -5,7 +5,9 @@ using UnityEngine.EventSystems;
 
 public class createPlant : MonoBehaviour, IPointerClickHandler
 {
-
+    private Blueprint blueprint;
+    private PlayerPrototype player;
+    public Plant plant;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -13,18 +15,21 @@ public class createPlant : MonoBehaviour, IPointerClickHandler
 
         GameObject.Find("bpSelectHandlerPlant").GetComponent<selectedBP>().setBlueprint(gameObject.GetComponent<knowBlueprint>().getBlueprint());
 
-        PlayerPrototype player = GameObject.Find("Player1").GetComponent<PlayerPrototype>();
-        float cost = GameObject.Find("BluePrint").GetComponent<Blueprint>().GetCost();
+
+        //player = this.GetComponent<IsTile>().getPlayingField().players[0];
+        player = GameObject.Find("Player1").GetComponent<PlayerPrototype>();
+        blueprint = this.gameObject.GetComponent<knowBlueprint>().getBlueprint();
+        float cost = blueprint.GetCost();
         if (tile != null && tile.canSustainPlant && !tile.getPlant())
         {
             if (cost >= 0 && player.GetPoints() >= cost)
             {
-                tile.GrowPlant(player, tile,this.gameObject.GetComponent<knowBlueprint>().getBlueprint());
+                tile.GrowPlant(player, plant, blueprint);
                 player.AddPoints(-cost);
             }
             else
             {
-                print("Nicht genug Energie! SPieler hat " + player.GetPoints() + " Punkte, BP kostet " + cost);
+                //print("Nicht genug Energie! Spieler" + player.myNum+ " hat "+ player.GetPoints()+ " Punkte, BP kostet "+ cost);
             }
         }
 

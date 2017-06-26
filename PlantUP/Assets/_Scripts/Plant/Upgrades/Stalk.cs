@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stalk : IsUpgrade {
+public class Stalk : _IsUpgrade
+{
 
-    static readonly int cost = 10;
+    static readonly int cost = 1000;
     int current = 0;
     static readonly int max = 2;
+    static readonly UpgradeType upgradeType = UpgradeType.STALK;
 
     public int GetCost()
     {
@@ -54,7 +56,12 @@ public class Stalk : IsUpgrade {
         current = 0;
     }
 
-    public string getInfo()
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
+    }
+
+    public string GetInfo()
     {
         return "Stängel Stufe " + current;
     }

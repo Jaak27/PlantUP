@@ -22,7 +22,8 @@ public class removeButton : MonoBehaviour, IPointerClickHandler {
             }
         }
         
-        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetSequence().RemoveAt(i);
+        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetTypeSequence().RemoveAt(i);
+        GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().SetSequence();
         Destroy(gameObject);
     }
 }

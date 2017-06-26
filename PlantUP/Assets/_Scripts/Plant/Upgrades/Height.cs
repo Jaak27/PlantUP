@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Height :  IsUpgrade {
+public class Height : _IsUpgrade
+{
 
-    static readonly int cost = 10;
+    static readonly int cost = 700;
     int current = 0;
-    static readonly int max = 7;
+    static readonly int max = 5;
+    static readonly UpgradeType upgradeType = UpgradeType.HEIGHT;
 
     public int GetCost()
     {
@@ -24,13 +26,15 @@ public class Height :  IsUpgrade {
         return max;
     }
 
-    public bool Inkrement() {
+    public bool Inkrement()
+    {
         if (current < max)
         {
             current++;
             return true;
         }
-        else {
+        else
+        {
             return false;
         }
     }
@@ -53,8 +57,14 @@ public class Height :  IsUpgrade {
         current = 0;
     }
 
-    public string getInfo() {
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
+    }
+
+    public string GetInfo()
+    {
         return "Höhe Stufe " + current;
     }
-    
+
 }

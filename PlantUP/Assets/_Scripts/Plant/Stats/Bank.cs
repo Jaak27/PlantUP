@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bank : IsStat{
+public class Bank : _IsStat{
 
     private static readonly float baseValue = 0;
     private float maxValue = 1000;

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Petals : IsUpgrade
+public class Petals : _IsUpgrade
 {
 
-    static readonly int cost = 10;
+    static readonly int cost = 1000;
     int current = 0;
     static readonly int max = 2;
+    static readonly UpgradeType upgradeType = UpgradeType.PETAL;
 
     public int GetCost()
     {
@@ -55,7 +56,12 @@ public class Petals : IsUpgrade
         current = 0;
     }
 
-    public string getInfo()
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
+    }
+
+    public string GetInfo()
     {
         return "Blüte Stufe " + current;
     }

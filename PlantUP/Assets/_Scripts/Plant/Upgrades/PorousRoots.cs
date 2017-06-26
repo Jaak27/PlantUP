@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PorousRoots : IsUpgrade
+public class PorousRoots : _IsUpgrade
 {
 
-    static readonly int cost = 10;
+    static readonly int cost = 1000;
     int current = 0;
-    static readonly int max = 10;
+    static readonly int max = 2;
+    static readonly UpgradeType upgradeType = UpgradeType.POROUSROOTS;
 
     public int GetCost()
     {
@@ -55,7 +56,12 @@ public class PorousRoots : IsUpgrade
         current = 0;
     }
 
-    public string getInfo()
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
+    }
+
+    public string GetInfo()
     {
         return "Poröse Wurzeln Stufe " + current;
     }

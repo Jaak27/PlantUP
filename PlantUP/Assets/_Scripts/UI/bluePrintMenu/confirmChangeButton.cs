@@ -14,7 +14,7 @@ public class confirmChangeButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        selectedChange.getBlueprint().setSequence(selected.getBlueprint().GetSequence());
+        selectedChange.getBlueprint().setTypeSequence(selected.getBlueprint().GetTypeSequence());
 
         selectedChange.getBlueprint().setHasChanged(true);
 

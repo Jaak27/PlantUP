@@ -27,7 +27,7 @@ public class tileControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 if(!mainControl.getUseSkills())
                 {
-                    GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(this.gameObject);
+                    GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(this.gameObject.GetComponent<IsTile>());
                 }
                 else
                 {

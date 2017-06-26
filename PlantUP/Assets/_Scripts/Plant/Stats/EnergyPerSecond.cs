@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnergyPerSecond : IsStat {
+public class EnergyPerSecond : _IsStat {
 
     private static readonly float baseValue = 1;
     private float currentValue = baseValue;

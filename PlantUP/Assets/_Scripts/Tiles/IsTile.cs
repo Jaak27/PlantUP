@@ -10,8 +10,7 @@ public class IsTile : MonoBehaviour
     /// </summary>
     PlayingFieldLogic playingField;
 
-    Plant plant;
-
+    public Plant myPlant;
 
     /// <summary>
     /// Welcher Typ in diesem Feld dargestellt ist.
@@ -30,10 +29,10 @@ public class IsTile : MonoBehaviour
     /// Die Nährstoffe die noch auf diesem Feld lagern.
     /// Die Stärke des Wassers, sowie die Windstärke.
     /// </summary>
-    int nutrientValue;
-    int waterStrength;
-    int windstrength;
-    
+    float nutrientValue;
+    float waterStrength;
+    float windstrength;
+
 
     /// <summary>
     /// Ist windUpdate = true, muss die Windstärke neu berechnet werden.
@@ -85,7 +84,7 @@ public class IsTile : MonoBehaviour
         return neighbours;
     }
 
-    public int getNutrientValue()
+    public float getNutrientValue()
     {
         if (hasGroundValue)
 
@@ -94,7 +93,7 @@ public class IsTile : MonoBehaviour
             return 0;
     }
 
-    public int getWaterStrength()
+    public float getWaterStrength()
     {
         if (hasWaterValue)
 
@@ -115,41 +114,46 @@ public class IsTile : MonoBehaviour
     /// Gibt die maximale Windenergie auf diesem Feld zurück.
     /// </summary>
     /// <returns>Windenergie</returns>
-    public int getWindStrength()
+    public float getWindStrength()
     {
         if (windUpdate)
             updateWindStrength();
         return windstrength;
     }
-    
+
     /// <summary>
     /// Gibt die Windstärke an, die von diesem Feld zurück geht.
     /// Ist kleiner bei großen Pflanzen auf Groundfeldern oder generell bei Bergfeldern.
     /// </summary>
     /// <returns>Weitergegebene Windstärke</returns>
-    public int getWindSpread()
+    public float getWindSpread()
     {
 
         //Ist windloss < 0 wird die Windstärke direkt multipliziert, für schneller Abfall
-        int windSpread;
+        float windSpread;
         if (windloss < 1)
             windSpread = Mathf.CeilToInt(getWindStrength() * windloss);
         else
-            windSpread = getWindStrength() + Mathf.CeilToInt(getPlayingField().getWindStrength() * windloss);
+            windSpread = getWindStrength() + (getPlayingField().getWindStrength() * windloss);
         if (windSpread > getPlayingField().getWindStrength())
             windSpread = getPlayingField().getWindStrength();
 
 
 
         return windSpread;
-        
+
     }
 
-    public void setWaterStrength(int waterStrength)
+    public void setWaterStrength(float waterStrength)
     {
         this.waterStrength = waterStrength;
     }
-    
+
+
+    public void SetPlant(Plant p)
+    {
+        myPlant = p;
+    }
 
     /// <summary>
     /// Erneuert die Windstärke auf diesem Feld nachdem sich der Wind verändert hat.
@@ -181,13 +185,13 @@ public class IsTile : MonoBehaviour
         windUpdate = true;
     }
 
-    public void setNutrientValue(int nutrientValue)
+    public void setNutrientValue(float nutrientValue)
     {
         this.nutrientValue = nutrientValue;
         if (this.nutrientValue < 0)
             this.nutrientValue = 0;
     }
-    
+
 
     public int getLightValue()
     {
@@ -207,6 +211,18 @@ public class IsTile : MonoBehaviour
     public PlayingFieldLogic getPlayingField()
     {
         return playingField;
+    }
+
+    public Plant getPlant()
+    {
+        if (canSustainPlant && myPlant != null)
+        {
+            return myPlant;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void replaceNeighbour(IsTile oldTile, IsTile newTile)
@@ -238,26 +254,19 @@ public class IsTile : MonoBehaviour
         return hasWaterValue;
     }
 
-    public void GrowPlant(PlayerPrototype player, IsTile tile, Blueprint bp)
+    public void GrowPlant(PlayerPrototype player, Plant plant, Blueprint bp)
     {
-        plant = Resources.Load<Plant>("Plant");
-        plant.SetMyTile(tile);
-        plant.SetPlayer(player);
-        plant.SetBlueprint(bp);
-        plant = Instantiate(plant, this.transform.position, Quaternion.identity);
+        myPlant = plant;
+
+        myPlant.SetMyTile(this);
+        myPlant.SetPlayer(player);
+        myPlant.SetBlueprint(bp);
+
+        SetPlant(Instantiate(myPlant, this.transform.position, Quaternion.identity));
+
+
+        player.AddPlant();
     }
 
-    public Plant getPlant()
-    {
 
-        if (canSustainPlant && plant != null)
-        {
-            return plant;
-        }
-        else
-        {
-            return null;
-        }
-
-    }
 }

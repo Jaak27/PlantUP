@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class selectedObject : MonoBehaviour
 {
 
-    GameObject tileSelect;
+    public IsTile tileSelect;
 
     Text text_Feld; // Text welcher die Feldinfos darstellt
     Text text_Pflanze;
@@ -104,12 +104,12 @@ public class selectedObject : MonoBehaviour
         }
     }
 
-    public GameObject getTile()
+    public IsTile getTile()
     {
         return tileSelect;
     }
 
-    public void setTile(GameObject test)
+    public void setTile(IsTile test)
     {
         tileSelect = test;
     }

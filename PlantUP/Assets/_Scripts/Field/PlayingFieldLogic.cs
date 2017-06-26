@@ -17,6 +17,9 @@ public enum weatherType
 }
 
 public class PlayingFieldLogic : MonoBehaviour {
+    public ParticleSystem erupt;
+
+    public List<IsTile> vulcanos;
 
     /// <summary>
     /// Eine Struktur um Events zu speichern.
@@ -30,6 +33,7 @@ public class PlayingFieldLogic : MonoBehaviour {
         public int change;
         //Wieviel Zeit zwischen diesem und dem vorherigen Event vergehen soll, in Ticks.
         public int time;
+
     }
 
     private enum eventTypes
@@ -308,6 +312,8 @@ public class PlayingFieldLogic : MonoBehaviour {
             }
         }
 
+        
+
         //Die ausgewürfelten Feldertypen werden jetzt in richtige Felder verwandelt.
         felder = new IsTile[xSize * ySize];
         
@@ -338,6 +344,7 @@ public class PlayingFieldLogic : MonoBehaviour {
                         break;
                     case tileType.VOLCANO:
                         newTile = Instantiate(volcanoTilePrefab, position, Quaternion.identity);
+                        vulcanos.Add(newTile);
                         break;
                     case tileType.ASH:
                         newTile = Instantiate(ashTilePrefab, position, Quaternion.identity);
@@ -516,8 +523,13 @@ public class PlayingFieldLogic : MonoBehaviour {
     }
 
 
-	// Update is called once per frame
-	void Update () 
+    public cameraShake cS;
+    bool shake = true;
+    // Update is called once per frame
+
+    public ParticleSystem snow;
+
+    void Update () 
     {
         ticksHappened++;
         int seconds = Mathf.FloorToInt((float) ticksHappened * Time.smoothDeltaTime) ;
@@ -530,6 +542,34 @@ public class PlayingFieldLogic : MonoBehaviour {
         else if (seconds % 60 < 10 && seconds / 60 < 10)
             timer.text = "Timer: 0" + seconds / 60 + ":0" + seconds % 60;
         //Starte die Events
+
+        
+        if(eventListe[2].type == eventTypes.BLIZZARDSTART && shake)
+        {
+            shake = false;
+            var em = snow.emission;
+            em.rateOverTime = 8;
+
+        }
+
+        if (eventListe[2].type == eventTypes.ERUPTIONSTART && shake)
+        {
+            cS.setShakeTimer(2);
+            for (int i = 0; i < vulcanos.Count; i++)
+            {
+                Instantiate(erupt, new Vector3(vulcanos[i].transform.position.x, vulcanos[i].transform.position.y, 0), Quaternion.identity);
+
+            }
+            shake = false;
+        }
+
+        if (eventListe[1].type == eventTypes.WEATHERSTOP && shake)
+        {
+            shake = false;
+            var em = snow.emission;
+            em.rateOverTime = 0;
+        }
+
         if (eventListe != null && eventListe.Count > 0)
         {
             RandomEvent current = eventListe[0];
@@ -537,6 +577,7 @@ public class PlayingFieldLogic : MonoBehaviour {
             if (current.time <= 0)
             {
                 eventListe.RemoveAt(0);
+                shake = true;
                 handleEvent(current);
             }
         }
@@ -580,6 +621,7 @@ public class PlayingFieldLogic : MonoBehaviour {
                 currentWeather = weatherType.ERUPTION;
                 break;
             case eventTypes.WEATHERSTOP:
+
                 currentWeather = weatherType.NORMAL;
                 forceWindupate();
                 break;
@@ -767,4 +809,6 @@ public class PlayingFieldLogic : MonoBehaviour {
                 return windStrength;
         }
     }
+
+
 }

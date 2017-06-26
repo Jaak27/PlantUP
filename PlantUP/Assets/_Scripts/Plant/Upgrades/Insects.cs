@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Insects : IsUpgrade
+public class Insects : _IsUpgrade
 {
 
-    static readonly int cost = 10;
+    static readonly int cost = 5000;
     int current = 0;
     static readonly int max = 2;
+    static readonly UpgradeType upgradeType = UpgradeType.INSECTS;
 
     public int GetCost()
     {
@@ -55,7 +56,12 @@ public class Insects : IsUpgrade
         current = 0;
     }
 
-    public string getInfo()
+    public UpgradeType GetUpgradeType()
+    {
+        return upgradeType;
+    }
+
+    public string GetInfo()
     {
         return "Insekten Stufe " + current;
     }
