@@ -25,7 +25,7 @@ public class bpControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             if (Input.GetMouseButtonDown(0))
             {
                 GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(this.gameObject.GetComponent<knowBlueprint>().getBlueprint());
-                //GameObject.Find("bluePrintSelect").transform.position = this.transform.position;
+                GameObject.Find("bluePrintSelect").transform.position = gameObject.transform.position;
 
             }
 

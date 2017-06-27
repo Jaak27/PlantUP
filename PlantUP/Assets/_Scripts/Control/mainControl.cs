@@ -43,19 +43,6 @@ public class mainControl : MonoBehaviour {
             cameraControl.Translate(new Vector3(0, 0.25f, 0));
         }
 
-        if (Input.GetKey(KeyCode.Q)) // falls true auf dem Bildschirm bewegen
-        {
-            GameObject skills = GameObject.Find("fenster_Skills");
-            float newX = Mathf.Lerp(skills.GetComponent<RectTransform>().anchoredPosition.x, -60, 0.3f);
-            skills.GetComponent<RectTransform>().anchoredPosition = new Vector3(newX,skills.GetComponent<RectTransform>().anchoredPosition.y, 1);
-        }
-        else // falls false offScreen bewegen
-        {
-            GameObject skills = GameObject.Find("fenster_Skills");
-            float newX = Mathf.Lerp(skills.GetComponent<RectTransform>().anchoredPosition.x, 71, 0.3f);
-            skills.GetComponent<RectTransform>().anchoredPosition = new Vector3(newX,skills.GetComponent<RectTransform>().anchoredPosition.y, 1);
-
-        }
 
        
         if (Input.GetKey(KeyCode.W)) // falls true auf dem Bildschirm bewegen

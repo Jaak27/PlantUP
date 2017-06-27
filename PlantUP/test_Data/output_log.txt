@@ -15,22 +15,22 @@ Platform assembly: C:\Users\Dennis\Documents\GitHub\PlantUP\PlantUP\test_Data\Ma
 Loading C:\Users\Dennis\Documents\GitHub\PlantUP\PlantUP\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Dennis\Documents\GitHub\PlantUP\PlantUP\test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Dennis\Documents\GitHub\PlantUP\PlantUP\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.083 seconds
+- Completed reload, in  0.069 seconds
 Platform assembly: C:\Users\Dennis\Documents\GitHub\PlantUP\PlantUP\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Dennis\Documents\GitHub\PlantUP\PlantUP\test_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 1.887201 ms
+UnloadTime: 1.518956 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 2e5c -> priority: 1 
-  Thread -> id: 21d0 -> priority: 1 
+  Thread -> id: 35b4 -> priority: 1 
+  Thread -> id: 1b18 -> priority: 1 
 Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 4.256363 ms
+UnloadTime: 2.695943 ms
 
-Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1060.
-Total: 1.305071 ms (FindLiveObjects: 0.103042 ms CreateObjectMapping: 0.080874 ms MarkObjects: 1.009080 ms  DeleteObjects: 0.110842 ms)
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1070.
+Total: 0.807099 ms (FindLiveObjects: 0.058705 ms CreateObjectMapping: 0.048852 ms MarkObjects: 0.628930 ms  DeleteObjects: 0.069789 ms)
 
 BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
@@ -49,6 +49,30 @@ Font size and style overrides are only supported for dynamic fonts. Font 'PIXELS
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 TEST DEEPROOTS
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+TEST LEAVES
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+TEST LEAVES
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -64,197 +88,151 @@ Parent of RectTransform is being set with parent property. Consider using the Se
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-NullReferenceException: Object reference not set to an instance of an object
-  at selectedObject.Update () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 43, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 47, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 47, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 47, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 47, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 47, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-NullReferenceException: Object reference not set to an instance of an object
-  at selectedObject.Update () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
-<color=green>Nutri: 20, Water: 20.5, Sun: 29, Wind: 43, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 64, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 29, Wind: 58, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 64, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 29, Wind: 58, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 20, Water: 20.5, Sun: 29, Wind: 64, </color>
+Parent of RectTransform is being set with parent property. Consider using the SetParent method instead, with the worldPositionStays argument set to false. This will retain local orientation and scale rather than world orientation and scale, which can prevent common UI scaling issues.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 29, Wind: 58, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 40, Water: 41, Sun: 30, Wind: 64, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 30, Wind: 58, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 40, Water: 41, Sun: 30, Wind: 64, </color>
+Parent of RectTransform is being set with parent property. Consider using the SetParent method instead, with the worldPositionStays argument set to false. This will retain local orientation and scale rather than world orientation and scale, which can prevent common UI scaling issues.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 30, Wind: 58, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 40, Water: 41, Sun: 30, Wind: 64, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 30, Wind: 58, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 40, Water: 41, Sun: 30, Wind: 64, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 20, Water: 20.5, Sun: 30, Wind: 37, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 40, Water: 41, Sun: 30, Wind: 41, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 20, Water: 20.5, Sun: 30, Wind: 37, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 30, Wind: 41, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 55, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 55, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 55, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
+Font size and style overrides are only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -263,231 +241,7 @@ NullReferenceException: Object reference not set to an instance of an object
  
 (Filename:  Line: -1)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 31, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 10, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 10, Wind: 31, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 11, Wind: 31, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 11, Wind: 31, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 40, Water: 41, Sun: 11, Wind: 31, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 61, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 41, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 82, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 41, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 51, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 26, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 51, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 26, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 15, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 15, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 15, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 4, </color>
+<color=red>Nutri: 20, Sun: 26, Wind: 65, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -499,7 +253,16 @@ BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynam
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Nutri: 60, Water: 61.5, Sun: 11, Wind: 30, </color>
+<color=red>Nutri: 20, Sun: 26, Wind: 65, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at selectedObject.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+<color=green>Nutri: 20, Sun: 26, Wind: 65, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -511,59 +274,11 @@ BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynam
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Nutri: 60, Water: 61.5, Sun: 11, Wind: 4, </color>
+<color=red>Nutri: 20, Sun: 26, Wind: 65, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 12, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 12, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 12, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 12, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Nutri: 60, Water: 61.5, Sun: 12, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 15, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Water: 61.5, Sun: 15, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Nutri: 60, Water: 61.5, Sun: 15, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Water: 61.5, Sun: 15, Wind: 30, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Water: 61.5, Sun: 15, Wind: 4, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Water: 61.5, Sun: 43, Wind: 20, </color>
+<color=green>Nutri: 20, Sun: 26, Wind: 65, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -576,15 +291,11 @@ BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynam
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+<color=red>Nutri: 20, Sun: 26, Wind: 91, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Water: 61.5, Sun: 43, Wind: 3, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Water: 61.5, Sun: 43, Wind: 20, </color>
+<color=green>Nutri: 20, Sun: 26, Wind: 91, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -592,23 +303,11 @@ BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynam
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Water: 61.5, Sun: 43, Wind: 3, </color>
+<color=red>Nutri: 20, Sun: 26, Wind: 91, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=red>Water: 61.5, Sun: 43, Wind: 20, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=green>Water: 61.5, Sun: 43, Wind: 3, </color>
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-<color=red>Water: 61.5, Sun: 43, Wind: 20, </color>
+<color=green>Nutri: 20, Sun: 26, Wind: 91, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -616,7 +315,99 @@ BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynam
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-<color=green>Water: 61.5, Sun: 35, Wind: 3, </color>
+<color=red>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+BestFit is only supported for dynamic fonts. Font 'PIXELSIX00_copy' is not dynamic.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 20, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 26, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 33, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 33, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 33, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 33, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=red>Nutri: 40, Sun: 38, Wind: 91, </color>
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+<color=green>Nutri: 40, Sun: 38, Wind: 91, </color>
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
