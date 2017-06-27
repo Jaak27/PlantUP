@@ -9,6 +9,10 @@ public class mainControl : MonoBehaviour {
     private Transform cameraControl; // Transform Component der Camera
     static bool useSkills;
 
+    public PlayingFieldLogic playingfield;
+
+    public GameObject pauseMenu;
+
 
     // Use this for initialization
     void Start () {
@@ -70,7 +74,10 @@ public class mainControl : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Escape)) // falls true auf dem Bildschirm bewegen
         {
-            SceneManager.LoadScene("menu_Test");
+            playingfield = GameObject.Find("basePlayingField(Clone)").GetComponent<PlayingFieldLogic>();
+            //SceneManager.LoadScene("menu_Test");
+            playingfield.setPaused(true);
+            pauseMenu.SetActive(true);
         }
 
 

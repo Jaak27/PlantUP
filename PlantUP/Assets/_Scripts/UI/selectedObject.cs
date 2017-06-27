@@ -68,7 +68,7 @@ public class selectedObject : MonoBehaviour
 
                         createPlantPanel.SetActive(false);
                         plantText.SetActive(true);
-                        text_Pflanze.text = "-Planzendata-" +
+                        text_Pflanze.text = "-Plant-" +
                                          "\n" + "Health........" + tile.getPlant().GetStats()[2].GetCurrent() + 
                                          "\n" + "Energy......." + tile.getPlant().GetStats()[8].GetCurrent() +
                                          "\n" + "Age......................" + tile.getPlant().GetStats()[7].GetCurrent() +
@@ -82,7 +82,8 @@ public class selectedObject : MonoBehaviour
                     else
                     {
                         createPlantPanel.SetActive(true);
-                        plantText.SetActive(false);
+                        //plantText.SetActive(false);
+                        text_Pflanze.text = "-Plant-";
                     }
 
                 }

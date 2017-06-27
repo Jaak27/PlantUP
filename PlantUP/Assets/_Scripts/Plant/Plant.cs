@@ -12,6 +12,11 @@ public class Plant : MonoBehaviour
     /// </summary>
     public IsTile myTile;
 
+    public void setTile(IsTile tile)
+    {
+        myTile = tile;
+    }
+
     /// <summary>
     /// Eine Referenz auf den Blueprint.
     /// </summary>

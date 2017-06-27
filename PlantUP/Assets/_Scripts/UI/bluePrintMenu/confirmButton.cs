@@ -28,56 +28,75 @@ public class confirmButton : MonoBehaviour, IPointerClickHandler
     public Transform parentCreate;
     public Transform parentPlant;
     public Transform parentChange;
+    public Transform parentMain;
 
     //Menus
     public GameObject addUpgrades;
     public GameObject createBP;
+    public GameObject main;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        test = Instantiate(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint());
 
-
-        newBpSlotCreate = Instantiate(bpSlotCreate, parentCreate);
-        newBpSlotPlant = Instantiate(bpSlotPlant, parentPlant);
-
-        test.GetComponent<myAddedSlotGroup>().myGroup.transform.parent = parentChange;
-        test.GetComponent<myAddedSlotGroup>().myGroup.GetComponent<addedSlotGroup>().mybp = test;
-
-        newBpSlotCreate.GetComponent<knowBlueprint>().setBlueprint(test);
-        newBpSlotPlant.GetComponent<knowBlueprint>().setBlueprint(test);
-
-
-        player.blueprints.Add(test);
-        test.index = player.blueprints.Count - 1;
-
-        BlueprintSprites spritesPlant = GameObject.Find("bluePrintPlantSprites").GetComponent<BlueprintSprites>();
-
-        for (int i = 0; i < spritesPlant.spirtes.Count; i++)
+        if(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().GetTypeSequence().Count > 0)
         {
-            if (spritesPlant.used[i] == false)
+            test = Instantiate(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint());
+
+
+            newBpSlotCreate = Instantiate(bpSlotCreate, parentCreate);
+            newBpSlotPlant = Instantiate(bpSlotPlant, parentPlant);
+
+            //addedSlotGroup a = Instantiate(test.GetComponent<myAddedSlotGroup>().myGroup.GetComponent<addedSlotGroup>());
+
+            //a.transform.parent = parentMain;
+
+            test.GetComponent<myAddedSlotGroup>().myGroup.transform.parent = createBP.transform;
+            test.GetComponent<myAddedSlotGroup>().myGroup.GetComponent<addedSlotGroup>().mybp = test;
+
+            newBpSlotCreate.GetComponent<knowBlueprint>().setBlueprint(test);
+            newBpSlotPlant.GetComponent<knowBlueprint>().setBlueprint(test);
+
+
+            player.blueprints.Add(test);
+            test.index = player.blueprints.Count - 1;
+
+            BlueprintSprites spritesPlant = GameObject.Find("bluePrintPlantSprites").GetComponent<BlueprintSprites>();
+
+            for (int i = 0; i < spritesPlant.spirtes.Count; i++)
             {
-                test.s = spritesPlant.spirtes[i];
-                spritesPlant.used[i] = true;
-                break;
+                if (spritesPlant.used[i] == false)
+                {
+                    test.s = spritesPlant.spirtes[i];
+                    spritesPlant.used[i] = true;
+                    break;
+                }
             }
+
+            BlueprintSprites spritesBP = GameObject.Find("bluePrintSprites").GetComponent<BlueprintSprites>();
+
+            for (int i = 0; i < spritesBP.spirtes.Count; i++)
+            {
+                if (spritesBP.used[i] == false)
+                {
+                    newBpSlotCreate.GetComponent<Image>().sprite = spritesBP.spirtes[i];
+                    newBpSlotPlant.GetComponent<Image>().sprite = spritesBP.spirtes[i];
+                    spritesBP.used[i] = true;
+                    break;
+                }
+            }
+
+            Destroy(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject);
+
+            addUpgrades.SetActive(false);
+            main.SetActive(true);
+
         }
 
-        BlueprintSprites spritesBP = GameObject.Find("bluePrintSprites").GetComponent<BlueprintSprites>();
-
-        for (int i = 0; i < spritesBP.spirtes.Count; i++)
-        {
-            if (spritesBP.used[i] == false)
-            {
-                newBpSlotCreate.GetComponent<Image>().sprite = spritesBP.spirtes[i];
-                newBpSlotPlant.GetComponent<Image>().sprite = spritesBP.spirtes[i];
-                spritesBP.used[i] = true;
-                break;
-            }
-        }
-
-        Destroy(GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint().gameObject);
 
 
     }
+}
+
+internal class addUpgrades
+{
 }

@@ -29,6 +29,7 @@ public class changeButton : MonoBehaviour, IPointerClickHandler
 
         selected.setBlueprint(newBp);
         selected.getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.SetActive(true);
+        selected.getBlueprint().gameObject.GetComponent<myAddedSlotGroup>().myGroup.transform.parent = changeBP.transform.parent;
         if (selected.getBlueprint() != null)
         {
             changeBP.SetActive(true);

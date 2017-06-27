@@ -19,6 +19,7 @@ public class addedSlotGroup : MonoBehaviour {
 
     private void Update()
     {
+        /*
         if(mybp == GameObject.Find("bpSelectHandlerChange").GetComponent<selectedBP>().getBlueprint() | mybp == GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().getBlueprint())
         {
             gameObject.SetActive(true);
@@ -27,6 +28,7 @@ public class addedSlotGroup : MonoBehaviour {
         {
             gameObject.SetActive(false);
         }
+        */
     }
 
 

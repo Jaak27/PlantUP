@@ -24,25 +24,25 @@ public class bpControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             if (Input.GetMouseButtonDown(0))
             {
-                    GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(this.gameObject.GetComponent<knowBlueprint>().getBlueprint());
+                GameObject.Find("bpSelectHandler").GetComponent<selectedBP>().setBlueprint(this.gameObject.GetComponent<knowBlueprint>().getBlueprint());
+                //GameObject.Find("bluePrintSelect").transform.position = this.transform.position;
 
             }
 
             Blueprint test = this.GetComponent<knowBlueprint>().getBlueprint();
 
-            blueprintInfo = GameObject.Find("txt_BlueprintInfo").GetComponent<Text>();
 
-            blueprintInfo.text = "" + test.ToString();
-
-
-
-
-
-
+            test.GetComponent<myAddedSlotGroup>().myGroup.SetActive(true);
 
         }
         else
         {
+            Blueprint test = this.GetComponent<knowBlueprint>().getBlueprint();
+            if(test != null)
+            {
+                test.GetComponent<myAddedSlotGroup>().myGroup.SetActive(false);
+            }
+            
 
         }
 

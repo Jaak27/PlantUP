@@ -10,7 +10,14 @@ public class IsTile : MonoBehaviour
     /// </summary>
     PlayingFieldLogic playingField;
 
-    public Plant myPlant;
+    Plant myPlant;
+
+
+
+    bool getMoving = false;
+    Vector3 target;
+    float distanceLeft;
+    Vector3 movementDirection;
 
     /// <summary>
     /// Welcher Typ in diesem Feld dargestellt ist.
@@ -23,7 +30,7 @@ public class IsTile : MonoBehaviour
     /// Enthält die 6 nächsten Nachbarn.
     /// Von links oben, in Uhrzeigerrichtung
     /// </summary>
-    IsTile[] neighbours;
+    public IsTile[] neighbours;
 
     /// <summary>
     /// Die Nährstoffe die noch auf diesem Feld lagern.
@@ -65,6 +72,25 @@ public class IsTile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (getMoving)
+        {
+            if (movementDirection == null || movementDirection == Vector3.zero)
+            {
+                movementDirection = target - this.transform.position;
+                movementDirection.Normalize();
+                movementDirection = movementDirection * playingField.getSpeed();
+            }
+
+            this.transform.Translate(movementDirection);
+
+            distanceLeft = Vector3.Distance(target, this.transform.position);
+            if (Math.Abs(distanceLeft) < playingField.getSpeed() / 2)
+            {
+                this.transform.position = target;
+                getMoving = false;
+            }
+
+        }
 
     }
 
@@ -86,16 +112,26 @@ public class IsTile : MonoBehaviour
 
     public float getNutrientValue()
     {
-        if (hasGroundValue)
+        return getNutrientValue(false);
+    }
+
+    public float getNutrientValue(bool ignoreHasNutrientValue)
+    {
+        if (hasGroundValue || ignoreHasNutrientValue)
 
             return nutrientValue;
         else
             return 0;
     }
-
     public float getWaterStrength()
     {
-        if (hasWaterValue)
+        return getWaterStrength(false);
+    }
+
+
+    public float getWaterStrength(bool ignoreHasWaterValue)
+    {
+        if (hasWaterValue || ignoreHasWaterValue)
 
             return waterStrength;
         else
@@ -153,6 +189,22 @@ public class IsTile : MonoBehaviour
     public void SetPlant(Plant p)
     {
         myPlant = p;
+        myPlant.setTile(this);
+    }
+
+    public bool hasReachedTarget()
+    {
+        return !getMoving;
+    }
+    public void setTarget(Vector3 target)
+    {
+        this.target = target;
+    }
+
+    public void setMoving()
+    {
+        if (target != null)
+            getMoving = true;
     }
 
     /// <summary>
