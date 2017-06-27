@@ -254,10 +254,14 @@ public class Plant : MonoBehaviour {
         }
         else
         {
-            myBlueprint.ChangeNoticed();
-            ResetUpgrades();
-            //CheckForNextUpgrade();
-
+            float cost = stats[8].GetCurrent() - myBlueprint.GetCost();
+            if (cost >= 0)
+            {
+                print(cost);
+                myBlueprint.ChangeNoticed();
+                stats[8].SetCurrent(cost);
+                ResetUpgrades();
+            }
         }
     }
 
@@ -632,7 +636,7 @@ public class Plant : MonoBehaviour {
             {
                 int avgGroundValue  = (PlayingFieldLogic.minimumGroundValueStart+ PlayingFieldLogic.maximumGroundValueStart)/2;
 
-                float nups = stats[4].GetCurrent() * reach * avgGroundValue * 0.01f * absorbRate;
+                float nups = stats[4].GetCurrent() * reach * avgGroundValue * 0.01f;
                 float energy = stats[8].GetCurrent();
 
                 //Wenn die Tile mehr Nährstoffe enthält als die Pflanze gebrauchen kann
@@ -698,7 +702,7 @@ public class Plant : MonoBehaviour {
             //Wenn die Tile Wasser enthält
             if (waterValue > 0)
             {
-                float waps = stats[7].GetCurrent() * reachMultiplier * waterValue * absorbRate;
+                float waps = stats[7].GetCurrent() * reachMultiplier * waterValue;
                 float energy = stats[8].GetCurrent();
 
                 //Wenn die Tile mehr Wasser enthält als die Pflanze gebrauchen kann
@@ -730,7 +734,7 @@ public class Plant : MonoBehaviour {
     private void CalcWindValue()
     {
         float windValue = myTile.getWindStrength();
-        float wips = stats[6].GetCurrent() * windValue * absorbRate;
+        float wips = stats[6].GetCurrent() * windValue;
         float energy = stats[8].GetCurrent();
 
         //Weht der Wind auf der Tile der Pflanze stark genug gibt es die vollen Werte dafür
@@ -810,7 +814,7 @@ public class Plant : MonoBehaviour {
 
         //=================================================Energie aus Licht ziehen======================================================================
 
-        float sups = stats[5].GetCurrent() * sunValue * absorbRate;
+        float sups = stats[5].GetCurrent() * sunValue;
         float energy = stats[8].GetCurrent();
 
         //Scheint die Sonne stark genug gibt es die vollen Werte dafür

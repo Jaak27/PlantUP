@@ -254,11 +254,9 @@ public class IsTile : MonoBehaviour
         myPlant.SetMyTile(this);
         myPlant.SetPlayer(player);
         myPlant.SetBlueprint(player.blueprints[0]);
-
-        Instantiate(myPlant, this.transform.position, Quaternion.identity);
         
-
-        player.AddPlant();
+        
+        player.AddPlant(Instantiate(myPlant, this.transform.position, Quaternion.identity));
     }
 
     internal void setPlant(Plant p)

@@ -11,20 +11,28 @@ public class Blueprint : MonoBehaviour {
     public bool hasChanged = true;
     public int playerPlants = 0;
     public int plantsNoticed = 0;
-    private float cost = 100;
+    private float cost = 1000;
 
     private void Awake()
     {
         SetSequence();
     }
 
+    public void ResetPlantsNoticed()
+    {
+            plantsNoticed = 0;
+    }
+
     public float GetCost()
     {
-        if (upgradeSequence.Count > 0)
+        if (hasChanged && typeSequence.Count > 0)
         {
-            cost = upgradeSequence.Count * 100;
+            cost = typeSequence.Count * 1000;
+        }else if (upgradeSequence.Count > 0)
+        {
+            cost = upgradeSequence.Count * 1000;
         }
-
+        
         return cost;
     }
     
@@ -75,7 +83,7 @@ public class Blueprint : MonoBehaviour {
     }
 
     public bool HasChanged() {
-        playerPlants = player.GetPlantCount();
+        playerPlants = player.GetPlantWithBlueprintCount(this);
         return hasChanged;
     }
 

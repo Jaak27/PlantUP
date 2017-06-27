@@ -16,6 +16,7 @@ public class PlayerPrototype : MonoBehaviour {
     public static int playerCount = 0;
     public int myNum;
     private int plantCount = 0;
+    public List<Plant> plants = new List<Plant>();
 
     private void Awake()
     {
@@ -31,17 +32,32 @@ public class PlayerPrototype : MonoBehaviour {
         
     }
 
+    public void AddPlant(Plant plant)
+    {
+        plants.Add(plant);
+        plantCount++;
+    }
+
     public float GetPoints() {
         return points;
     }
 
-    public void AddPlant()
-    {
-        plantCount++;
-    }
     public int GetPlantCount()
     {
         return plantCount;
+    }
+
+    public int GetPlantWithBlueprintCount(Blueprint bp)
+    {
+        int count = 0;
+        foreach (Plant plant in plants)
+        {
+            if (plant.GetBlueprint() == bp)
+            {
+                ++count;
+            }
+        }
+        return count;
     }
 
     public int GetPlayerNum()
