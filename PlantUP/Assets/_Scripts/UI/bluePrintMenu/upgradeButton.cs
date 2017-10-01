@@ -24,7 +24,7 @@ public class upgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         overObject = false;
     }
-
+    /*
     void Update()
     {
 
@@ -77,7 +77,7 @@ public class upgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
     } 
-
+    */
     public void OnPointerEnter(PointerEventData eventData)
     {
         overObject = true;

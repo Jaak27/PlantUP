@@ -17,6 +17,7 @@ public class bpControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
 
     }
+    /*
 
     void Update()
     {
@@ -48,7 +49,7 @@ public class bpControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
 
     }
-
+    */
     public void OnPointerEnter(PointerEventData eventData)
     {
         mouseOverObject = true;

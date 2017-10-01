@@ -10,9 +10,9 @@ public class blueprintCostText : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
-        if(bp.getBlueprint() != null)
+        if(bp.getBlueprintSelect() != null)
         {
-            gameObject.GetComponent<Text>().text = "Blueprint Cost: " + bp.getBlueprint().GetCostTypSequence();
+            gameObject.GetComponent<Text>().text = "Blueprint Cost: " + bp.getBlueprintSelect().GetCostTypSequence();
         }
         
 		

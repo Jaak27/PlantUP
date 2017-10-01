@@ -971,4 +971,9 @@ public class PlayingFieldLogic : MonoBehaviour
         return isFinished;
     }
 
+    public IsTile[] getFelder()
+    {
+        return felder;
+    }
+
 }

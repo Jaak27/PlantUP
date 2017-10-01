@@ -92,6 +92,20 @@ public class IsTile : MonoBehaviour
 
         }
 
+        
+
+        if(type == tileType.GROUND)
+        {
+            float opacity = (((nutrientValue / 3000) * 100) * 1.0f) / 100; 
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
+        }
+
+        if (type == tileType.WATER)
+        {
+            float opacity = (((waterStrength / 70) * 100) * 1.0f) / 100;
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
+        }
+
     }
 
     public Transform getTransform()
@@ -112,7 +126,8 @@ public class IsTile : MonoBehaviour
 
     public float getNutrientValue()
     {
-        return getNutrientValue(false);
+        //return getNutrientValue(false);
+        return nutrientValue;
     }
 
     public float getNutrientValue(bool ignoreHasNutrientValue)

@@ -16,7 +16,7 @@ public class seed : MonoBehaviour
     static int challenge = 0;
     //Wie lange soll das Spiel gehen?
     //36000 ~ 10 Minuten
-    static int time = 300;
+    static int time = 180;
 
     public static bool getAutoStart()
     {

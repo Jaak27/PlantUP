@@ -10,10 +10,10 @@ public class BluePrintText : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if(test.getBlueprint() != null)
+        if(test.getBlueprintSelect() != null)
         {
 
-            gameObject.GetComponent<Text>().text = "" + test.getBlueprint().ToString();
+            gameObject.GetComponent<Text>().text = "" + test.getBlueprintSelect().ToString();
         }
         
 		

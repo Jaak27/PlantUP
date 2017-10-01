@@ -13,7 +13,7 @@ public class createPlant : MonoBehaviour, IPointerClickHandler
     {
         IsTile tile = GameObject.Find("selectHandler").GetComponent<selectedObject>().getTile().GetComponent<IsTile>();
 
-        GameObject.Find("bpSelectHandlerPlant").GetComponent<selectedBP>().setBlueprint(gameObject.GetComponent<knowBlueprint>().getBlueprint());
+        GameObject.Find("bpSelectHandlerPlant").GetComponent<selectedBP>().setBlueprintSelect(gameObject.GetComponent<knowBlueprint>().getBlueprint());
 
 
         //player = this.GetComponent<IsTile>().getPlayingField().players[0];

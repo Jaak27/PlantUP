@@ -37,7 +37,10 @@ public class tileControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 
 
             }
+
         }
+
+
 
 
     }
