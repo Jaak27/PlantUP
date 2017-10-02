@@ -15,17 +15,12 @@ public class tileControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     void Update()
     {
 
-        if (mainControl.getUseSkills() | Input.GetMouseButton(1)) // feld wird deselektiert
-        {
-            GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(null);
-            GameObject.Find("feldSelect").GetComponent<SpriteRenderer>().enabled = false;
-        }
 
         if (mouseOverObject)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if(!mainControl.getUseSkills())
+                if (!mainControl.getUseSkills())
                 {
                     GameObject.Find("selectHandler").GetComponent<selectedObject>().setTile(this.gameObject.GetComponent<IsTile>());
                 }
@@ -33,11 +28,17 @@ public class tileControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 {
                     this.GetComponent<IsTile>().getPlayingField().replaceTile(this.GetComponent<IsTile>(), tileType.WATER);
                 }
-                
-                
 
             }
 
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (!mainControl.getUseSkills())
+                {
+                    GameObject.Find("selectHandlerP2").GetComponent<selectedObject>().setTile(this.gameObject.GetComponent<IsTile>());
+                }
+
+            }
         }
 
 
