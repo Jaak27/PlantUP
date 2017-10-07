@@ -26,9 +26,9 @@ public class Blueprint : MonoBehaviour {
 
     public float GetCost()
     {
-        if (upgradeSequence.Count > 0)
+        if (upgradeSequence.Count >= 0)
         {
-            cost = upgradeSequence.Count * 100;
+            cost = typeSequence.Count * typeSequence.Count * 100;
         }
 
         return cost;
@@ -36,7 +36,7 @@ public class Blueprint : MonoBehaviour {
 
     public void updateCost()
     {
-        cost = typeSequence.Count * 100;
+        cost = typeSequence.Count * typeSequence.Count * 100;
     }
 
     public float GetCostTypSequence()
@@ -44,7 +44,7 @@ public class Blueprint : MonoBehaviour {
         int costn = 0;
         if (typeSequence.Count > 0)
         {
-            costn = typeSequence.Count * 100;
+            costn = typeSequence.Count * typeSequence.Count * 100;
         }
 
         return costn;
@@ -66,10 +66,11 @@ public class Blueprint : MonoBehaviour {
 
     public void SetSequence()
     {
-
+        print("set Sequence");
         upgradeSequence = new List<int>();
         foreach (UpgradeType type in typeSequence)
         {
+            print("TT");
             switch (type)
             {
                 case UpgradeType.HEIGHT:
@@ -113,6 +114,7 @@ public class Blueprint : MonoBehaviour {
 
     public void setHasChanged(bool b)
     {
+        print("setHasChanged");
         hasChanged = b;
     }
 
@@ -123,6 +125,7 @@ public class Blueprint : MonoBehaviour {
 
     public void ChangeNoticed()
     {
+        print("changed Noticed");
         plantsNoticed++;
         SetSequence();
         if (plantsNoticed == playerPlants)
@@ -141,5 +144,10 @@ public class Blueprint : MonoBehaviour {
             test = test + upgradeSequence[i];
         }
         return test;
+    }
+
+    public int getPlants()
+    {
+        return playerPlants;
     }
 }

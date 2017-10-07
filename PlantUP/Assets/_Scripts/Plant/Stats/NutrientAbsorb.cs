@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class NutrientAbsorb : _IsStat {
 
-    private static readonly float baseValue = 1;
+    private static readonly float baseValue = 0;
     private float currentValue = baseValue;
 
 
@@ -34,10 +34,7 @@ public class NutrientAbsorb : _IsStat {
 
     public void SetCurrent(float value)
     {
-        if (value > 0)
-        {
             currentValue = value;
-        }
     }
 
     public float GetMax()

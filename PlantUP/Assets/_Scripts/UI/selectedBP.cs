@@ -13,17 +13,26 @@ public class selectedBP : MonoBehaviour {
     public Blueprint blueprint2;
     public Blueprint blueprint3;
 
+    public PlayerPrototype player;
+
 
     void Start()
     {
         blueprint0 = Instantiate(blueprintPrefab);
         blueprint0.s = Resources.Load<Sprite>("BaseFlower1");
+        player.setBlueprint0(blueprint0);
+
         blueprint1 = Instantiate(blueprintPrefab);
         blueprint1.s = Resources.Load<Sprite>("BaseFlower2");
+        player.setBlueprint1(blueprint1);
+
         blueprint2 = Instantiate(blueprintPrefab);
         blueprint2.s = Resources.Load<Sprite>("BaseFlower3");
+        player.setBlueprint2(blueprint2);
+
         blueprint3 = Instantiate(blueprintPrefab);
         blueprint3.s = Resources.Load<Sprite>("BaseFlower4");
+        player.setBlueprint3(blueprint3);
     }
 
 

@@ -148,7 +148,7 @@ public class selectedObject : MonoBehaviour
             }
 
             // Tile auswahl
-            if(menu == false)
+            if(menu == false && Input.GetAxis("Right Trigger") == 0.0)
             {
                 menuCursor.gameObject.SetActive(false);
 
@@ -191,6 +191,12 @@ public class selectedObject : MonoBehaviour
                 if (Input.GetAxis("Right Stick X") == 0.0 && Input.GetAxis("Right Stick Y") == 0.0)
                 {
                     moved = false;
+                }
+
+                if (Input.GetButtonDown("X"))
+                {
+                    player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
+                    tileSelect.getPlant().GetStats()[8].SetCurrent(0);
                 }
             }
 
@@ -377,7 +383,7 @@ public class selectedObject : MonoBehaviour
             }
 
             // Tile auswahl
-            if (menu == false)
+            if (menu == false && Input.GetAxis("Left Trigger") == 0.0)
             {
                 menuCursor.gameObject.SetActive(false);
 
@@ -526,7 +532,7 @@ public class selectedObject : MonoBehaviour
             if (cost >= 0 && player.GetPoints() >= cost)
             {
                 tile.GrowPlant(player, plant, blueprint);
-                player.AddPoints(-cost);
+                //player.AddPoints(-cost);
             }
             else
             {

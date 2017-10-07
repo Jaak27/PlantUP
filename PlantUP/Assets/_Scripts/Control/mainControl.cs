@@ -169,7 +169,13 @@ public class mainControl : MonoBehaviour {
                     {
                         moved = false;
                     }
-            }
+
+                    if (Input.GetButtonDown("X"))
+                    {
+                        bp.getBlueprintSelect().GetTypeSequence().Clear();
+                        bp.getBlueprintSelect().hasChanged = true;
+                    }
+                }
 
 
                 if (changeMenu == true)
@@ -229,7 +235,13 @@ public class mainControl : MonoBehaviour {
                     {
                         addUpgrade(upIcon3.GetComponent<upgradeButton>().upgrade);
                     }
-            
+
+                    if (Input.GetButtonDown("X"))
+                    {
+                        bp.getBlueprintSelect().GetTypeSequence().Clear();
+                        bp.getBlueprintSelect().hasChanged = true;
+                    }
+
 
                     if (Input.GetAxis("Right Stick X") == 0.0)
                     {
@@ -347,6 +359,12 @@ public class mainControl : MonoBehaviour {
                     {
                         moved = false;
                     }
+
+                    if (Input.GetAxis("D Pad X") <= -0.5 && pressDpad == false)
+                    {
+                        bp.getBlueprintSelect().GetTypeSequence().Clear();
+                        pressDpad = true;
+                    }
                 }
 
 
@@ -416,6 +434,12 @@ public class mainControl : MonoBehaviour {
                     {
                         moved = false;
                     }
+
+                    if (Input.GetAxis("D Pad X") <= -0.5 && pressDpad == false)
+                    {
+                        bp.getBlueprintSelect().GetTypeSequence().Clear();
+                        pressDpad = true;
+                    }
                 }
             }
             else
@@ -473,7 +497,7 @@ public class mainControl : MonoBehaviour {
             }
         }
 
-        if (count < 2)
+        if (count < 4)
         {
             bp.getBlueprintSelect().typeSequence.Add(upgrade);
             bp.getBlueprintSelect().hasChanged = true;

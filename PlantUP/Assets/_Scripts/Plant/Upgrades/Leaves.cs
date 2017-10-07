@@ -8,7 +8,7 @@ public class Leaves : _IsUpgrade
 
     static readonly int cost = 1000;
     int current = 0;
-    static readonly int max = 2;
+    static readonly int max = 4;
     static readonly UpgradeType upgradeType = UpgradeType.LEAVES;
 
     public int GetCost()

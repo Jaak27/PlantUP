@@ -60,6 +60,8 @@ public class IsTile : MonoBehaviour
     public bool hasWaterValue;
 
 
+    public int lightmultiplikator;
+
 
 
     // Use this for initialization
@@ -262,7 +264,7 @@ public class IsTile : MonoBehaviour
 
     public int getLightValue()
     {
-        return playingField.getLightStrength();
+        return playingField.getLightStrength() * lightmultiplikator;
     }
 
     public void setNeighbours(IsTile[] neighbours)
