@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 public class selectedObject : MonoBehaviour
 {
@@ -21,7 +23,7 @@ public class selectedObject : MonoBehaviour
     public GameObject createPlantPanel;
 
     bool moved;
-    bool movedtwo;
+    public bool movedtwo;
     bool menu;
     bool pressDpad;
 
@@ -29,6 +31,8 @@ public class selectedObject : MonoBehaviour
     public RectTransform bpIcon1;
     public RectTransform bpIcon2;
     public RectTransform bpIcon3;
+
+    float angle = 0;
 
     public RectTransform menuCursor;
 
@@ -39,6 +43,10 @@ public class selectedObject : MonoBehaviour
     public bool playerSelect;
 
     public GameObject feldselect;
+
+    public Rigidbody2D playerFigure;
+
+    public GameObject energyEx;
 
     // Use this for initialization
     void Start()
@@ -51,7 +59,7 @@ public class selectedObject : MonoBehaviour
         menu = false;
         pressDpad = false;
 
-        menuCursor.transform.position = bpIcon0.transform.position;
+      
     }
 
     // Update is called once per frame
@@ -59,14 +67,17 @@ public class selectedObject : MonoBehaviour
     {
         //print("AD");
         //Player 1
+
+
         if(!playerSelect)
         {
             // Blueprint wählen um Pflanze zu erstellen
-            if(Input.GetAxis("Right Trigger") == 0.0f)
+            if (Input.GetAxis("Right Trigger") == 0.0f)
             {
                 if(Input.GetButtonUp("A") && menu == false)
                 {
                     menu = true;
+                    menuCursor.transform.position = bpIcon0.transform.position;
                 }
                 else if(Input.GetButtonUp("A") && menu == true)
                 {
@@ -147,56 +158,90 @@ public class selectedObject : MonoBehaviour
 
             }
 
+
+            if (Input.GetButton("X"))
+                {
+                    //player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
+                    //tileSelect.getPlant().GetStats()[8].SetCurrent(0);
+
+                    //energyEx.SetActive(true);
+                    energyEx.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+                    energyEx.GetComponent<energyExtract>().setUsed(true);
+
+                    
+                }
+                else
+                {
+                    //player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
+                    //tileSelect.getPlant().GetStats()[8].SetCurrent(0);
+
+                    //energyEx.SetActive(false);
+                    energyEx.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                    energyEx.GetComponent<energyExtract>().setUsed(false);
+
+            }
+
             // Tile auswahl
-            if(menu == false && Input.GetAxis("Right Trigger") == 0.0)
+            if(menu == false && Input.GetAxis("Right Trigger") == 0.0 && !Input.GetButton("X"))
             {
-                menuCursor.gameObject.SetActive(false);
 
-                if (Input.GetAxis("Right Stick X") >= 0.5 && Input.GetAxis("Right Stick Y") <= -0.5 && moved == false)
+                float x = Input.GetAxis("Right Stick X");
+                float y = -Input.GetAxis("Right Stick Y");
+
+                // float angle = 0;
+                /*
+                 if(x != 0.0f || y != 0.0f)
+                 {
+                     angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+                 }
+                 */
+
+                //playerFigure.MoveRotation(angle);
+
+
+
+
+                if (Input.GetAxis("Right Stick X") >= 0.8)
                 {
-                    tileSelect = tileSelect.getNeighbours()[3];
-                    moved = true;
+                    //playerFigure.transform.position = new Vector3(playerFigure.transform.position.x + 0.1f, playerFigure.transform.position.y, playerFigure.transform.position.z);
+                    //movedtwo = true;
+                    playerFigure.AddForce(new Vector2(400, 0));
+                    playerFigure.MoveRotation(0);
+                    
                 }
 
-                if (Input.GetAxis("Right Stick X") <= -0.5 && Input.GetAxis("Right Stick Y") <= -0.5 && moved == false)
+                if (Input.GetAxis("Right Stick X") <= -0.8)
                 {
-                    tileSelect = tileSelect.getNeighbours()[4];
-                    moved = true;
+                    //playerFigure.transform.position = new Vector3(playerFigure.transform.position.x - 0.1f, playerFigure.transform.position.y, playerFigure.transform.position.z);
+                    playerFigure.AddForce(new Vector2(-400, 0));
+                    playerFigure.MoveRotation(180);
+                }
+                if (Input.GetAxis("Right Stick Y") >= 0.8)
+                {
+                    //playerFigure.transform.position = new Vector3(playerFigure.transform.position.x, playerFigure.transform.position.y - 0.1f, playerFigure.transform.position.z);
+                    playerFigure.AddForce(new Vector2(0, -400));
+                    playerFigure.MoveRotation(270);
                 }
 
-                if (Input.GetAxis("Right Stick X") <= -0.5 && Input.GetAxis("Right Stick Y") == 0.0 && moved == false)
+                if (Input.GetAxis("Right Stick Y") <= -0.8)
                 {
-                    tileSelect = tileSelect.getNeighbours()[5];
-                    moved = true;
+                    playerFigure.AddForce(new Vector2(0, 400));
+                    playerFigure.MoveRotation(90);
                 }
 
-                if (Input.GetAxis("Right Stick X") <= -0.5 && Input.GetAxis("Right Stick Y") >= 0.5 && moved == false)
-                {
-                    tileSelect = tileSelect.getNeighbours()[0];
-                    moved = true;
-                }
-
-                if (Input.GetAxis("Right Stick X") >= 0.5 && Input.GetAxis("Right Stick Y") >= 0.5 && moved == false)
-                {
-                    tileSelect = tileSelect.getNeighbours()[1];
-                    moved = true;
-                }
-
-                if (Input.GetAxis("Right Stick X") >= 0.5 && Input.GetAxis("Right Stick Y") == 0.0 && moved == false)
-                {
-                    tileSelect = tileSelect.getNeighbours()[2];
-                    moved = true;
-                }
-
-                if (Input.GetAxis("Right Stick X") == 0.0 && Input.GetAxis("Right Stick Y") == 0.0)
-                {
-                    moved = false;
-                }
-
+                /*
                 if (Input.GetButtonDown("X"))
                 {
                     player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
                     tileSelect.getPlant().GetStats()[8].SetCurrent(0);
+                }
+                */
+
+                if (Input.GetButtonDown("B"))
+                {
+                    tileSelect.getPlant().GetBlueprint().dekrementPlants();
+                    Destroy(tileSelect.getPlant().gameObject);
+                    tileSelect.SetPlant(null);
                 }
             }
 
@@ -529,7 +574,7 @@ public class selectedObject : MonoBehaviour
         float cost = blueprint.GetCost();
         if (tile != null && tile.canSustainPlant && !tile.getPlant())
         {
-            if (cost >= 0 && player.GetPoints() >= cost)
+            if (cost >= 0)
             {
                 tile.GrowPlant(player, plant, blueprint);
                 //player.AddPoints(-cost);

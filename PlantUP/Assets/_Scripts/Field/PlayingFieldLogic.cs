@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public enum tileType
 {
-    GROUND = 0, WATER, MOUNTAIN, VOLCANO, ASH, ICE, FIRE, SWAMP
+    GROUND = 0, WATER, MOUNTAIN, VOLCANO, ASH, ICE, FIRE, SWAMP, DESERT
 }
 
 public enum weatherType
@@ -70,6 +70,9 @@ public class PlayingFieldLogic : MonoBehaviour
     public IsTile mountainTilePrefab;
     public IsTile volcanoTilePrefab;
     public IsTile fireTilePrefab;
+    public IsTile desertTilePrefab;
+
+    public GameObject testPrefab;
 
     public IsTile[] extraTiles;
 
@@ -96,8 +99,8 @@ public class PlayingFieldLogic : MonoBehaviour
 
     public  int minimumSwampValueStart = 1500;
     public  int maximumSwampValueStart = 3500;
-    public static int minimumGroundValueStart = 1000;
-    public static int maximumGroundValueStart = 3000;
+    public static int minimumGroundValueStart = 25;
+    public static int maximumGroundValueStart = 200;
     public  int minimumAshValueStart = 2000;
     public  int maximumAshValueStart = 4000;
 
@@ -109,7 +112,7 @@ public class PlayingFieldLogic : MonoBehaviour
     /// <summary>
     /// Die Menge an Energie die an Licht auf jedes Feld fällt.
     /// </summary>
-    int lightStrength;
+    float lightStrength;
 
 
     public weatherType currentWeather = weatherType.NORMAL;
@@ -130,7 +133,7 @@ public class PlayingFieldLogic : MonoBehaviour
     /// Speichert alle Felder dieses Spielfeldes.
     /// Wollen wir ein Sechseckiges Spielfeld, oder ein viereckiges?
     /// </summary>
-    IsTile[] felder;
+    public IsTile[] felder;
 
     /// <summary>
     /// Der Seed für den Zufallszahlengenerator.
@@ -193,9 +196,10 @@ public class PlayingFieldLogic : MonoBehaviour
         {
             for (int y = 0; y < ySize; y++)
             {
-                float mountainChance = 6f;
+                float mountainChance = 8f;
                 float waterChance = 10f;
-                float swampChance = 2f;
+                float desertChance = 8f;
+                float swampChance = 0f;
 
                 //Generiere eine zufällige Zahl zwischen 0 und 10.
                 float randomChance = Random.Range(0f, 100f);
@@ -204,11 +208,15 @@ public class PlayingFieldLogic : MonoBehaviour
                 {
                     tempField[x, y] = tileType.MOUNTAIN;
                 }
-                else if (randomChance < mountainChance + waterChance)
+                else if(randomChance < mountainChance + desertChance)
+                {
+                    tempField[x, y] = tileType.DESERT;
+                }
+                else if (randomChance < mountainChance + desertChance + waterChance)
                 {
                     tempField[x, y] = tileType.WATER;
                 }
-                else if (randomChance < mountainChance + waterChance + swampChance)
+                else if (randomChance < mountainChance + desertChance + waterChance + swampChance)
                 {
                     tempField[x, y] = tileType.SWAMP;
                 }
@@ -232,6 +240,7 @@ public class PlayingFieldLogic : MonoBehaviour
                     int countVolcano = 0;
                     int countAsh = 0;
                     int countSwamp = 0;
+                    int countDesert = 0;
 
                     int[,] neighbourCoords;
 
@@ -252,6 +261,8 @@ public class PlayingFieldLogic : MonoBehaviour
                                 countMountain++;
                             else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.WATER)
                                 countWater++;
+                            else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.DESERT)
+                                countDesert++;
                             else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.VOLCANO)
                                 countVolcano++;
                             else if (tempField[x + neighbourCoords[j, 0], y + neighbourCoords[j, 1]] == tileType.ASH)
@@ -279,6 +290,12 @@ public class PlayingFieldLogic : MonoBehaviour
                             float chance = Random.Range(0f, 1f);
                             if (chance <= 0.15 * countMountain)
                                 tempField[x, y] = tileType.MOUNTAIN;
+                        }
+                        if (countDesert == 2 || countDesert == 1)
+                        {
+                            float chance = Random.Range(0f, 1f);
+                            if (chance <= 0.15 * countDesert)
+                                tempField[x, y] = tileType.DESERT;
                         }
                         //Chance sich in ein Aschefeld zu verwandeln.
                         if (countVolcano >= 1 || countAsh >= 1)
@@ -309,6 +326,7 @@ public class PlayingFieldLogic : MonoBehaviour
                         }
 
                     }
+
                     //Gebirgsfelder können sich in Groundfelder verwandeln, wenn sie 2 oder mehr Wasserfelder berühren.
                     //Gebirgsfelder können sich in Vulkane verwandeln.
                     else if (tempField[x, y] == tileType.MOUNTAIN)
@@ -322,10 +340,12 @@ public class PlayingFieldLogic : MonoBehaviour
                         }
                         //Chance sich in ein Vulkan zu verwandeln
                         //0.05%
+                        /*
                         if (Random.Range(0f, 1f) <= 0.02)
                         {
                             tempField[x, y] = tileType.VOLCANO;
                         }
+                        */
                     }
                 }
             }
@@ -419,6 +439,9 @@ public class PlayingFieldLogic : MonoBehaviour
                         break;
                     case tileType.GROUND:
                         newTile = Instantiate(groundTilePrefab, position, Quaternion.identity);
+                        break;
+                    case tileType.DESERT:
+                        newTile = Instantiate(desertTilePrefab, position, Quaternion.identity);
                         break;
                     default:
                         if (extraTiles.Length > Mathf.Abs((int)typeTiles[x, y] + 1))
@@ -638,7 +661,7 @@ public class PlayingFieldLogic : MonoBehaviour
             }
 
 
-
+            /*
             if (eventListe[2].type == eventTypes.BLIZZARDSTART && shake)
             {
                 shake = false;
@@ -662,14 +685,14 @@ public class PlayingFieldLogic : MonoBehaviour
                 }
 
             }
-
+            
             if (eventListe[1].type == eventTypes.WEATHERSTOP && shake)
             {
                 shake = false;
                 var em = snow.emission;
                 em.rateOverTime = 0;
             }
-
+            */
             //Starte die Events
             if (eventListe != null && eventListe.Count > 0)
             {
@@ -690,7 +713,7 @@ public class PlayingFieldLogic : MonoBehaviour
         }
 
     }
-
+    
 
     private void handleEvent(RandomEvent currentEvent)
     {
@@ -722,8 +745,13 @@ public class PlayingFieldLogic : MonoBehaviour
                 forceWindupate();
                 break;
             case eventTypes.BLIZZARDSTART:
-                currentWeather = weatherType.BLIZZARD;
-                forceWindupate();
+                
+                //currentWeather = weatherType.BLIZZARD;
+                //forceWindupate();
+                
+                int i = Random.Range(0, felder.GetLength(0));
+                Instantiate(testPrefab, new Vector3(felder[i].transform.position.x, felder[i].transform.position.y, 0), Quaternion.identity);
+                
                 break;
             case eventTypes.ERUPTIONSTART:
                 currentWeather = weatherType.ERUPTION;
@@ -903,7 +931,7 @@ public class PlayingFieldLogic : MonoBehaviour
     }
 
 
-    public int getLightStrength()
+    public float getLightStrength()
     {
         switch (currentWeather)
         {
@@ -974,6 +1002,7 @@ public class PlayingFieldLogic : MonoBehaviour
     public IsTile[] getFelder()
     {
         return felder;
+        
     }
 
 }

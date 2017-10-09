@@ -497,11 +497,12 @@ public class mainControl : MonoBehaviour {
             }
         }
 
-        if (count < 4)
+        if (count < 4 && gameObject.GetComponent<PlayerPrototype>().UpgradeCost() <= gameObject.GetComponent<PlayerPrototype>().GetPoints())
         {
+            gameObject.GetComponent<PlayerPrototype>().AddPoints(-gameObject.GetComponent<PlayerPrototype>().UpgradeCost());
             bp.getBlueprintSelect().typeSequence.Add(upgrade);
             bp.getBlueprintSelect().hasChanged = true;
-
+            
 
             print("TEST " + upgrade);
 

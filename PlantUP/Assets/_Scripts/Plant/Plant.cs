@@ -63,7 +63,7 @@ public class Plant : MonoBehaviour
     public static int plantCount = 0;
     public int myNum;
     public float absorbRate = 1f;
-    private readonly float ticks = 1f;
+    private readonly float ticks = 5f;
     private List<int> boughtUpgrades;
     private String output = "";
 
@@ -96,6 +96,9 @@ public class Plant : MonoBehaviour
     // public float schadenErlitten;
 
     public float maxEnergie = 3000;
+
+
+    public bool nutTilesinformed;
 
     public void SetMyTile(IsTile myTile)
     {
@@ -154,6 +157,8 @@ public class Plant : MonoBehaviour
     {
         myNum = ++plantCount;
 
+
+        myBlueprint.inkrementPlants();
         seqCount = myBlueprint.GetSequence().Count;
 
         boughtUpgrades = new List<int>();
@@ -227,10 +232,31 @@ public class Plant : MonoBehaviour
     private void Update()
     {
 
-        if(stats[8].GetCurrent() >= stats[8].GetMax())
+        maxEnergie = stats[8].GetMax();
+
+        if (stats[8].GetCurrent() >= stats[8].GetMax())
         {
             stats[8].SetCurrent(stats[8].GetMax());
         }
+
+        if(nutriAbsorb >= 1 && !nutTilesinformed)
+        {
+            //myTile.setNutrientValueUsed(true);
+            myTile.inkrementNutrientValueUsed();
+            nutTilesinformed = true;
+            for (int i = 0; i < 6; i++)
+            {
+                if (myTile.getNeighbours()[i].getTileType() == tileType.GROUND)
+                {
+
+                    myTile.getNeighbours()[i].inkrementNutrientValueUsed();
+                }
+            }
+
+        }
+
+
+
         // TODO: Nur zum Testen der Stats
         //alter = stats[0].GetCurrent();
        //fov = stats[1].GetCurrent();
@@ -305,13 +331,13 @@ public class Plant : MonoBehaviour
 
         //int cost = upgrades[upgradeID].GetCost();
 
-        int cost = 100;
+        int cost = 250;
 
         float energy = stats[8].GetCurrent();
 
-        if (!upgrading)
+        if (!upgrading )
         {
-
+                //player.AddPoints(-cost);
                 upgrading = true;
                 print("TESST");
                 timestamp = Time.time + 1;
@@ -331,7 +357,7 @@ public class Plant : MonoBehaviour
             if(timestamp < Time.time )
             {
                 popUpTextController.CreatePopUpText("NEW UP", gameObject.transform);
-                //stats[8].SetCurrent(energy - cost);
+                
                 //print("Spieler" + player.GetPlayerNum() + "'s Pflanze Nr." + myNum + " hat Upgrade " + upgrades[upgradeID].getInfo() + " für " + cost + " gekauft.");
                 upgrades[upgradeID].Inkrement();
                 boughtUpgrades.Add(upgradeID);
@@ -428,7 +454,7 @@ public class Plant : MonoBehaviour
     /// </summary>
     private void PushNutrientAbsorb()
     {
-        print("NUT UP");
+        //print("NUT UP");
         //stats[4].SetCurrent((stats[4].GetBase() + deepRoots - stalk) * absorbRate);
         stats[4].SetCurrent((stats[4].GetBase() + deepRoots));
     }
@@ -439,7 +465,7 @@ public class Plant : MonoBehaviour
     private void PushBankCapacity()
     {
 
-        stats[8].SetMax(1000 + deepRoots * 200 + leaves * 200);
+        stats[8].SetMax(2000 + deepRoots * deepRoots * 1000 + leaves * leaves * 1000);
     }
 
     /// <summary>
@@ -555,6 +581,7 @@ public class Plant : MonoBehaviour
     /// </summary>
     private void ResetUpgrades()
     {
+        print("RESET");
         int help = 1;
         int bought = boughtUpgrades.Count;
         if (bought > 0)
@@ -566,8 +593,8 @@ public class Plant : MonoBehaviour
             if (upgrades[i].Dekrement())
             {
                 print("DEKREMENT");
-                int cost = upgrades[i].GetCost() * help;
-                //stats[8].SetCurrent(stats[8].GetCurrent() + cost);
+                //int cost = upgrades[i].GetCost() * help;
+               // player.AddPoints(500);
                 //print("Pflanze Nr." + myNum + " hat ein Upgrade " + (i+1) + " für " + cost + " verkauft.");
                 help++;
             }
@@ -625,29 +652,37 @@ public class Plant : MonoBehaviour
     private void CalcNutriValue()
     {
 
-        IsTile thisTile;
-        int thisLevel;
-        float reach = 0;
+        //IsTile thisTile;
+        //int thisLevel;
+        //float reach = 0;
+        
         
         float nutriValue = myTile.getNutrientValue();
-        float nups = stats[4].GetCurrent() * 25;
         float energy = stats[8].GetCurrent();
+        float nups;
+        nups = nutriValue * stats[4].GetCurrent();
         popUpTextController.CreatePopUpText(nups.ToString(), gameObject.transform);
-        
         stats[8].SetCurrent(energy + nups);
-        myTile.setNutrientValue(nutriValue - nups);
+        //myTile.setNutrientValue(nutriValue - nups);
 
+
+        /*
         for (int i = 0; i < 6; i++)
         {
-            if (myTile.getNeighbours()[i].getTileType() == tileType.GROUND)
+            if (myTile.getNeighbours()[i].getTileType() == tileType.GROUND || myTile.getNeighbours()[i].getTileType() == tileType.SWAMP)
             {
                 nutriValue = myTile.getNeighbours()[i].getNutrientValue();
-                energy = stats[8].GetCurrent();
-                //popUpTextController.CreatePopUpText(wups.ToString(), gameObject.transform);
-                stats[8].SetCurrent(energy + nups);
-                myTile.getNeighbours()[i].setNutrientValue(nutriValue - nups);
+                if( nutriValue > 0)
+                {
+                    energy = stats[8].GetCurrent();
+                    //popUpTextController.CreatePopUpText(wups.ToString(), gameObject.transform);
+                    nups = nutriValue * stats[4].GetCurrent();
+                    stats[8].SetCurrent(energy + nups);
+                }
+
             }
         }
+        */
 
             //Für jede Tile in der "Verbreitete Wurzeln" Reichweite der Pflanze
             /*
@@ -717,7 +752,7 @@ public class Plant : MonoBehaviour
     {
         for(int i = 0; i < 6; i++)
         {
-            if(myTile.getNeighbours()[i].getTileType() == tileType.WATER)
+            if(myTile.getNeighbours()[i].getTileType() == tileType.WATER || myTile.getNeighbours()[i].getTileType() == tileType.SWAMP)
             {
                 float waterValue = myTile.getNeighbours()[i].getWaterStrength();
                 float wups = stats[7].GetCurrent() * waterValue;
@@ -833,12 +868,33 @@ public class Plant : MonoBehaviour
     private void CalcSunValue()
     {
 
-        float sunValue = myTile.getLightValue();
-        float sups = stats[5].GetCurrent() * sunValue;
-        float energy = stats[8].GetCurrent();
-        popUpTextController.CreatePopUpText(sups.ToString(), gameObject.transform);
 
+        float sunValue = myTile.getLightValue();
+        float energy = stats[8].GetCurrent();
+        float sups;
+        sups = sunValue * stats[5].GetCurrent();
+        popUpTextController.CreatePopUpText(sups.ToString(), gameObject.transform);
         stats[8].SetCurrent(energy + sups);
+        //myTile.setNutrientValue(nutriValue - nups);
+
+
+        /*
+        for (int i = 0; i < 6; i++)
+        {
+            if (myTile.getNeighbours()[i].getTileType() == tileType.DESERT)
+            {
+                sunValue = myTile.getNeighbours()[i].getLightValue();
+                if(sunValue > 0)
+                {
+                    energy = stats[8].GetCurrent();
+                    //popUpTextController.CreatePopUpText(wups.ToString(), gameObject.transform);
+                    sups = sunValue * stats[5].GetCurrent();
+                    stats[8].SetCurrent(energy + sups);
+                }
+
+            }
+        }
+        */
         /*
         //=================================================Schatten Berechnen======================================================================
         float shadowPenalty = 0.8f;
@@ -966,6 +1022,20 @@ public class Plant : MonoBehaviour
                 //myTile.setPlant(null);
                 --plantCount;
                 Destroy(gameObject);                                                                    //Die Pflanze ist tot
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // myTile.setNutrientValueUsed(false);
+        myTile.dekrementNutrientValueUsed();
+        for (int i = 0; i < 6; i++)
+        {
+            if (myTile.getNeighbours()[i].getTileType() == tileType.GROUND)
+            {
+
+                myTile.getNeighbours()[i].dekrementNutrientValueUsed();
             }
         }
     }

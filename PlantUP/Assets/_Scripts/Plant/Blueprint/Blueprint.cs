@@ -28,7 +28,7 @@ public class Blueprint : MonoBehaviour {
     {
         if (upgradeSequence.Count >= 0)
         {
-            cost = typeSequence.Count * typeSequence.Count * 100;
+            cost = typeSequence.Count * 100;
         }
 
         return cost;
@@ -36,7 +36,7 @@ public class Blueprint : MonoBehaviour {
 
     public void updateCost()
     {
-        cost = typeSequence.Count * typeSequence.Count * 100;
+        cost = typeSequence.Count * 100;
     }
 
     public float GetCostTypSequence()
@@ -44,7 +44,7 @@ public class Blueprint : MonoBehaviour {
         int costn = 0;
         if (typeSequence.Count > 0)
         {
-            costn = typeSequence.Count * typeSequence.Count * 100;
+            costn = typeSequence.Count * 100;
         }
 
         return costn;
@@ -119,7 +119,7 @@ public class Blueprint : MonoBehaviour {
     }
 
     public bool HasChanged() {
-        playerPlants = GameObject.Find("Player1").GetComponent<PlayerPrototype>().GetPlantCount();
+        //playerPlants = GameObject.Find("Player1").GetComponent<PlayerPrototype>().GetPlantCount();
         return hasChanged;
     }
 
@@ -149,5 +149,25 @@ public class Blueprint : MonoBehaviour {
     public int getPlants()
     {
         return playerPlants;
+    }
+
+    public void dekrementPlants()
+    {
+        playerPlants--;
+    }
+
+    public void inkrementPlants()
+    {
+        playerPlants++;
+    }
+
+    public int getUpgradeCount()
+    {
+        int num = 0;
+        foreach(UpgradeType type in typeSequence)
+        {
+            num++;
+        }
+        return num;
     }
 }

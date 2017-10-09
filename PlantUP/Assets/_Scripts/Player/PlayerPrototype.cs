@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerPrototype : MonoBehaviour
-{ 
+{
     /// <summary>
     /// Die Angesammelte Punktzahl des Spielers
     /// </summary>
@@ -16,7 +17,6 @@ public class PlayerPrototype : MonoBehaviour
     public int myNum;
     public int plantCount = 0;
 
-
     //Blueprints des Players
     public Blueprint blueprint0;
     public Blueprint blueprint1;
@@ -25,18 +25,22 @@ public class PlayerPrototype : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("cost", 0, 1f);
+        InvokeRepeating("cost", 0, 5f);
     }
 
     private void Awake()
     {
         myNum = ++playerCount;
-        
+
     }
 
     private void Update()
     {
         UpdateUIText();
+        if(points <= 0)
+        {
+            SceneManager.LoadScene("menu_Test");
+        }
     }
 
     public void AddPoints(float value)
@@ -56,6 +60,12 @@ public class PlayerPrototype : MonoBehaviour
     {
         plantCount++;
     }
+
+    public void removePlant()
+    {
+        plantCount--;
+    }
+
     public int GetPlantCount()
     {
         return plantCount;
@@ -76,8 +86,13 @@ public class PlayerPrototype : MonoBehaviour
 
     private void cost()
     {
-        print("cost");
-        points -= blueprint0.GetCost() * blueprint0.getPlants() + blueprint1.GetCost() * blueprint1.getPlants() + blueprint2.GetCost() * blueprint2.getPlants() + blueprint3.GetCost() * blueprint3.getPlants();
+        points = points -(blueprint0.GetCost() * blueprint0.getPlants() + blueprint1.GetCost() * blueprint1.getPlants() + blueprint2.GetCost() * blueprint2.getPlants() + blueprint3.GetCost() * blueprint3.getPlants());
+    }
+
+    public int UpgradeCost()
+    {
+        int cost = 1000 + (blueprint0.getUpgradeCount() + blueprint1.getUpgradeCount() + blueprint2.getUpgradeCount() + blueprint3.getUpgradeCount()) * 1000;
+        return cost;
     }
 
     public void setBlueprint0(Blueprint bp)

@@ -41,6 +41,8 @@ public class IsTile : MonoBehaviour
     float windstrength;
 
 
+    float maxNutrientValue;
+
     /// <summary>
     /// Ist windUpdate = true, muss die Windstärke neu berechnet werden.
     /// windloss = wieviel Prozent der Wind verliert oder gewinnt wenn er über dieses Feld fliegt.
@@ -60,14 +62,19 @@ public class IsTile : MonoBehaviour
     public bool hasWaterValue;
 
 
-    public int lightmultiplikator;
+    public float lightmultiplikator;
 
-
+    public int nutrientValueUsed;
 
     // Use this for initialization
     void Start()
     {
+        if(type == tileType.GROUND)
+        {
+            maxNutrientValue = nutrientValue;
+        }
 
+        nutrientValueUsed = 0;
 
     }
 
@@ -98,15 +105,24 @@ public class IsTile : MonoBehaviour
 
         if(type == tileType.GROUND)
         {
-            float opacity = (((nutrientValue / 3000) * 100) * 1.0f) / 100; 
+            float opacity = (((nutrientValue / 200) * 100) * 1.0f) / 100; 
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
+
+            if(myPlant == null && nutrientValueUsed == 0)
+            {
+                if(nutrientValue < maxNutrientValue)
+                {
+                    nutrientValue++;
+                }
+            }
         }
 
         if (type == tileType.WATER)
         {
-            float opacity = (((waterStrength / 70) * 100) * 1.0f) / 100;
+            float opacity = (((waterStrength / 200) * 100) * 1.0f) / 100;
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
         }
+
 
     }
 
@@ -262,7 +278,7 @@ public class IsTile : MonoBehaviour
     }
 
 
-    public int getLightValue()
+    public float getLightValue()
     {
         return playingField.getLightStrength() * lightmultiplikator;
     }
@@ -338,5 +354,19 @@ public class IsTile : MonoBehaviour
         player.AddPlant();
     }
 
+    public void setNutrientValueUsed(int b)
+    {
+        nutrientValueUsed = b;
+    }
+
+    public void inkrementNutrientValueUsed()
+    {
+        nutrientValueUsed++;
+    }
+
+    public void dekrementNutrientValueUsed()
+    {
+        nutrientValueUsed--;
+    }
 
 }
