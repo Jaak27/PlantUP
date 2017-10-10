@@ -61,7 +61,7 @@ public class mainControl : MonoBehaviour {
         // Dient zur Bewegung der Camera mit den Pfeiltasten
 
 
-
+        //print(seed.getCostCalc());
 
         if(bp.getBlueprintSelect() != null)
         {
@@ -70,7 +70,7 @@ public class mainControl : MonoBehaviour {
                                 "\n" + "energy............." +
                                 "\n" + "energy............." +
                                 "\n" + "energy............." +
-                                "\n" + "cost.........." + (int) (1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000);
+                                "\n" + "cost.........." + (int) (1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * seed.getCostCalc());
         }
 
 
@@ -484,7 +484,7 @@ public class mainControl : MonoBehaviour {
 
         if (bp.getBlueprintSelect().getUpgradeCount() < 4 && gameObject.GetComponent<PlayerPrototype>().UpgradeCost() <= gameObject.GetComponent<PlayerPrototype>().GetPoints())
         {
-            gameObject.GetComponent<PlayerPrototype>().AddPoints(-(1000 + bp.getBlueprintSelect().getUpgradeCount()* bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000));
+            gameObject.GetComponent<PlayerPrototype>().AddPoints(-(1000 + bp.getBlueprintSelect().getUpgradeCount()* bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * seed.getCostCalc()));
             bp.getBlueprintSelect().typeSequence.Add(upgrade);
             bp.getBlueprintSelect().hasChanged = true;
             

@@ -17,16 +17,11 @@ public class seed : MonoBehaviour
     static int challenge = 0;
     //Wie lange soll das Spiel gehen?
     //36000 ~ 10 Minuten
-    static int time = 10;
+    static int time = 180;
 
 
     static int costCalc = 0;
 
-
-    void Update()
-    {
-        print(costCalc);
-    }
 
     public static bool getAutoStart()
     {
@@ -56,6 +51,11 @@ public class seed : MonoBehaviour
         return seedField;
     }
 
+    public static int getCostCalc()
+    {
+        return costCalc;
+    }
+
     public static void setSeedField(int s)
     {
         seedField = s;
@@ -63,7 +63,7 @@ public class seed : MonoBehaviour
         {
             costCalc = 0;
         }
-        costCalc = costCalc + 250;
+        costCalc += 150;
     }
 
 }
