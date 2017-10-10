@@ -36,7 +36,7 @@ public class Blueprint : MonoBehaviour {
 
     public void updateCost()
     {
-        cost = typeSequence.Count * 100;
+        cost = typeSequence.Count * 200;
     }
 
     public float GetCostTypSequence()

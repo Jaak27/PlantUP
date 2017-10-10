@@ -38,6 +38,7 @@ public class IsTile : MonoBehaviour
     /// </summary>
     float nutrientValue;
     float waterStrength;
+    float lightStrength;
     float windstrength;
 
 
@@ -60,9 +61,10 @@ public class IsTile : MonoBehaviour
     public bool canSustainPlant;
     public bool hasGroundValue;
     public bool hasWaterValue;
+    public bool hasLightValue;
 
 
-    public float lightmultiplikator;
+    float lightmultiplikator;
 
     public int nutrientValueUsed;
 
@@ -75,6 +77,15 @@ public class IsTile : MonoBehaviour
         }
 
         nutrientValueUsed = 0;
+
+        if (type == tileType.DESERT)
+        {
+            lightmultiplikator = UnityEngine.Random.Range(1.0f, 7.0f);
+        }
+        else
+        {
+            lightmultiplikator = 0.1f;
+        }
 
     }
 
@@ -105,7 +116,7 @@ public class IsTile : MonoBehaviour
 
         if(type == tileType.GROUND)
         {
-            float opacity = (((nutrientValue / 200) * 100) * 1.0f) / 100; 
+            float opacity = (((nutrientValue / 175) * 100) * 1.0f) / 100; 
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
 
             if(myPlant == null && nutrientValueUsed == 0)
@@ -119,7 +130,13 @@ public class IsTile : MonoBehaviour
 
         if (type == tileType.WATER)
         {
-            float opacity = (((waterStrength / 200) * 100) * 1.0f) / 100;
+            float opacity = (((waterStrength / 175) * 100) * 1.0f) / 100;
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
+        }
+
+        if (type == tileType.DESERT)
+        {
+            float opacity = ((((playingField.getLightStrength() * lightmultiplikator) / 175) * 100) * 1.0f) / 100;
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, opacity);
         }
 
@@ -339,7 +356,7 @@ public class IsTile : MonoBehaviour
         return hasWaterValue;
     }
 
-    public void GrowPlant(PlayerPrototype player, Plant plant, Blueprint bp)
+    public void GrowPlant(PlayerPrototype player, Plant plant, Blueprint bp, PlayerPrototype p)
     {
         myPlant = plant;
         myPlant.GetComponent<SpriteRenderer>().sprite = bp.s;
@@ -348,7 +365,10 @@ public class IsTile : MonoBehaviour
         myPlant.SetPlayer(player);
         myPlant.SetBlueprint(bp);
 
-        SetPlant(Instantiate(myPlant, this.transform.position, Quaternion.identity));
+        Plant pt = Instantiate(myPlant, this.transform.position, Quaternion.identity);
+        p.plants.Add(pt);
+
+        SetPlant(pt);
 
 
         player.AddPlant();

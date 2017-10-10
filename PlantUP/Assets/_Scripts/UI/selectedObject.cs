@@ -74,7 +74,7 @@ public class selectedObject : MonoBehaviour
             // Blueprint wählen um Pflanze zu erstellen
             if (Input.GetAxis("Right Trigger") == 0.0f)
             {
-                if(Input.GetButtonUp("A") && menu == false)
+                if(Input.GetButtonUp("A") && menu == false && tileSelect.getPlant() == null)
                 {
                     menu = true;
                     menuCursor.transform.position = bpIcon0.transform.position;
@@ -241,7 +241,7 @@ public class selectedObject : MonoBehaviour
                 {
                     tileSelect.getPlant().GetBlueprint().dekrementPlants();
                     Destroy(tileSelect.getPlant().gameObject);
-                    tileSelect.SetPlant(null);
+                    //tileSelect.SetPlant(null);
                 }
             }
 
@@ -269,7 +269,7 @@ public class selectedObject : MonoBehaviour
                         text_Feld.text += "\nWasserwert........." + tile.getWaterStrength();
                     //Jedes Feld hat Licht und Wind
                     text_Feld.text += "\nWindstaerke........" + tile.getWindStrength() +
-                                          "\nLichtintensitaet..." + tile.getLightValue();
+                                          "\nLichtintensitaet..." + (int) tile.getLightValue();
 
                     if (tile.getCanSustainPlant())
                     {
@@ -280,13 +280,17 @@ public class selectedObject : MonoBehaviour
 
                             createPlantPanel.SetActive(false);
                             plantText.SetActive(true);
-                            text_Pflanze.text =
-                                             "Health........" + tile.getPlant().GetStats()[2].GetCurrent() +
-                                             "\n" + "Energy......." + tile.getPlant().GetStats()[8].GetCurrent() +
-                                             "\n" + "N..........................." + tile.getPlant().GetStats()[4].GetCurrent() +
-                                             "\n" + "Wa........................." + tile.getPlant().GetStats()[7].GetCurrent() +
-                                             "\n" + "Wi.........................." + tile.getPlant().GetStats()[6].GetCurrent() +
-                                             "\n" + "S............................" + tile.getPlant().GetStats()[5].GetCurrent();
+                            tile.getPlant();
+
+                            if(tile.getPlant().GetStats() != null)
+                            {
+                                text_Pflanze.text =
+                                                 "\n" + "N..........................." + tile.getPlant().GetStats()[4].GetCurrent() +
+                                                 "\n" + "Wa........................." + tile.getPlant().GetStats()[7].GetCurrent() +
+                                                 "\n" + "Wi.........................." + tile.getPlant().GetStats()[6].GetCurrent() +
+                                                 "\n" + "S............................" + tile.getPlant().GetStats()[5].GetCurrent();
+                            }
+
                                          
          
                         }
@@ -572,11 +576,11 @@ public class selectedObject : MonoBehaviour
 
 
         float cost = blueprint.GetCost();
-        if (tile != null && tile.canSustainPlant && !tile.getPlant())
+        if (tile != null && tile.canSustainPlant && !tile.getPlant() && blueprint.getUpgradeCount() > 0)
         {
             if (cost >= 0)
             {
-                tile.GrowPlant(player, plant, blueprint);
+                tile.GrowPlant(player, plant, blueprint, player);
                 //player.AddPoints(-cost);
             }
             else

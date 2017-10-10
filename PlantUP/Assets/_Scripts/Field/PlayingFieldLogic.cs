@@ -72,6 +72,8 @@ public class PlayingFieldLogic : MonoBehaviour
     public IsTile fireTilePrefab;
     public IsTile desertTilePrefab;
 
+    public List<IsTile> waterTiles;
+
     public GameObject testPrefab;
 
     public IsTile[] extraTiles;
@@ -100,7 +102,7 @@ public class PlayingFieldLogic : MonoBehaviour
     public  int minimumSwampValueStart = 1500;
     public  int maximumSwampValueStart = 3500;
     public static int minimumGroundValueStart = 25;
-    public static int maximumGroundValueStart = 200;
+    public static int maximumGroundValueStart = 175;
     public  int minimumAshValueStart = 2000;
     public  int maximumAshValueStart = 4000;
 
@@ -198,7 +200,7 @@ public class PlayingFieldLogic : MonoBehaviour
             {
                 float mountainChance = 8f;
                 float waterChance = 10f;
-                float desertChance = 8f;
+                float desertChance = 15f;
                 float swampChance = 0f;
 
                 //Generiere eine zufällige Zahl zwischen 0 und 10.
@@ -417,6 +419,7 @@ public class PlayingFieldLogic : MonoBehaviour
                 {
                     case tileType.WATER:
                         newTile = Instantiate(waterTilePrefab, position, Quaternion.identity);
+                        waterTiles.Add(newTile);
                         break;
                     case tileType.SWAMP:
                         newTile = Instantiate(swampTilePrefab, position, Quaternion.identity);
@@ -657,7 +660,7 @@ public class PlayingFieldLogic : MonoBehaviour
                 isPaused = true;
                 isFinished = true;
 
-                SceneManager.LoadScene("menu_Test");
+                SceneManager.LoadScene("inbetween_Test");
             }
 
 
@@ -749,8 +752,8 @@ public class PlayingFieldLogic : MonoBehaviour
                 //currentWeather = weatherType.BLIZZARD;
                 //forceWindupate();
                 
-                int i = Random.Range(0, felder.GetLength(0));
-                Instantiate(testPrefab, new Vector3(felder[i].transform.position.x, felder[i].transform.position.y, 0), Quaternion.identity);
+                int i = Random.Range(0, waterTiles.Count);
+                Instantiate(testPrefab, new Vector3(waterTiles[i].transform.position.x, waterTiles[i].transform.position.y, 0), Quaternion.identity);
                 
                 break;
             case eventTypes.ERUPTIONSTART:

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class seed : MonoBehaviour
 {
@@ -16,7 +17,16 @@ public class seed : MonoBehaviour
     static int challenge = 0;
     //Wie lange soll das Spiel gehen?
     //36000 ~ 10 Minuten
-    static int time = 180;
+    static int time = 10;
+
+
+    static int costCalc = 0;
+
+
+    void Update()
+    {
+        print(costCalc);
+    }
 
     public static bool getAutoStart()
     {
@@ -49,6 +59,11 @@ public class seed : MonoBehaviour
     public static void setSeedField(int s)
     {
         seedField = s;
+        if(SceneManager.GetActiveScene().name == "menu_Test")
+        {
+            costCalc = 0;
+        }
+        costCalc = costCalc + 250;
     }
 
 }

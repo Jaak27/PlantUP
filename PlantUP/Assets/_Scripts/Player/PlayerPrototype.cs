@@ -11,11 +11,17 @@ public class PlayerPrototype : MonoBehaviour
     /// </summary>
     public float points = 0;
     public List<Blueprint> blueprints;
+
+    public List<Plant> plants;
     //private string name;
     public Text uiText;
     public static int playerCount = 0;
     public int myNum;
     public int plantCount = 0;
+
+    public int costDivide;
+
+    int multiplier;
 
     //Blueprints des Players
     public Blueprint blueprint0;
@@ -26,6 +32,8 @@ public class PlayerPrototype : MonoBehaviour
     void Start()
     {
         InvokeRepeating("cost", 0, 5f);
+        multiplier = 1;
+        costDivide = 1;
     }
 
     private void Awake()
@@ -78,15 +86,21 @@ public class PlayerPrototype : MonoBehaviour
 
     private void UpdateUIText()
     {
-        uiText.text = "Player" + playerCount + ": " + points;
+
+        int reserve = 0;
+
+        for(int i = 0; i < plants.Count; i++)
+        {
+            reserve = reserve + (int) plants[i].GetStats()[8].GetCurrent();
+        }
+        uiText.text = "Player" + playerCount + ": " + points + " Running Costs: " + (int)((blueprint0.GetCost() * blueprint0.getPlants() + blueprint1.GetCost() * blueprint1.getPlants() + blueprint2.GetCost() * blueprint2.getPlants() + blueprint3.GetCost() * blueprint3.getPlants())/costDivide) + " reserve: " + reserve * multiplier;
+
     }
-
-
 
 
     private void cost()
     {
-        points = points -(blueprint0.GetCost() * blueprint0.getPlants() + blueprint1.GetCost() * blueprint1.getPlants() + blueprint2.GetCost() * blueprint2.getPlants() + blueprint3.GetCost() * blueprint3.getPlants());
+        points = points -((blueprint0.GetCost() * blueprint0.getPlants() + blueprint1.GetCost() * blueprint1.getPlants() + blueprint2.GetCost() * blueprint2.getPlants() + blueprint3.GetCost() * blueprint3.getPlants())/costDivide);
     }
 
     public int UpgradeCost()
@@ -133,6 +147,27 @@ public class PlayerPrototype : MonoBehaviour
     public Blueprint getBlueprint3()
     {
         return blueprint3;
+    }
+
+
+    public void setMultiplier(int m)
+    {
+        multiplier = m;
+    }
+
+    public int getMultiplier()
+    {
+        return multiplier;
+    }
+
+    public void setCostDevide(int m)
+    {
+        costDivide = m;
+    }
+
+    public int getCostDevide()
+    {
+        return costDivide;
     }
 
 }

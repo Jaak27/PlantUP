@@ -65,13 +65,12 @@ public class mainControl : MonoBehaviour {
 
         if(bp.getBlueprintSelect() != null)
         {
-            blueprintInfo.text = "health.............." +
+            blueprintInfo.text =
                                 "\n" + "energy............." +
                                 "\n" + "energy............." +
                                 "\n" + "energy............." +
                                 "\n" + "energy............." +
-                                "\n" + "energy............." +
-                                "\n" + "cost.........." + bp.getBlueprintSelect().GetCostTypSequence();
+                                "\n" + "cost.........." + (int) (1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000);
         }
 
 
@@ -169,12 +168,13 @@ public class mainControl : MonoBehaviour {
                     {
                         moved = false;
                     }
-
+                    /*
                     if (Input.GetButtonDown("X"))
                     {
                         bp.getBlueprintSelect().GetTypeSequence().Clear();
                         bp.getBlueprintSelect().hasChanged = true;
                     }
+                    */
                 }
 
 
@@ -182,18 +182,7 @@ public class mainControl : MonoBehaviour {
                 {
                     if (Input.GetAxis("Right Stick X") >= 0.5 && upgradeCursor.transform.position == upIcon0.transform.position && !moved)
                     {
-                        upgradeCursor.transform.position = upIcon1.transform.position;
-                        moved = true;
-                    }
-
-                    if (Input.GetAxis("Right Stick X") >= 0.5 && upgradeCursor.transform.position == upIcon1.transform.position && !moved)
-                    {
                         upgradeCursor.transform.position = upIcon3.transform.position;
-                        moved = true;
-                    }
-                    if (Input.GetAxis("Right Stick X") <= -0.5 && upgradeCursor.transform.position == upIcon1.transform.position && !moved)
-                    {
-                        upgradeCursor.transform.position = upIcon0.transform.position;
                         moved = true;
                     }
 
@@ -204,7 +193,7 @@ public class mainControl : MonoBehaviour {
                     }
                     if (Input.GetAxis("Right Stick X") <= -0.5 && upgradeCursor.transform.position == upIcon3.transform.position && !moved)
                     {
-                        upgradeCursor.transform.position = upIcon1.transform.position;
+                        upgradeCursor.transform.position = upIcon0.transform.position;
                         moved = true;
                     }
 
@@ -221,11 +210,6 @@ public class mainControl : MonoBehaviour {
 
                     }
 
-                    if (upgradeCursor.transform.position == upIcon1.transform.position && Input.GetButtonDown("A"))
-                    {
-                        addUpgrade(upIcon1.GetComponent<upgradeButton>().upgrade);
-                    }
-
                     if (upgradeCursor.transform.position == upIcon2.transform.position && Input.GetButtonDown("A"))
                     {
                         addUpgrade(upIcon2.GetComponent<upgradeButton>().upgrade);
@@ -236,12 +220,13 @@ public class mainControl : MonoBehaviour {
                         addUpgrade(upIcon3.GetComponent<upgradeButton>().upgrade);
                     }
 
+                    /*
                     if (Input.GetButtonDown("X"))
                     {
                         bp.getBlueprintSelect().GetTypeSequence().Clear();
                         bp.getBlueprintSelect().hasChanged = true;
                     }
-
+                    */
 
                     if (Input.GetAxis("Right Stick X") == 0.0)
                     {
@@ -497,9 +482,9 @@ public class mainControl : MonoBehaviour {
             }
         }
 
-        if (count < 4 && gameObject.GetComponent<PlayerPrototype>().UpgradeCost() <= gameObject.GetComponent<PlayerPrototype>().GetPoints())
+        if (bp.getBlueprintSelect().getUpgradeCount() < 4 && gameObject.GetComponent<PlayerPrototype>().UpgradeCost() <= gameObject.GetComponent<PlayerPrototype>().GetPoints())
         {
-            gameObject.GetComponent<PlayerPrototype>().AddPoints(-gameObject.GetComponent<PlayerPrototype>().UpgradeCost());
+            gameObject.GetComponent<PlayerPrototype>().AddPoints(-(1000 + bp.getBlueprintSelect().getUpgradeCount()* bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000));
             bp.getBlueprintSelect().typeSequence.Add(upgrade);
             bp.getBlueprintSelect().hasChanged = true;
             

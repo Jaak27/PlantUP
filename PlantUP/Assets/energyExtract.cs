@@ -41,7 +41,7 @@ public class energyExtract : MonoBehaviour {
         if(other.tag == "Tile" && other.GetComponent<IsTile>().getPlant() != null && used == true)
         {
             print("GET IT ALL");
-            player.AddPoints(other.GetComponent<IsTile>().getPlant().GetStats()[8].GetCurrent());
+            player.AddPoints(other.GetComponent<IsTile>().getPlant().GetStats()[8].GetCurrent() * player.getMultiplier());
             other.GetComponent<IsTile>().getPlant().GetStats()[8].SetCurrent(0);
         }
     }

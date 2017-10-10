@@ -239,21 +239,6 @@ public class Plant : MonoBehaviour
             stats[8].SetCurrent(stats[8].GetMax());
         }
 
-        if(nutriAbsorb >= 1 && !nutTilesinformed)
-        {
-            //myTile.setNutrientValueUsed(true);
-            myTile.inkrementNutrientValueUsed();
-            nutTilesinformed = true;
-            for (int i = 0; i < 6; i++)
-            {
-                if (myTile.getNeighbours()[i].getTileType() == tileType.GROUND)
-                {
-
-                    myTile.getNeighbours()[i].inkrementNutrientValueUsed();
-                }
-            }
-
-        }
 
 
 
@@ -356,7 +341,7 @@ public class Plant : MonoBehaviour
         {
             if(timestamp < Time.time )
             {
-                popUpTextController.CreatePopUpText("NEW UP", gameObject.transform);
+                //popUpTextController.CreatePopUpText("NEW UP", gameObject.transform);
                 
                 //print("Spieler" + player.GetPlayerNum() + "'s Pflanze Nr." + myNum + " hat Upgrade " + upgrades[upgradeID].getInfo() + " für " + cost + " gekauft.");
                 upgrades[upgradeID].Inkrement();
@@ -612,26 +597,14 @@ public class Plant : MonoBehaviour
         if (myTile != null)
         {
 
-            if (stats[8].GetCurrent() >= stats[8].GetMax())
-            {
-                stats[2].SetCurrent(stats[2].GetCurrent() - 5);
-            }
+            CalcNutriValue();
+            CalcWaterValue();
+            CalcSunValue();
+            CalcWindValue();
 
-            if (stats[8].GetCurrent() < stats[8].GetMax())
-            {
-                CalcNutriValue();
-                CalcWaterValue();
-                CalcSunValue();
-                CalcWindValue();
-                //CalcEnergyLoss();
-            }
-            else
-            {
-                popUpTextController.CreatePopUpText("FULL", gameObject.transform);
-            }
-
-
-            CalcHealth();
+            popUpTextController.CreatePopUpText(gameObject.GetComponent<Plant>().GetStats()[8].GetCurrent().ToString(), gameObject.transform);
+            //CalcEnergyLoss();
+ 
 
             if (myNum == 1)
             {
@@ -661,7 +634,7 @@ public class Plant : MonoBehaviour
         float energy = stats[8].GetCurrent();
         float nups;
         nups = nutriValue * stats[4].GetCurrent();
-        popUpTextController.CreatePopUpText(nups.ToString(), gameObject.transform);
+        //popUpTextController.CreatePopUpText(nups.ToString(), gameObject.transform);
         stats[8].SetCurrent(energy + nups);
         //myTile.setNutrientValue(nutriValue - nups);
 
@@ -750,16 +723,21 @@ public class Plant : MonoBehaviour
 
         private void CalcWaterValue()
     {
+
         for(int i = 0; i < 6; i++)
         {
-            if(myTile.getNeighbours()[i].getTileType() == tileType.WATER || myTile.getNeighbours()[i].getTileType() == tileType.SWAMP)
+            if(myTile.getNeighbours()[i] != null)
             {
-                float waterValue = myTile.getNeighbours()[i].getWaterStrength();
-                float wups = stats[7].GetCurrent() * waterValue;
-                float energy = stats[8].GetCurrent();
-                popUpTextController.CreatePopUpText(wups.ToString(), gameObject.transform);
-                stats[8].SetCurrent(energy + wups);
+                if(myTile.getNeighbours()[i].getTileType() == tileType.WATER)
+                {
+                    float waterValue = myTile.getNeighbours()[i].getWaterStrength();
+                    float wups = stats[7].GetCurrent() * waterValue;
+                    float energy = stats[8].GetCurrent();
+                    //popUpTextController.CreatePopUpText(wups.ToString(), gameObject.transform);
+                    stats[8].SetCurrent(energy + wups);
+                }
             }
+
 
 
         }
@@ -836,7 +814,7 @@ public class Plant : MonoBehaviour
         float windValue = myTile.getWindStrength();
         float wips = stats[6].GetCurrent() * windValue;
         float energy = stats[8].GetCurrent();
-        popUpTextController.CreatePopUpText(wips.ToString(), gameObject.transform);
+        //popUpTextController.CreatePopUpText(wips.ToString(), gameObject.transform);
 
         stats[8].SetCurrent(energy + wips);
 
@@ -873,8 +851,8 @@ public class Plant : MonoBehaviour
         float energy = stats[8].GetCurrent();
         float sups;
         sups = sunValue * stats[5].GetCurrent();
-        popUpTextController.CreatePopUpText(sups.ToString(), gameObject.transform);
-        stats[8].SetCurrent(energy + sups);
+        //popUpTextController.CreatePopUpText(sups.ToString(), gameObject.transform);
+        stats[8].SetCurrent(energy + (int) sups);
         //myTile.setNutrientValue(nutriValue - nups);
 
 
@@ -1026,18 +1004,5 @@ public class Plant : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        // myTile.setNutrientValueUsed(false);
-        myTile.dekrementNutrientValueUsed();
-        for (int i = 0; i < 6; i++)
-        {
-            if (myTile.getNeighbours()[i].getTileType() == tileType.GROUND)
-            {
-
-                myTile.getNeighbours()[i].dekrementNutrientValueUsed();
-            }
-        }
-    }
 
 }
