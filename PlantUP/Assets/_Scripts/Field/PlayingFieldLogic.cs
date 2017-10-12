@@ -36,7 +36,7 @@ public class PlayingFieldLogic : MonoBehaviour
 
     public enum eventTypes
     {
-        LIGHT, WINDSTRENGTH, WINDDIRECTION, BLIZZARDSTART, ERUPTIONSTART, WEATHERSTOP, NULL
+        LIGHT, WINDSTRENGTH, WINDDIRECTION, BLIZZARDSTART, ERUPTIONSTART, WEATHERSTOP, NULL, ITEMSPAWN
     }
 
     public  int minimumBlizzardDuration = 400;
@@ -48,13 +48,17 @@ public class PlayingFieldLogic : MonoBehaviour
 
     public int averageTimeBetweenEvents = 180;
 
+
     public int normalEventChance = 9;
     public int windStrengthChangeChance = 1;
     public int windDirectionChangeChance = 1;
     public int LightStrengthChangeChance = 1;
+
     public int catastropheEventChance = 2;
     public int BlizzardChance = 1;
     public int EruptionChance = 1;
+
+	public int itemEventChance = 4;
 
     /// <summary>
     /// Speichert alle ausgewürfelten Events.
@@ -530,67 +534,56 @@ public class PlayingFieldLogic : MonoBehaviour
             //Würfel Typ aus
             int random;
             if (toCatastropheEnd <= -1)
-                random = Random.Range(0, normalEventChance + catastropheEventChance);
+				random = Random.Range(0, normalEventChance + catastropheEventChance + itemEventChance);
             else
-                random = 0;
+				random = Random.Range(0, normalEventChance + itemEventChance);;
 
-            if (random >= 0 && random < normalEventChance)
-            {
-                int random2 = Random.Range(0, windDirectionChangeChance + windStrengthChangeChance + LightStrengthChangeChance);
+			if (random >= 0 && random < normalEventChance) {
+				int random2 = Random.Range (0, windDirectionChangeChance + windStrengthChangeChance + LightStrengthChangeChance);
 
-                if (random2 >= 0 && random2 < windStrengthChangeChance)
-                {
-                    neu.type = eventTypes.WINDDIRECTION;
-                    //Würfel Änderung nach links oder rechts aus
-                    if (Random.Range(0, 1) == 0)
-                    {
-                        //Rechts
-                        neu.change = 1;
-                    }
-                    else
-                    {
-                        //Links
-                        neu.change = -1;
-                    }
-                }
-                else if (random2 < windStrengthChangeChance + windStrengthChangeChance)
-                {
-                    neu.type = eventTypes.WINDSTRENGTH;
-                    //Würfel positiven oder negativenEffekt aus
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        //Positiv
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, nicht so häufig auftreten.
-                        neu.change = Random.Range(2, 18) + Random.Range(3, 19);
-                    }
-                    else
-                    {
-                        //Negativ
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie -5 oder -35, nicht so häufig auftreten.
-                        neu.change = Random.Range(-18, -2) + Random.Range(-19, -3);
-                    }
-                }
-                else
-                {
-                    neu.type = eventTypes.LIGHT;
-                    //Würfel positiven oder negativenEffekt aus
-                    if (Random.Range(0, 2) == 0)
-                    {
-                        //Positiv
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie 1 oder +15, nicht so häufig auftreten.
-                        //Durchschnitt wäre 7 oder 8.
-                        neu.change = Random.Range(0, 7) + Random.Range(1, 8);
-                    }
-                    else
-                    {
-                        //Negativ
-                        //Diese Methode sorgt dafür das extreme Ergebnisse, wie -1 oder -15, nicht so häufig auftreten.
-                        //Durchschnitt wäre -7 oder -8.
-                        neu.change = Random.Range(-7, 0) + Random.Range(-8, -1);
-                    }
-                }
-            }
-            else
+				if (random2 >= 0 && random2 < windStrengthChangeChance) {
+					neu.type = eventTypes.WINDDIRECTION;
+					//Würfel Änderung nach links oder rechts aus
+					if (Random.Range (0, 1) == 0) {
+						//Rechts
+						neu.change = 1;
+					} else {
+						//Links
+						neu.change = -1;
+					}
+				} else if (random2 < windStrengthChangeChance + windStrengthChangeChance) {
+					neu.type = eventTypes.WINDSTRENGTH;
+					//Würfel positiven oder negativenEffekt aus
+					if (Random.Range (0, 2) == 0) {
+						//Positiv
+						//Diese Methode sorgt dafür das extreme Ergebnisse, nicht so häufig auftreten.
+						neu.change = Random.Range (2, 18) + Random.Range (3, 19);
+					} else {
+						//Negativ
+						//Diese Methode sorgt dafür das extreme Ergebnisse, wie -5 oder -35, nicht so häufig auftreten.
+						neu.change = Random.Range (-18, -2) + Random.Range (-19, -3);
+					}
+				} else {
+					neu.type = eventTypes.LIGHT;
+					//Würfel positiven oder negativenEffekt aus
+					if (Random.Range (0, 2) == 0) {
+						//Positiv
+						//Diese Methode sorgt dafür das extreme Ergebnisse, wie 1 oder +15, nicht so häufig auftreten.
+						//Durchschnitt wäre 7 oder 8.
+						neu.change = Random.Range (0, 7) + Random.Range (1, 8);
+					} else {
+						//Negativ
+						//Diese Methode sorgt dafür das extreme Ergebnisse, wie -1 oder -15, nicht so häufig auftreten.
+						//Durchschnitt wäre -7 oder -8.
+						neu.change = Random.Range (-7, 0) + Random.Range (-8, -1);
+					}
+				}
+			} 
+			else if (random >= normalEventChance && random < itemEventChance) 
+			{
+				neu.type = eventTypes.ITEMSPAWN;
+			}
+			else
             {
                 //Rolle für eine Katastrophe!
                 int randomCatastrophe = Random.Range(0, BlizzardChance + EruptionChance);
@@ -749,13 +742,14 @@ public class PlayingFieldLogic : MonoBehaviour
                 break;
             case eventTypes.BLIZZARDSTART:
                 
-                //currentWeather = weatherType.BLIZZARD;
-                //forceWindupate();
-                
-                int i = Random.Range(0, waterTiles.Count);
-                Instantiate(testPrefab, new Vector3(waterTiles[i].transform.position.x, waterTiles[i].transform.position.y, 0), Quaternion.identity);
-                
+                currentWeather = weatherType.BLIZZARD;
+                forceWindupate();
                 break;
+			case eventTypes.ITEMSPAWN:
+				int i = Random.Range(0, waterTiles.Count);
+				Instantiate(testPrefab, new Vector3(waterTiles[i].transform.position.x, waterTiles[i].transform.position.y, 0), Quaternion.identity);
+
+				break;
             case eventTypes.ERUPTIONSTART:
                 currentWeather = weatherType.ERUPTION;
                 break;

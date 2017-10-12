@@ -297,7 +297,10 @@ public class IsTile : MonoBehaviour
 
     public float getLightValue()
     {
-        return playingField.getLightStrength() * lightmultiplikator;
+		if (hasLightValue)
+			return playingField.getLightStrength () * lightmultiplikator;
+		else
+			return 0;
     }
 
     public void setNeighbours(IsTile[] neighbours)
@@ -355,6 +358,10 @@ public class IsTile : MonoBehaviour
     {
         return hasWaterValue;
     }
+	public bool getHasLightValue()
+	{
+		return hasLightValue;
+	}
 
     public void GrowPlant(PlayerPrototype player, Plant plant, Blueprint bp, PlayerPrototype p)
     {
