@@ -341,9 +341,6 @@ public class Plant : MonoBehaviour
         {
             if(timestamp < Time.time )
             {
-                //popUpTextController.CreatePopUpText("NEW UP", gameObject.transform);
-                
-                //print("Spieler" + player.GetPlayerNum() + "'s Pflanze Nr." + myNum + " hat Upgrade " + upgrades[upgradeID].getInfo() + " für " + cost + " gekauft.");
                 upgrades[upgradeID].Inkrement();
                 boughtUpgrades.Add(upgradeID);
                 upgrading = false;

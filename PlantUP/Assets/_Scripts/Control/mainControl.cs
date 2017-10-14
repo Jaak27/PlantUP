@@ -36,11 +36,12 @@ public class mainControl : MonoBehaviour {
 
     public Text blueprintInfo;
 
+    public Text upgradeInfo;
+
     //Menus
     public GameObject addUpgrades;
     public GameObject selectBlueprint;
     public GameObject blueprintMenu;
-    public GameObject skillMenu;
 
     // Use this for initialization
     void Start () {
@@ -61,16 +62,17 @@ public class mainControl : MonoBehaviour {
         // Dient zur Bewegung der Camera mit den Pfeiltasten
 
 
-        //print(seed.getCostCalc());
+        //print(1000);
 
         if(bp.getBlueprintSelect() != null)
         {
             blueprintInfo.text =
-                                "\n" + "energy............." +
-                                "\n" + "energy............." +
-                                "\n" + "energy............." +
-                                "\n" + "energy............." +
-                                "\n" + "cost.........." + (int) (1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * seed.getCostCalc());
+
+                                    
+                                "\n\n\nrunning........." + bp.getBlueprintSelect().GetCost() +
+                                "\nupgrade.........." + (int) (1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000) +
+                                "\n" +
+                                "\n" + "Added Upgrades";
         }
 
 
@@ -207,7 +209,6 @@ public class mainControl : MonoBehaviour {
                     if (upgradeCursor.transform.position == upIcon0.transform.position && Input.GetButtonDown("A"))
                     {
                         addUpgrade(upIcon0.GetComponent<upgradeButton>().upgrade);
-
                     }
 
                     if (upgradeCursor.transform.position == upIcon2.transform.position && Input.GetButtonDown("A"))
@@ -220,6 +221,8 @@ public class mainControl : MonoBehaviour {
                         addUpgrade(upIcon3.GetComponent<upgradeButton>().upgrade);
                     }
 
+
+
                     /*
                     if (Input.GetButtonDown("X"))
                     {
@@ -228,9 +231,26 @@ public class mainControl : MonoBehaviour {
                     }
                     */
 
+                    if (upgradeCursor.transform.position == upIcon0.transform.position)
+                    {
+                        upgradeInfo.text = "raises ground energy absorb" + "\n\nrunning........." + bp.getBlueprintSelect().GetCost() + "\nupgrade.........." + (int)(1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000) +  "\n\nadded upgrades";
+                    }
+
+                    if (upgradeCursor.transform.position == upIcon2.transform.position)
+                    {
+                        upgradeInfo.text = "raises light energy absorb"  + "\n\nrunning........." + bp.getBlueprintSelect().GetCost() + "\nupgrade.........." + (int)(1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000) + "\n\nadded upgrades";
+                    }
+
+                    if (upgradeCursor.transform.position == upIcon3.transform.position)
+                    {
+                        upgradeInfo.text = "raises water energy absorb" + "\n\nrunning........." + bp.getBlueprintSelect().GetCost() + "\nupgrade.........." + (int)(1000 + bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000) + "\n\nadded upgrades";
+                    }
+
+
                     if (Input.GetAxis("Right Stick X") == 0.0)
                     {
                         moved = false;
+
                     }
                 }
             }
@@ -484,17 +504,13 @@ public class mainControl : MonoBehaviour {
 
         if (bp.getBlueprintSelect().getUpgradeCount() < 4 && gameObject.GetComponent<PlayerPrototype>().UpgradeCost() <= gameObject.GetComponent<PlayerPrototype>().GetPoints())
         {
-            gameObject.GetComponent<PlayerPrototype>().AddPoints(-(1000 + bp.getBlueprintSelect().getUpgradeCount()* bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * seed.getCostCalc()));
+            gameObject.GetComponent<PlayerPrototype>().AddPoints(-(1000 + bp.getBlueprintSelect().getUpgradeCount()* bp.getBlueprintSelect().getUpgradeCount() * bp.getBlueprintSelect().getUpgradeCount() * 1000));
             bp.getBlueprintSelect().typeSequence.Add(upgrade);
             bp.getBlueprintSelect().hasChanged = true;
             
 
             print("TEST " + upgrade);
 
-        }
-        else
-        {
-            print("VOLL");
         }
     }
 }

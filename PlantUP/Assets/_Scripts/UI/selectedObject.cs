@@ -78,6 +78,7 @@ public class selectedObject : MonoBehaviour
                 {
                     menu = true;
                     menuCursor.transform.position = bpIcon0.transform.position;
+                    print("test");
                 }
                 else if(Input.GetButtonUp("A") && menu == true)
                 {
@@ -128,7 +129,6 @@ public class selectedObject : MonoBehaviour
                     }
 
 
-
                     if (Input.GetButtonDown("A") && menuCursor.transform.position == bpIcon0.transform.position)
                     {
                         createPlant(blueprintSelect.getBlueprint0());
@@ -149,6 +149,8 @@ public class selectedObject : MonoBehaviour
                         createPlant(blueprintSelect.getBlueprint3());
                     }
 
+                    //TTTT
+
                     if (Input.GetButtonDown("B"))
                     {
                         menu = false;
@@ -158,26 +160,16 @@ public class selectedObject : MonoBehaviour
 
             }
 
-
+            //energie den Pflanzen entziehen
             if (Input.GetButton("X"))
-                {
-                    //player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
-                    //tileSelect.getPlant().GetStats()[8].SetCurrent(0);
-
-                    //energyEx.SetActive(true);
-                    energyEx.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-                    energyEx.GetComponent<energyExtract>().setUsed(true);
-
-                    
-                }
-                else
-                {
-                    //player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
-                    //tileSelect.getPlant().GetStats()[8].SetCurrent(0);
-
-                    //energyEx.SetActive(false);
-                    energyEx.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-                    energyEx.GetComponent<energyExtract>().setUsed(false);
+            {
+                 energyEx.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+                 energyEx.GetComponent<energyExtract>().setUsed(true);
+            }
+            else
+            {
+                 energyEx.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                 energyEx.GetComponent<energyExtract>().setUsed(false);
 
             }
 
@@ -187,18 +179,6 @@ public class selectedObject : MonoBehaviour
 
                 float x = Input.GetAxis("Right Stick X");
                 float y = -Input.GetAxis("Right Stick Y");
-
-                // float angle = 0;
-                /*
-                 if(x != 0.0f || y != 0.0f)
-                 {
-                     angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-                 }
-                 */
-
-                //playerFigure.MoveRotation(angle);
-
-
 
 
                 if (Input.GetAxis("Right Stick X") >= 0.8)
@@ -229,19 +209,15 @@ public class selectedObject : MonoBehaviour
                     playerFigure.MoveRotation(90);
                 }
 
-                /*
-                if (Input.GetButtonDown("X"))
-                {
-                    player.AddPoints(tileSelect.getPlant().GetStats()[8].GetCurrent());
-                    tileSelect.getPlant().GetStats()[8].SetCurrent(0);
-                }
-                */
 
                 if (Input.GetButtonDown("B"))
                 {
-                    tileSelect.getPlant().GetBlueprint().dekrementPlants();
-                    Destroy(tileSelect.getPlant().gameObject);
-                    //tileSelect.SetPlant(null);
+                    if(tileSelect.getPlant() != null)
+                    {
+                        tileSelect.getPlant().GetBlueprint().dekrementPlants();
+                        Destroy(tileSelect.getPlant().gameObject);
+                    }
+
                 }
             }
 
@@ -252,7 +228,6 @@ public class selectedObject : MonoBehaviour
                 feldselect.transform.position = new Vector3(tileSelect.transform.position.x, tileSelect.transform.position.y, 1);
                 feldselect.GetComponent<SpriteRenderer>().enabled = true;
 
-                fenster_FeldInfo.setUp(true);
                 // Welche Infos angezeigt werden sollen abhängig von den Tiles
 
                 if (tileSelect.GetComponent<IsTile>() != null)
@@ -262,14 +237,13 @@ public class selectedObject : MonoBehaviour
 
 
                     //Jedes Feld hat 3 booleans die Aussagen ob es 1. Naerstoffe hat, 2. Wasserkraft hat, und 3. Eine Pflanze haben kann
-                    text_Feld.text = "-Feldata-";
+                    text_Feld.text = "-Tiledata-\n";
                     if (tile.getHasGroundValue())
-                        text_Feld.text += "\nNaehrstoffe........" + tile.getNutrientValue();
+                        text_Feld.text += "\nGroundvalue........" + tile.getNutrientValue();
                     if (tile.getHasWaterValue())
-                        text_Feld.text += "\nWasserwert........." + tile.getWaterStrength();
-                    //Jedes Feld hat Licht und Wind
-                    text_Feld.text += "\nWindstaerke........" + tile.getWindStrength() +
-                                          "\nLichtintensitaet..." + (int) tile.getLightValue();
+                        text_Feld.text += "\nWatervalue............" + tile.getWaterStrength();
+                    if(tile.getHasLightValue())
+                        text_Feld.text += "\nLightvalue............" + (int) tile.getLightValue();
 
                     if (tile.getCanSustainPlant())
                     {
@@ -284,11 +258,12 @@ public class selectedObject : MonoBehaviour
 
                             if(tile.getPlant().GetStats() != null)
                             {
-                                text_Pflanze.text =
-                                                 "\n" + "N..........................." + tile.getPlant().GetStats()[4].GetCurrent() +
-                                                 "\n" + "Wa........................." + tile.getPlant().GetStats()[7].GetCurrent() +
-                                                 "\n" + "Wi.........................." + tile.getPlant().GetStats()[6].GetCurrent() +
-                                                 "\n" + "S............................" + tile.getPlant().GetStats()[5].GetCurrent();
+                                text_Pflanze.text = "-plantdata-\n" + 
+                                                 "\n" + "Groundabsorb........" + tile.getPlant().GetStats()[4].GetCurrent() +
+                                                 "\n" + "Waterabsorb..........." + tile.getPlant().GetStats()[7].GetCurrent() +
+                                                 "\n" + "Lightabsorb.............." + tile.getPlant().GetStats()[5].GetCurrent() + 
+                                                  "\n" + "running cost......" + tile.getPlant().GetBlueprint().GetCost(); 
+                                                    
                             }
 
                                          
@@ -297,8 +272,7 @@ public class selectedObject : MonoBehaviour
                         else
                         {
                             createPlantPanel.SetActive(true);
-                            //plantText.SetActive(false);
-                            text_Pflanze.text = "-Plant-";
+                           text_Pflanze.text = "-plantdata-\n";
                         }
 
                         if(Input.GetKeyDown(KeyCode.Space))
